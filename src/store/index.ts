@@ -50,13 +50,20 @@ export namespace Store {
         values: CheckboxFacetItem[]
     };
 
+    export type FacetMode = "simple" | "advanced";
+
+    export type Facets = {
+        facetMode: FacetMode,
+        facets: {[key: string]: Facet}
+    };
+
     export type Facet = RangeFacet | CheckboxFacet;
 
     export type SearchState = {
         config: Config,
         results: SearchResults,
         suggestions: {}[],
-        facets: {[key: string]: Facet}
+        facets: Facets
         searchParameters: SearchParameters
     };
 }

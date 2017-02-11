@@ -2,7 +2,7 @@ import * as resultsActions from "../resultsActions";
 
 const ts = Date.now();
 
-describe("actions/sync", () => {
+describe("actions/results", () => {
     it("should create the action that gets triggered when search is initiated", () => {
         expect(
             resultsActions.initiateSearch()

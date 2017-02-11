@@ -2,7 +2,7 @@ import * as searchParametersActions from "../searchParametersActions";
 import { Store } from "../../store";
 import * as searchParameters from "../../reducers/searchParameters";
 
-describe("actions/sync", () => {
+describe("actions/searchParameters", () => {
     it("should create action to set input", () => {
         expect(
             searchParametersActions.setInput("foo")
