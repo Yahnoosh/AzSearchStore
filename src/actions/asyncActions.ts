@@ -12,7 +12,7 @@ const searchAndDispatch: ThunkAction<Promise<void>, Store.SearchState, {actionTo
     const searchState: Store.SearchState = getState();
     const service = searchState.config.service;
     const index = searchState.config.index;
-    const searchURI = buildSearchURI(searchState.config, searchState.searchParameters);
+    const searchURI = buildSearchURI(searchState.config, searchState.searchParameters, searchState.facets);
     let headers = new Headers({ "api-key": searchState.config.queryKey });
     dispatch(resultsActions.initiateSearch());
     return fetch(searchURI, { mode: "cors", headers })

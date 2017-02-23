@@ -33,6 +33,8 @@ export namespace Store {
         count: number
     };
 
+    export type FacetSortingMode = "count" | "count-" | "value" | "value-";
+
     export type RangeFacet = {
         key: string,
         min: number,
@@ -41,13 +43,19 @@ export namespace Store {
         filterUpperBound: number,
         lowerBucketCount: number,
         middleBucketCount: number,
-        upperBucketCount: number
+        upperBucketCount: number,
+        facetClause: string,
+        filterClause: string,
     };
 
     export type CheckboxFacet = {
         isNumeric: boolean,
         key: string,
         values: CheckboxFacetItem[]
+        count: number,
+        sort: FacetSortingMode
+        facetClause: string,
+        filterClause: string,
     };
 
     export type FacetMode = "simple" | "advanced";

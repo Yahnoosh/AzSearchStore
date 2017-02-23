@@ -11,16 +11,20 @@ export type FacetsAction =
         type: "ADD_CHECKBOX_FACET"
         key: string,
         isNumeric: boolean,
+        count: number,
+        sort: Store.FacetSortingMode
     } |
     {
         type: "SET_FACET_MODE",
         facetMode: Store.FacetMode
     };
 
-export const addCheckboxFacet = (key: string, isNumeric: boolean): FacetsAction => ({
+export const addCheckboxFacet = (key: string, isNumeric: boolean, count: number = 5, sort: Store.FacetSortingMode = "count"): FacetsAction => ({
     type: "ADD_CHECKBOX_FACET",
     key,
-    isNumeric
+    isNumeric,
+    count,
+    sort
 });
 
 export const addRangeFacet = (key: string, min: number, max: number): FacetsAction => ({

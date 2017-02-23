@@ -11,11 +11,12 @@ const parameterNameLookup = {
     select: "$select",
     skip: "$skip",
     top: "$top",
-    apiVersion: "api-version"
+    apiVersion: "api-version",
+    facet: "facet"
 };
 
-function appendQueryParams(searchURI: uri.URI, parameters: Store.SearchParameters): uri.URI {
-    let params: { [id: string]: string | boolean | number } = {};
+function appendQueryParams(searchURI: uri.URI, parameters: Store.SearchParameters, facets: Store.Facets): uri.URI {
+    let params: { [id: string]: string | string[] | boolean | number } = {};
     params[parameterNameLookup.input] = parameters.input;
     params[parameterNameLookup.apiVersion] = parameters.apiVersion;
     params[parameterNameLookup.skip] = parameters.skip;
@@ -26,13 +27,26 @@ function appendQueryParams(searchURI: uri.URI, parameters: Store.SearchParameter
     parameters.scoringProfile ? params[parameterNameLookup.scoringProfile] = parameters.scoringProfile : 0;
     parameters.searchFields ? params[parameterNameLookup.searchFields] = parameters.searchFields : 0;
     parameters.select ? params[parameterNameLookup.select] = parameters.select : 0;
+    const facetClauses = getFacetClauses(facets);
+    facetClauses ? params[parameterNameLookup.facet] = facetClauses : 0;
     searchURI.addQuery(params);
     return searchURI;
 }
-export function buildSearchURI(config: Store.Config, parameters: Store.SearchParameters): string {
+
+
+function getFacetClauses(facets: Store.Facets): string[] {
+    const facetKeys = Object.keys(facets.facets);
+    let clauses: string[] = facetKeys.map((facetKey) => {
+        return facets.facets[facetKey].facetClause;
+    });
+    return clauses;
+}
+
+
+export function buildSearchURI(config: Store.Config, parameters: Store.SearchParameters, facets: Store.Facets): string {
     const {service, index} = config;
     const uriTemplate = `https://${service}.search.windows.net/indexes/${index}/docs`;
     let searchURI = URI(uriTemplate);
-    searchURI = appendQueryParams(searchURI, parameters);
+    searchURI = appendQueryParams(searchURI, parameters, facets);
     return searchURI.valueOf();
 }

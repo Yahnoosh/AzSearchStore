@@ -18,6 +18,8 @@ const searchResponse = {
 
 const config: Store.Config = { index: "foo", service: "bar", queryKey: "buzz" };
 
+const facets: Store.Facets = { facetMode: "simple", facets: {} };
+
 
 const middleWare = [thunk];
 const mockStore = configureMockStore(middleWare);
@@ -41,7 +43,7 @@ describe("actions/async", () => {
             { type: "RECEIVE_RESULTS", results: searchResponse.value, receivedAt: Date.now() }
         ];
 
-        const store = mockStore({ config, searchParameters: searchParameters.initialState });
+        const store = mockStore({ config, searchParameters: searchParameters.initialState, facets });
 
         store.dispatch(actions.fetchSearchResults).then(() => {
             expect(store.getActions()).toEqual(expectedActions);
@@ -59,7 +61,7 @@ describe("actions/async", () => {
             { type: "APPEND_RESULTS", results: searchResponse.value, receivedAt: Date.now() }
         ];
 
-        const store = mockStore({ config, searchParameters: searchParameters.initialState });
+        const store = mockStore({ config, searchParameters: searchParameters.initialState, facets });
 
         store.dispatch(actions.loadMoreSearchResults).then(() => {
             expect(store.getActions()).toEqual(expectedActions);

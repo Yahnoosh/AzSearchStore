@@ -44,7 +44,9 @@ describe("reducers/facets", () => {
             filterUpperBound: 10,
             lowerBucketCount: 0,
             middleBucketCount: 0,
-            upperBucketCount: 0
+            upperBucketCount: 0,
+            filterClause: "",
+            facetClause: "foo,values:0|10"
         };
         expect(
             reducer(facets.initialState, facetsAction.addRangeFacet(expectedFacet.key, expectedFacet.min, expectedFacet.max))
@@ -59,7 +61,11 @@ describe("reducers/facets", () => {
         const expectedFacet: Store.CheckboxFacet = {
             key: "foo",
             isNumeric: false,
-            values: []
+            values: [],
+            count: 5,
+            sort: "count",
+            filterClause: "",
+            facetClause: "foo,count:5,sort:count"
         };
         expect(
             reducer(facets.initialState, facetsAction.addCheckboxFacet(expectedFacet.key, expectedFacet.isNumeric))

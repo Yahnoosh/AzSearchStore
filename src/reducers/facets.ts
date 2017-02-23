@@ -15,6 +15,8 @@ export function facets(state: Store.Facets = initialState, action: FacetsAction)
             return objectAssign({}, state, { facetMode: action.facetMode});
         case "ADD_RANGE_FACET":
             let { key, min, max } = action;
+            const filterLowerBound = min,
+                  filterUpperBound = max;
             const rangeFacet: Store.RangeFacet = {
                 key,
                 min,
@@ -23,17 +25,25 @@ export function facets(state: Store.Facets = initialState, action: FacetsAction)
                 filterUpperBound: max,
                 lowerBucketCount: 0,
                 middleBucketCount: 0,
-                upperBucketCount: 0
+                upperBucketCount: 0,
+                filterClause: "",
+                facetClause: `${key},values:${filterLowerBound}|${filterUpperBound}`
             };
             newFacets[key] = rangeFacet;
             return objectAssign({}, state, { facets: newFacets});
         case "ADD_CHECKBOX_FACET":
              key = action.key;
              const { isNumeric } = action;
+             const sort = "count",
+                   count = 5;
              const checkFacet: Store.CheckboxFacet = {
                  key,
                  isNumeric,
-                 values: []
+                 values: [],
+                 count,
+                 sort,
+                 filterClause: "",
+                 facetClause: `${key},count:${count},sort:${sort}`
              };
              newFacets[key] = checkFacet;
              return objectAssign({}, state, { facets: newFacets});

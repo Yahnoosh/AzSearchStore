@@ -27,7 +27,9 @@ describe("actions/facets", () => {
         ).toEqual({
             type: "ADD_CHECKBOX_FACET",
             key: "bar",
-            isNumeric: true
+            isNumeric: true,
+            count: 5,
+            sort: "count"
         });
     });
 });

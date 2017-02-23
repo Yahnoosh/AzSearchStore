@@ -22,9 +22,41 @@ const testParameters: Store.SearchParameters = {
     top: 3,
 };
 
+const initFacets: Store.Facets = {
+    facetMode: "simple",
+    facets: {}
+};
+
+const testFacets: Store.Facets = {
+    facetMode: "simple",
+    facets: {
+        foo: {
+            key: "foo",
+            min: 0,
+            max: 10,
+            filterLowerBound: 0,
+            filterUpperBound: 10,
+            lowerBucketCount: 0,
+            middleBucketCount: 0,
+            upperBucketCount: 0,
+            filterClause: "",
+            facetClause: "foo,values:0|10"
+        },
+        bar: {
+            key: "foo",
+            isNumeric: false,
+            values: [],
+            count: 5,
+            sort: "count",
+            filterClause: "",
+            facetClause: "bar,count:5,sort:count"
+        }
+    }
+};
+
 describe("utils/searchParameters", () => {
     it("should create a uri from test config and default searchParameters", () => {
-        const uriString = uriHelper.buildSearchURI(config, searchParameters.initialState);
+        const uriString = uriHelper.buildSearchURI(config, searchParameters.initialState, initFacets);
         const searchURI = URI(uriString);
         expect(
             searchURI.valueOf()
@@ -36,7 +68,7 @@ describe("utils/searchParameters", () => {
         expect(searchURI.hasQuery("$skip", 0)).toBe(true);
     });
     it("should create a uri from test config and custom searchParameters", () => {
-        const uriString = uriHelper.buildSearchURI(config, testParameters);
+        const uriString = uriHelper.buildSearchURI(config, testParameters, initFacets);
         const searchURI = URI(uriString);
         expect(
             searchURI.valueOf()
@@ -51,5 +83,19 @@ describe("utils/searchParameters", () => {
         expect(searchURI.hasQuery("scoringProfile", "abc")).toBe(true);
         expect(searchURI.hasQuery("searchFields", "def")).toBe(true);
         expect(searchURI.hasQuery("$select", "hij")).toBe(true);
+    });
+    it("should create a uri from test config, default searchParameters and custom facets", () => {
+        const uriString = uriHelper.buildSearchURI(config, searchParameters.initialState, testFacets);
+        const searchURI = URI(uriString);
+        expect(
+            searchURI.valueOf()
+        ).toEqual("https://buzz.search.windows.net/indexes/foo/docs?search=%2A&api-version=2016-09-01&%24skip=0&%24top=50&searchMode=any&facet=foo%2Cvalues%3A0%7C10&facet=bar%2Ccount%3A5%2Csort%3Acount");
+        expect(searchURI.hasQuery("search", "*")).toBe(true);
+        expect(searchURI.hasQuery("api-version", "2016-09-01")).toBe(true);
+        expect(searchURI.hasQuery("searchMode", "any")).toBe(true);
+        expect(searchURI.hasQuery("$top", 50)).toBe(true);
+        expect(searchURI.hasQuery("$skip", 0)).toBe(true);
+        expect(searchURI.hasQuery("facet", "foo,values:0|10", true)).toBe(true);
+        expect(searchURI.hasQuery("facet", "bar,count:5,sort:count", true)).toBe(true);
     });
 });
