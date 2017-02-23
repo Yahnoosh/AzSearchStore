@@ -17,4 +17,12 @@
 5. ~~load more~~
 5. ~~refactor actions~~
 4. facets
+    1. ~~add facets~~
+    2. ~~build URLS~~
+    3. ~~tests~~
+    4. set facet values/ update facet clauses
+5. filtering
+    1. simple filter url building
+    2. advanced filter url building
+    3. behavior for search vs load more
 5. suggestions
