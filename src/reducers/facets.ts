@@ -18,6 +18,7 @@ export function facets(state: Store.Facets = initialState, action: FacetsAction)
             const filterLowerBound = min,
                 filterUpperBound = max;
             const rangeFacet: Store.RangeFacet = {
+                type: "RangeFacet",
                 key,
                 min,
                 max,
@@ -37,6 +38,7 @@ export function facets(state: Store.Facets = initialState, action: FacetsAction)
             const sort = "count",
                 count = 5;
             const checkFacet: Store.CheckboxFacet = {
+                type: "CheckboxFacet",
                 key,
                 isNumeric,
                 values: {},
@@ -51,10 +53,9 @@ export function facets(state: Store.Facets = initialState, action: FacetsAction)
             key = action.key;
             const value = action.value;
             const facet = state.facets[key];
-            // todo(evboyle): get this sanity check to work
-            // if (typeof facet !== Store) {
-            //     throw new Error(`TOGGLE_CHECKBOX_SELECTION must be called on facet of type 'CheckboxFacet', actual: ${typeof facet}`);
-            // }
+            if (facet.type !== "CheckboxFacet") {
+                throw new Error(`TOGGLE_CHECKBOX_SELECTION must be called on facet of type 'CheckboxFacet', actual: ${facet.type}`);
+            }
             const checkboxFacet = facet as Store.CheckboxFacet;
             const oldFacetItem = checkboxFacet.values[value];
             const updatedFacetItem: Store.CheckboxFacetItem = {

@@ -31,6 +31,7 @@ const testFacets: Store.Facets = {
     facetMode: "simple",
     facets: {
         foo: {
+            type: "RangeFacet",
             key: "foo",
             min: 0,
             max: 10,
@@ -43,6 +44,7 @@ const testFacets: Store.Facets = {
             facetClause: "foo,values:0|10"
         },
         bar: {
+            type: "CheckboxFacet",
             key: "foo",
             isNumeric: false,
             values: {},

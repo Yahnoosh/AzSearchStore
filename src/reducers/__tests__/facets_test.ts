@@ -37,6 +37,7 @@ describe("reducers/facets", () => {
     });
     it("should add a range facet", () => {
         const expectedFacet: Store.RangeFacet = {
+            type: "RangeFacet",
             key: "foo",
             min: 0,
             max: 10,
@@ -59,6 +60,7 @@ describe("reducers/facets", () => {
     });
     it("should add a checkbox facet", () => {
         const expectedFacet: Store.CheckboxFacet = {
+            type: "CheckboxFacet",
             key: "foo",
             isNumeric: false,
             values: {},
@@ -78,6 +80,7 @@ describe("reducers/facets", () => {
     });
     it("should toggle the value of a checkbox facet value", () => {
         const initialFacet: Store.CheckboxFacet = {
+            type: "CheckboxFacet",
             key: "foo",
             isNumeric: false,
             values: {
@@ -98,6 +101,7 @@ describe("reducers/facets", () => {
             facetClause: "foo,count:5,sort:count"
         };
         const expectedFacet: Store.CheckboxFacet = {
+            type: "CheckboxFacet",
             key: "foo",
             isNumeric: false,
             values: {
