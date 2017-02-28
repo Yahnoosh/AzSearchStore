@@ -20,9 +20,9 @@
     1. ~~add facets~~
     2. ~~build URLS~~
     3. ~~tests~~
-    4. set facet values/ update facet clauses (1/2) ~~checkbox~~ range
-    5. enforce typecheck for toggle/setrange
-    5. tests
+    4. ~~set facet values/ update facet clauses ~~
+    5. ~~enforce typecheck for toggle/setrange~~
+    5. ~~tests~~
 5. filtering
     1. simple filter url building
     2. advanced filter url building

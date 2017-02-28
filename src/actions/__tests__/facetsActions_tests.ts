@@ -46,6 +46,7 @@ describe("actions/facets", () => {
             facetsActions.setFacetRange("foo", 0, 10)
         ).toEqual({
             type: "SET_FACET_RANGE",
+            key: "foo",
             lowerBound: 0,
             upperBound: 10
         });

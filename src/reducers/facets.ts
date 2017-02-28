@@ -31,7 +31,10 @@ export function facets(state: Store.Facets = initialState, action: FacetsAction)
                 facetClause: `${key},values:${filterLowerBound}|${filterUpperBound}`
             };
             newFacets[key] = rangeFacet;
-            return objectAssign({}, state, { facets: newFacets });
+
+            let mergedFacets = objectAssign({}, state.facets, newFacets);
+
+            return objectAssign({}, state, { facets: mergedFacets });
         case "ADD_CHECKBOX_FACET":
             key = action.key;
             const { isNumeric } = action;
@@ -48,11 +51,12 @@ export function facets(state: Store.Facets = initialState, action: FacetsAction)
                 facetClause: `${key},count:${count},sort:${sort}`
             };
             newFacets[key] = checkFacet;
-            return objectAssign({}, state, { facets: newFacets });
+            mergedFacets = objectAssign({}, state.facets, newFacets);
+            return objectAssign({}, state, { facets: mergedFacets });
         case "TOGGLE_CHECKBOX_SELECTION":
             key = action.key;
             const value = action.value;
-            const facet = state.facets[key];
+            let facet = state.facets[key];
             if (facet.type !== "CheckboxFacet") {
                 throw new Error(`TOGGLE_CHECKBOX_SELECTION must be called on facet of type 'CheckboxFacet', actual: ${facet.type}`);
             }
@@ -68,7 +72,20 @@ export function facets(state: Store.Facets = initialState, action: FacetsAction)
             const newValues = objectAssign({}, checkboxFacet.values, newValue);
             const newFacet = objectAssign({}, checkboxFacet, { values: newValues });
             newFacets[key] = newFacet;
-            return objectAssign({}, state, { facets: newFacets });
+            mergedFacets = objectAssign({}, state.facets, newFacets);
+            return objectAssign({}, state, { facets: mergedFacets });
+        case "SET_FACET_RANGE":
+            key = action.key;
+            const { lowerBound, upperBound} = action;
+            facet = state.facets[key];
+            if (facet.type !== "RangeFacet") {
+                throw new Error(`SET_FACET_RANGE must be called on facet of type 'RangeFacet', actual: ${facet.type}`);
+            }
+            const existingRangeFacet = facet as Store.RangeFacet;
+            const newRangeFacet = objectAssign({}, existingRangeFacet, { filterLowerBound: lowerBound, filterUpperBound: upperBound});
+            newFacets[key] = newRangeFacet;
+            mergedFacets = objectAssign({}, state.facets, newFacets);
+            return objectAssign({}, state, { facets: mergedFacets });
         default:
             return state;
     }

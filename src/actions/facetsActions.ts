@@ -21,6 +21,7 @@ export type FacetsAction =
     } |
     {
         type: "SET_FACET_RANGE",
+        key: string,
         lowerBound: number,
         upperBound: number
     } |
@@ -57,6 +58,7 @@ export const toggleCheckboxFacetSelection = (key: string, value: string): Facets
 
 export const setFacetRange = (key: string, lowerBound: number, upperBound: number): FacetsAction => ({
     type: "SET_FACET_RANGE",
+    key,
     lowerBound,
     upperBound
 });
