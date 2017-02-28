@@ -32,4 +32,22 @@ describe("actions/facets", () => {
             sort: "count"
         });
     });
+    it("should create action to toggle checkbox facet", () => {
+        expect(
+            facetsActions.toggleCheckboxFacetSelection("foo", "bar")
+        ).toEqual({
+            type: "TOGGLE_CHECKBOX_SELECTION",
+            key: "foo",
+            value: "bar"
+        });
+    });
+    it("should create action to set ranges for facet", () => {
+        expect(
+            facetsActions.setFacetRange("foo", 0, 10)
+        ).toEqual({
+            type: "SET_FACET_RANGE",
+            lowerBound: 0,
+            upperBound: 10
+        });
+    });
 });

@@ -15,6 +15,16 @@ export type FacetsAction =
         sort: Store.FacetSortingMode
     } |
     {
+        type: "TOGGLE_CHECKBOX_SELECTION",
+        key: string,
+        value: string
+    } |
+    {
+        type: "SET_FACET_RANGE",
+        lowerBound: number,
+        upperBound: number
+    } |
+    {
         type: "SET_FACET_MODE",
         facetMode: Store.FacetMode
     };
@@ -37,4 +47,16 @@ export const addRangeFacet = (key: string, min: number, max: number): FacetsActi
 export const setFacetMode = (facetMode: Store.FacetMode): FacetsAction => ({
     type: "SET_FACET_MODE",
     facetMode
+});
+
+export const toggleCheckboxFacetSelection = (key: string, value: string): FacetsAction => ({
+    type: "TOGGLE_CHECKBOX_SELECTION",
+    key,
+    value
+});
+
+export const setFacetRange = (key: string, lowerBound: number, upperBound: number): FacetsAction => ({
+    type: "SET_FACET_RANGE",
+    lowerBound,
+    upperBound
 });

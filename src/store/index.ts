@@ -31,6 +31,7 @@ export namespace Store {
     export type CheckboxFacetItem = {
         value: string,
         count: number
+        selected: boolean
     };
 
     export type FacetSortingMode = "count" | "count-" | "value" | "value-";
@@ -51,7 +52,7 @@ export namespace Store {
     export type CheckboxFacet = {
         isNumeric: boolean,
         key: string,
-        values: CheckboxFacetItem[]
+        values: {[key: string]: CheckboxFacetItem}
         count: number,
         sort: FacetSortingMode
         facetClause: string,

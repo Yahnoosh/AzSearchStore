@@ -61,7 +61,7 @@ describe("reducers/facets", () => {
         const expectedFacet: Store.CheckboxFacet = {
             key: "foo",
             isNumeric: false,
-            values: [],
+            values: {},
             count: 5,
             sort: "count",
             filterClause: "",
@@ -75,5 +75,58 @@ describe("reducers/facets", () => {
             },
             facetMode: "simple"
         });
+    });
+    it("should toggle the value of a checkbox facet value", () => {
+        const initialFacet: Store.CheckboxFacet = {
+            key: "foo",
+            isNumeric: false,
+            values: {
+                a: {
+                    value: "a",
+                    count: 5,
+                    selected: false
+                },
+                b: {
+                    value: "b",
+                    count: 5,
+                    selected: false
+                }
+            },
+            count: 5,
+            sort: "count",
+            filterClause: "",
+            facetClause: "foo,count:5,sort:count"
+        };
+        const expectedFacet: Store.CheckboxFacet = {
+            key: "foo",
+            isNumeric: false,
+            values: {
+                a: {
+                    value: "a",
+                    count: 5,
+                    selected: true
+                },
+                b: {
+                    value: "b",
+                    count: 5,
+                    selected: false
+                }
+            },
+            count: 5,
+            sort: "count",
+            filterClause: "",
+            facetClause: "foo,count:5,sort:count"
+        };
+        const initialFacets: Store.Facets = {
+            facetMode: "simple",
+            facets: {foo: initialFacet}
+        };
+        const expectedFacets: Store.Facets = {
+            facetMode: "simple",
+            facets: {foo: expectedFacet}
+        };
+        expect(
+            reducer(initialFacets, facetsAction.toggleCheckboxFacetSelection("foo", "a"))
+        ).toEqual(expectedFacets);
     });
 });

@@ -45,7 +45,7 @@ const testFacets: Store.Facets = {
         bar: {
             key: "foo",
             isNumeric: false,
-            values: [],
+            values: {},
             count: 5,
             sort: "count",
             filterClause: "",
