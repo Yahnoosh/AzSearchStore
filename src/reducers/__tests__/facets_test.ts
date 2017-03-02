@@ -130,7 +130,7 @@ describe("reducers/facets", () => {
             reducer(initialFacets, facetsAction.setFacetRange("foo", 5, 7))
         ).toEqual(expectedFacets);
     });
-    it("should toggle the value of a checkbox facet value", () => {
+    it("should toggle the value of a checkbox facet value, then toggle another value, verify facet and filter clauses", () => {
         const initialFacet: Store.CheckboxFacet = {
             type: "CheckboxFacet",
             key: "foo",
@@ -173,7 +173,7 @@ describe("reducers/facets", () => {
             filterClause: "",
             facetClause: "dummy,count:5,sort:count"
         };
-        const expectedFacet: Store.CheckboxFacet = {
+        const firstToggleFacet: Store.CheckboxFacet = {
             type: "CheckboxFacet",
             key: "foo",
             isNumeric: false,
@@ -191,19 +191,47 @@ describe("reducers/facets", () => {
             },
             count: 5,
             sort: "count",
-            filterClause: "",
+            filterClause: "(foo eq 'a')",
+            facetClause: "foo,count:5,sort:count"
+        };
+        const secondToggleFacet: Store.CheckboxFacet = {
+            type: "CheckboxFacet",
+            key: "foo",
+            isNumeric: false,
+            values: {
+                a: {
+                    value: "a",
+                    count: 5,
+                    selected: true
+                },
+                b: {
+                    value: "b",
+                    count: 5,
+                    selected: true
+                }
+            },
+            count: 5,
+            sort: "count",
+            filterClause: "(foo eq 'a' or foo eq 'b')",
             facetClause: "foo,count:5,sort:count"
         };
         const initialFacets: Store.Facets = {
             facetMode: "simple",
             facets: {foo: initialFacet, dummy: dummyFacet}
         };
-        const expectedFacets: Store.Facets = {
+        const firstToggleExpectedFacets: Store.Facets = {
             facetMode: "simple",
-            facets: {foo: expectedFacet, dummy: dummyFacet}
+            facets: {foo: firstToggleFacet, dummy: dummyFacet}
+        };
+        const secondToggleExpectedFacets: Store.Facets = {
+            facetMode: "simple",
+            facets: {foo: secondToggleFacet, dummy: dummyFacet}
         };
         expect(
             reducer(initialFacets, facetsAction.toggleCheckboxFacetSelection("foo", "a"))
-        ).toEqual(expectedFacets);
+        ).toEqual(firstToggleExpectedFacets);
+        expect(
+            reducer(firstToggleExpectedFacets, facetsAction.toggleCheckboxFacetSelection("foo", "b"))
+        ).toEqual(secondToggleExpectedFacets);
     });
 });

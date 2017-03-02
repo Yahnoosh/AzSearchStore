@@ -70,7 +70,11 @@ export function facets(state: Store.Facets = initialState, action: FacetsAction)
             let newValue: { [key: string]: Store.CheckboxFacetItem } = {};
             newValue[value] = updatedFacetItem;
             const newValues = objectAssign({}, checkboxFacet.values, newValue);
-            const newFacet = objectAssign({}, checkboxFacet, { values: newValues });
+            // merge in new values to facet
+            let newFacet = objectAssign({}, checkboxFacet, { values: newValues });
+            // create and merge in new filter
+            let filter = buildCheckboxFilter(newFacet);
+            newFacet = objectAssign({}, newFacet, { filterClause: filter });
             newFacets[key] = newFacet;
             mergedFacets = objectAssign({}, state.facets, newFacets);
             return objectAssign({}, state, { facets: mergedFacets });
@@ -82,11 +86,35 @@ export function facets(state: Store.Facets = initialState, action: FacetsAction)
                 throw new Error(`SET_FACET_RANGE must be called on facet of type 'RangeFacet', actual: ${facet.type}`);
             }
             const existingRangeFacet = facet as Store.RangeFacet;
-            const newRangeFacet = objectAssign({}, existingRangeFacet, { filterLowerBound: lowerBound, filterUpperBound: upperBound});
+            const newRangeFacet = objectAssign({}, existingRangeFacet, { filterLowerBound: lowerBound, filterUpperBound: upperBound });
             newFacets[key] = newRangeFacet;
             mergedFacets = objectAssign({}, state.facets, newFacets);
             return objectAssign({}, state, { facets: mergedFacets });
         default:
             return state;
     }
+}
+
+function buildCheckboxFilter(facet: Store.CheckboxFacet): string {
+    const selectedFacets = Object.keys(facet.values).filter((value) => {
+        return facet.values[value].selected;
+    });
+
+    let clauses = selectedFacets.map((selectedValue) => {
+        if (facet.isNumeric) {
+            return `${facet.key} eq ${facet.values[selectedValue].value}`;
+        }
+        else {
+            return `${facet.key} eq '${facet.values[selectedValue].value}'`;
+        }
+    });
+
+    let filter = clauses.join(" or ");
+    filter.length ? filter = `(${filter})` : filter = "";
+    return filter;
+}
+
+function buildRangeFilter(facet: Store.RangeFacet): string {
+
+    return "";
 }
