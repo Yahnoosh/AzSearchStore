@@ -115,7 +115,7 @@ describe("reducers/facets", () => {
             lowerBucketCount: 0,
             middleBucketCount: 0,
             upperBucketCount: 0,
-            filterClause: "",
+            filterClause: "foo ge 5 and foo le 7",
             facetClause: "foo,values:0|10"
         };
         const initialFacets: Store.Facets = {

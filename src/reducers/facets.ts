@@ -86,7 +86,9 @@ export function facets(state: Store.Facets = initialState, action: FacetsAction)
                 throw new Error(`SET_FACET_RANGE must be called on facet of type 'RangeFacet', actual: ${facet.type}`);
             }
             const existingRangeFacet = facet as Store.RangeFacet;
-            const newRangeFacet = objectAssign({}, existingRangeFacet, { filterLowerBound: lowerBound, filterUpperBound: upperBound });
+            let newRangeFacet = objectAssign({}, existingRangeFacet, { filterLowerBound: lowerBound, filterUpperBound: upperBound });
+            filter = buildRangeFilter(newRangeFacet);
+            newRangeFacet = objectAssign({}, newRangeFacet, { filterClause: filter });
             newFacets[key] = newRangeFacet;
             mergedFacets = objectAssign({}, state.facets, newFacets);
             return objectAssign({}, state, { facets: mergedFacets });
@@ -115,6 +117,15 @@ function buildCheckboxFilter(facet: Store.CheckboxFacet): string {
 }
 
 function buildRangeFilter(facet: Store.RangeFacet): string {
+    if (facet.min === facet.filterLowerBound && facet.max === facet.filterUpperBound) {
+        return "";
+    }
+    if (facet.min === facet.filterLowerBound) {
+        return `${facet.key} le ${facet.filterUpperBound}`;
+    }
+    if (facet.max === facet.filterUpperBound) {
+        return `${facet.key} ge ${facet.filterLowerBound}`;
+    }
 
-    return "";
+    return `${facet.key} ge ${facet.filterLowerBound} and ${facet.key} le ${facet.filterUpperBound}`;
 }
