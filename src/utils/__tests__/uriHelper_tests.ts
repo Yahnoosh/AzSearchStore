@@ -45,12 +45,52 @@ const testFacets: Store.Facets = {
         },
         bar: {
             type: "CheckboxFacet",
-            key: "foo",
+            key: "bar",
             isNumeric: false,
             values: {},
             count: 5,
             sort: "count",
             filterClause: "",
+            facetClause: "bar,count:5,sort:count"
+        }
+    }
+};
+
+const filteredFacets: Store.Facets = {
+    facetMode: "simple",
+    facets: {
+        foo: {
+            type: "RangeFacet",
+            key: "foo",
+            min: 0,
+            max: 10,
+            filterLowerBound: 5,
+            filterUpperBound: 7,
+            lowerBucketCount: 0,
+            middleBucketCount: 0,
+            upperBucketCount: 0,
+            filterClause: "foo ge 5 and foo le 7",
+            facetClause: "foo,values:0|10"
+        },
+        bar: {
+            type: "CheckboxFacet",
+            key: "bar",
+            isNumeric: false,
+            values: {
+                a: {
+                    value: "a",
+                    count: 5,
+                    selected: true
+                },
+                b: {
+                    value: "b",
+                    count: 5,
+                    selected: false
+                }
+            },
+            count: 5,
+            sort: "count",
+            filterClause: "(bar eq 'a')",
             facetClause: "bar,count:5,sort:count"
         }
     }
@@ -99,5 +139,20 @@ describe("utils/searchParameters", () => {
         expect(searchURI.hasQuery("$skip", 0)).toBe(true);
         expect(searchURI.hasQuery("facet", "foo,values:0|10", true)).toBe(true);
         expect(searchURI.hasQuery("facet", "bar,count:5,sort:count", true)).toBe(true);
+    });
+    it("should create a uri from test config, default searchParameters and custom facets with filters", () => {
+        const uriString = uriHelper.buildSearchURI(config, searchParameters.initialState, filteredFacets);
+        const searchURI = URI(uriString);
+        expect(
+            searchURI.valueOf()
+        ).toEqual("https://buzz.search.windows.net/indexes/foo/docs?search=%2A&api-version=2016-09-01&%24skip=0&%24top=50&searchMode=any&facet=foo%2Cvalues%3A0%7C10&facet=bar%2Ccount%3A5%2Csort%3Acount&%24filter=foo+ge+5+and+foo+le+7+and+%28bar+eq+%27a%27%29");
+        expect(searchURI.hasQuery("search", "*")).toBe(true);
+        expect(searchURI.hasQuery("api-version", "2016-09-01")).toBe(true);
+        expect(searchURI.hasQuery("searchMode", "any")).toBe(true);
+        expect(searchURI.hasQuery("$top", 50)).toBe(true);
+        expect(searchURI.hasQuery("$skip", 0)).toBe(true);
+        expect(searchURI.hasQuery("facet", "foo,values:0|10", true)).toBe(true);
+        expect(searchURI.hasQuery("facet", "bar,count:5,sort:count", true)).toBe(true);
+        expect(searchURI.hasQuery("$filter", "foo ge 5 and foo le 7 and (bar eq 'a')")).toBe(true);
     });
 });

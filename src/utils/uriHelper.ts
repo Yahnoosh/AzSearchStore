@@ -12,7 +12,8 @@ const parameterNameLookup = {
     skip: "$skip",
     top: "$top",
     apiVersion: "api-version",
-    facet: "facet"
+    facet: "facet",
+    filter: "$filter"
 };
 
 function appendQueryParams(searchURI: uri.URI, parameters: Store.SearchParameters, facets: Store.Facets): uri.URI {
@@ -29,10 +30,21 @@ function appendQueryParams(searchURI: uri.URI, parameters: Store.SearchParameter
     parameters.select ? params[parameterNameLookup.select] = parameters.select : 0;
     const facetClauses = getFacetClauses(facets);
     facetClauses ? params[parameterNameLookup.facet] = facetClauses : 0;
+    const filter = getFilterClauses(facets);
+    filter ? params[parameterNameLookup.filter] = filter : 0;
     searchURI.addQuery(params);
     return searchURI;
 }
 
+function getFilterClauses(facets: Store.Facets): string {
+    let filteredFacets = Object.keys(facets.facets).filter((key) => {
+        return facets.facets[key].filterClause.length > 0;
+    });
+    let filters = filteredFacets.map((key) => {
+        return facets.facets[key].filterClause;
+    });
+    return filters.join(" and ");
+}
 
 function getFacetClauses(facets: Store.Facets): string[] {
     const facetKeys = Object.keys(facets.facets);
