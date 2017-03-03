@@ -1,6 +1,8 @@
-import { FacetsAction } from "../actions/facetsActions";
+import { FacetsAction, SetFacetRangeAction, ToggleCheckboxFacetAction, AddCheckboxFacetAction, AddRangeFacetAction, SetFacetModeAction }
+    from "../actions/facetsActions";
 import { Store } from "../store";
 import * as objectAssign from "object-assign";
+import { updateObject, updateObjectAtKey } from "./reducerUtils";
 
 export const initialState: Store.Facets = {
     facetMode: "simple",
@@ -11,90 +13,90 @@ export function facets(state: Store.Facets = initialState, action: FacetsAction)
     let newFacets: { [key: string]: Store.Facet } = {};
     const initialFacets = state.facets;
     switch (action.type) {
-        case "SET_FACET_MODE":
-            return objectAssign({}, state, { facetMode: action.facetMode });
-        case "ADD_RANGE_FACET":
-            let { key, min, max } = action;
-            const filterLowerBound = min,
-                filterUpperBound = max;
-            const rangeFacet: Store.RangeFacet = {
-                type: "RangeFacet",
-                key,
-                min,
-                max,
-                filterLowerBound: min,
-                filterUpperBound: max,
-                lowerBucketCount: 0,
-                middleBucketCount: 0,
-                upperBucketCount: 0,
-                filterClause: "",
-                facetClause: `${key},values:${filterLowerBound}|${filterUpperBound}`
-            };
-            newFacets[key] = rangeFacet;
-
-            let mergedFacets = objectAssign({}, state.facets, newFacets);
-
-            return objectAssign({}, state, { facets: mergedFacets });
-        case "ADD_CHECKBOX_FACET":
-            key = action.key;
-            const { isNumeric } = action;
-            const sort = "count",
-                count = 5;
-            const checkFacet: Store.CheckboxFacet = {
-                type: "CheckboxFacet",
-                key,
-                isNumeric,
-                values: {},
-                count,
-                sort,
-                filterClause: "",
-                facetClause: `${key},count:${count},sort:${sort}`
-            };
-            newFacets[key] = checkFacet;
-            mergedFacets = objectAssign({}, state.facets, newFacets);
-            return objectAssign({}, state, { facets: mergedFacets });
-        case "TOGGLE_CHECKBOX_SELECTION":
-            key = action.key;
-            const value = action.value;
-            let facet = state.facets[key];
-            if (facet.type !== "CheckboxFacet") {
-                throw new Error(`TOGGLE_CHECKBOX_SELECTION must be called on facet of type 'CheckboxFacet', actual: ${facet.type}`);
-            }
-            const checkboxFacet = facet as Store.CheckboxFacet;
-            const oldFacetItem = checkboxFacet.values[value];
-            const updatedFacetItem: Store.CheckboxFacetItem = {
-                value: oldFacetItem.value,
-                count: oldFacetItem.count,
-                selected: !oldFacetItem.selected
-            };
-            let newValue: { [key: string]: Store.CheckboxFacetItem } = {};
-            newValue[value] = updatedFacetItem;
-            const newValues = objectAssign({}, checkboxFacet.values, newValue);
-            // merge in new values to facet
-            let newFacet = objectAssign({}, checkboxFacet, { values: newValues });
-            // create and merge in new filter
-            let filter = buildCheckboxFilter(newFacet);
-            newFacet = objectAssign({}, newFacet, { filterClause: filter });
-            newFacets[key] = newFacet;
-            mergedFacets = objectAssign({}, state.facets, newFacets);
-            return objectAssign({}, state, { facets: mergedFacets });
-        case "SET_FACET_RANGE":
-            key = action.key;
-            const { lowerBound, upperBound} = action;
-            facet = state.facets[key];
-            if (facet.type !== "RangeFacet") {
-                throw new Error(`SET_FACET_RANGE must be called on facet of type 'RangeFacet', actual: ${facet.type}`);
-            }
-            const existingRangeFacet = facet as Store.RangeFacet;
-            let newRangeFacet = objectAssign({}, existingRangeFacet, { filterLowerBound: lowerBound, filterUpperBound: upperBound });
-            filter = buildRangeFilter(newRangeFacet);
-            newRangeFacet = objectAssign({}, newRangeFacet, { filterClause: filter });
-            newFacets[key] = newRangeFacet;
-            mergedFacets = objectAssign({}, state.facets, newFacets);
-            return objectAssign({}, state, { facets: mergedFacets });
+        case "SET_FACET_MODE": return setFacetMode(state, action);
+        case "ADD_RANGE_FACET": return addRangeFacetAction(state, action);
+        case "ADD_CHECKBOX_FACET": return addCheckboxFacet(state, action);
+        case "TOGGLE_CHECKBOX_SELECTION": return toggleFacetSelection(state, action);
+        case "SET_FACET_RANGE": return setFacetRange(state, action);
         default:
             return state;
     }
+}
+
+function setFacetMode(state: Store.Facets, action: SetFacetModeAction): Store.Facets {
+    const { facetMode } = action;
+    return updateObject(state, { facetMode });
+}
+
+function addRangeFacetAction(state: Store.Facets, action: AddRangeFacetAction): Store.Facets {
+    let { key, min, max } = action;
+    const filterLowerBound = min,
+        filterUpperBound = max;
+    const rangeFacet: Store.RangeFacet = {
+        type: "RangeFacet",
+        key,
+        min,
+        max,
+        filterLowerBound: min,
+        filterUpperBound: max,
+        lowerBucketCount: 0,
+        middleBucketCount: 0,
+        upperBucketCount: 0,
+        filterClause: "",
+        facetClause: `${key},values:${filterLowerBound}|${filterUpperBound}`
+    };
+    const facets = updateObjectAtKey(state.facets, rangeFacet, key);
+    return updateObject(state, { facets });
+}
+
+function addCheckboxFacet(state: Store.Facets, action: AddCheckboxFacetAction): Store.Facets {
+    const { isNumeric, key } = action;
+    const sort = "count",
+        count = 5;
+    const checkFacet: Store.CheckboxFacet = {
+        type: "CheckboxFacet",
+        key,
+        isNumeric,
+        values: {},
+        count,
+        sort,
+        filterClause: "",
+        facetClause: `${key},count:${count},sort:${sort}`
+    };
+    const facets = updateObjectAtKey(state.facets, checkFacet, key);
+    return updateObject(state, { facets });
+}
+
+function toggleFacetSelection(state: Store.Facets, action: ToggleCheckboxFacetAction): Store.Facets {
+    const { key, value } = action;
+    const existingFacet = state.facets[key];
+    if (existingFacet.type !== "CheckboxFacet") {
+        throw new Error(`TOGGLE_CHECKBOX_SELECTION must be called on facet of type 'CheckboxFacet', actual: ${existingFacet.type}`);
+    }
+    const checkboxFacet = existingFacet as Store.CheckboxFacet;
+    const oldFacetItem = checkboxFacet.values[value];
+    const updatedFacetItem = updateObject(oldFacetItem, { selected: !oldFacetItem.selected });
+    const newValue: { [key: string]: Store.CheckboxFacetItem } = {};
+    const values = updateObjectAtKey(checkboxFacet.values, updatedFacetItem, value);
+    const newFacet = updateObject(checkboxFacet, { values });
+    const filterClause = buildCheckboxFilter(newFacet);
+    const newFacetWithFilter = updateObject(newFacet, { filterClause });
+    const facets = updateObjectAtKey(state.facets, newFacetWithFilter, key);
+    return updateObject(state, { facets });
+}
+
+function setFacetRange(state: Store.Facets, action: SetFacetRangeAction): Store.Facets {
+    const { key, lowerBound, upperBound} = action;
+    const existingFacet = state.facets[key];
+    if (existingFacet.type !== "RangeFacet") {
+        throw new Error(`SET_FACET_RANGE must be called on facet of type 'RangeFacet', actual: ${existingFacet.type}`);
+    }
+    const existingRangeFacet = existingFacet as Store.RangeFacet;
+    const newRangeFacet = updateObject(existingRangeFacet, { filterLowerBound: lowerBound, filterUpperBound: upperBound });
+    const filter = buildRangeFilter(newRangeFacet);
+    const newFacetWithFilter = updateObject(newRangeFacet, { filterClause: filter });
+    const facets = updateObjectAtKey(state.facets, newFacetWithFilter, key);
+    return updateObject(state, { facets });
 }
 
 function buildCheckboxFilter(facet: Store.CheckboxFacet): string {
