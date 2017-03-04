@@ -51,4 +51,20 @@ describe("actions/facets", () => {
             upperBound: 10
         });
     });
+    it("should create action to values for facets", () => {
+        expect(
+            facetsActions.setFacetsValues({})
+        ).toEqual({
+            type: "SET_FACETS_VALUES",
+            facets: {}
+        });
+    });
+    it("should create action to update values for a facet", () => {
+        expect(
+            facetsActions.updateFacetsValues({})
+        ).toEqual({
+            type: "UPDATE_FACETS_VALUES",
+            facets: {}
+        });
+    });
 });

@@ -1,4 +1,8 @@
-import { FacetsAction, SetFacetRangeAction, ToggleCheckboxFacetAction, AddCheckboxFacetAction, AddRangeFacetAction, SetFacetModeAction }
+import {
+    FacetsAction, SetFacetRangeAction, ToggleCheckboxFacetAction,
+    AddCheckboxFacetAction, AddRangeFacetAction, SetFacetModeAction,
+    SetFacetsValuesAction, UpdateFacetValuesAction
+}
     from "../actions/facetsActions";
 import { Store } from "../store";
 import * as objectAssign from "object-assign";
@@ -10,17 +14,68 @@ export const initialState: Store.Facets = {
 };
 
 export function facets(state: Store.Facets = initialState, action: FacetsAction): Store.Facets {
-    let newFacets: { [key: string]: Store.Facet } = {};
-    const initialFacets = state.facets;
     switch (action.type) {
         case "SET_FACET_MODE": return setFacetMode(state, action);
         case "ADD_RANGE_FACET": return addRangeFacetAction(state, action);
         case "ADD_CHECKBOX_FACET": return addCheckboxFacet(state, action);
         case "TOGGLE_CHECKBOX_SELECTION": return toggleFacetSelection(state, action);
         case "SET_FACET_RANGE": return setFacetRange(state, action);
+        case "SET_FACETS_VALUES": return setFacetsValues(state, action);
+        case "UPDATE_FACETS_VALUES": return updateFacetsValues(state, action);
         default:
             return state;
     }
+}
+
+function setFacetsValues(state: Store.Facets, action: SetFacetsValuesAction): Store.Facets {
+    let facets: { [key: string]: Store.Facet } = {};
+    const keysToUpdate = Object.keys(action.facets).filter((key) => {
+        const facet = state.facets[key];
+        return facet;
+    });
+    keysToUpdate.forEach((key) => {
+        const facet = state.facets[key];
+        const facetResults: Store.FacetResult[] = action.facets[key];
+        switch (facet.type) {
+            case "CheckboxFacet":
+                facets[key] = setCheckboxFacetValues(facet as Store.CheckboxFacet, facetResults);
+                break;
+            case "RangeFacet":
+                facets[key] = setRangeFacetValues(facet as Store.RangeFacet, facetResults);
+                break;
+            default: break;
+        }
+    });
+    return updateObject(state, { facets });
+}
+
+function setRangeFacetValues(facet: Store.RangeFacet, facetResults: Store.FacetResult[]): Store.RangeFacet {
+    return updateObject(facet,
+        {
+            filterLowerBound: facet.min,
+            filterUpperBound: facet.max,
+            lowerBucketCount: 0,
+            upperBucketCount: 0,
+            middleBucketCount: facetResults[1].count,
+            filterClause: ""
+        });
+}
+
+function setCheckboxFacetValues(facet: Store.CheckboxFacet, facetResults: Store.FacetResult[]): Store.CheckboxFacet {
+    let values: {[key: string]: Store.CheckboxFacetItem} = {};
+    facetResults.forEach((facetResult) => {
+        const { value, count } = facetResult;
+        values[value] = {
+            value,
+            count,
+            selected: false
+        };
+    });
+    return updateObject(facet, { values, filterClause: "" });
+}
+
+function updateFacetsValues(state: Store.Facets, action: UpdateFacetValuesAction): Store.Facets {
+    return state;
 }
 
 function setFacetMode(state: Store.Facets, action: SetFacetModeAction): Store.Facets {

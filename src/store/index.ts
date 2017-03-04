@@ -29,7 +29,7 @@ export namespace Store {
     };
 
     export type CheckboxFacetItem = {
-        value: string,
+        value: string | number,
         count: number
         selected: boolean
     };
@@ -59,6 +59,15 @@ export namespace Store {
         sort: FacetSortingMode
         facetClause: string,
         filterClause: string,
+    };
+
+    export type FacetResult = {
+        count: number,
+        // for bucketed facets
+        value?: string | number,
+        // for range facets
+        from?: number,
+        to?: number
     };
 
     export type FacetMode = "simple" | "advanced";

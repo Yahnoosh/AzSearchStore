@@ -234,4 +234,107 @@ describe("reducers/facets", () => {
             reducer(firstToggleExpectedFacets, facetsAction.toggleCheckboxFacetSelection("foo", "b"))
         ).toEqual(secondToggleExpectedFacets);
     });
+    it("should set incoming values for facets", () => {
+        const checkFacet: Store.CheckboxFacet = {
+            type: "CheckboxFacet",
+            key: "foo",
+            isNumeric: false,
+            values: {
+                a: {
+                    value: "a",
+                    count: 5,
+                    selected: false
+                },
+                b: {
+                    value: "b",
+                    count: 5,
+                    selected: false
+                }
+            },
+            count: 5,
+            sort: "count",
+            filterClause: "",
+            facetClause: "foo,count:5,sort:count"
+        };
+        const rangeFacet: Store.RangeFacet = {
+            type: "RangeFacet",
+            key: "bar",
+            min: 0,
+            max: 10,
+            filterLowerBound: 5,
+            filterUpperBound: 7,
+            lowerBucketCount: 0,
+            middleBucketCount: 0,
+            upperBucketCount: 0,
+            filterClause: "bar ge 5 and bar le 7",
+            facetClause: "bar,values:0|10"
+        };
+
+        const expectedCheckFacet: Store.CheckboxFacet = {
+            type: "CheckboxFacet",
+            key: "foo",
+            isNumeric: false,
+            values: {
+                c: {
+                    value: "c",
+                    count: 10,
+                    selected: false
+                },
+                d: {
+                    value: "d",
+                    count: 17,
+                    selected: false
+                }
+            },
+            count: 5,
+            sort: "count",
+            filterClause: "",
+            facetClause: "foo,count:5,sort:count"
+        };
+        const expectedRangeFacet: Store.RangeFacet = {
+            type: "RangeFacet",
+            key: "bar",
+            min: 0,
+            max: 10,
+            filterLowerBound: 0,
+            filterUpperBound: 10,
+            lowerBucketCount: 0,
+            middleBucketCount: 100,
+            upperBucketCount: 0,
+            filterClause: "",
+            facetClause: "bar,values:0|10"
+        };
+
+        const initialFacets: Store.Facets = {
+            facetMode: "simple",
+            facets: {
+                "foo": checkFacet,
+                "bar": rangeFacet
+            }
+        };
+
+        const expectedFacets: Store.Facets = {
+            facetMode: "simple",
+            facets: {
+                "foo": expectedCheckFacet,
+                "bar": expectedRangeFacet
+            }
+        };
+
+        const facetResults: { [key: string]: Store.FacetResult[] } = {
+            "foo": [
+                { value: "c", count: 10},
+                { value: "d", count: 17}
+            ],
+            "bar": [
+                {to: rangeFacet.min, count: 0},
+                {from: rangeFacet.min, to: rangeFacet.max, count: 100},
+                {from: rangeFacet.max, count: 0}
+            ]
+        };
+
+        expect(
+            reducer(initialFacets, facetsAction.setFacetsValues(facetResults))
+        ).toEqual(expectedFacets);
+    });
 });
