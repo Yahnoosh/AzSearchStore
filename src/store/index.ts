@@ -23,6 +23,7 @@ export namespace Store {
     };
 
     export type SearchResults = {
+        count: number,
         isFetching: boolean,
         lastUpdated: number,
         results: {}[]

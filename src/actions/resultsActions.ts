@@ -3,7 +3,13 @@ export type ResultsAction =
         type: "INITIATE_SEARCH",
     } |
     {
-        type: "RECEIVE_RESULTS" | "APPEND_RESULTS",
+        type: "RECEIVE_RESULTS",
+        results: {}[],
+        receivedAt: number,
+        count: number
+    } |
+    {
+        type: "APPEND_RESULTS",
         results: {}[],
         receivedAt: number
     } |
@@ -16,10 +22,11 @@ export const initiateSearch = (): ResultsAction => ({
     type: "INITIATE_SEARCH"
 });
 
-export const recieveResults = (results: {}[], receivedAt: number): ResultsAction => ({
+export const recieveResults = (results: {}[], receivedAt: number, count: number): ResultsAction => ({
     type: "RECEIVE_RESULTS",
     results,
-    receivedAt
+    receivedAt,
+    count
 });
 
 export const appendResults = (results: {}[], receivedAt: number): ResultsAction => ({

@@ -12,8 +12,9 @@ describe("actions/results", () => {
     });
     it("should create action to set results after search", () => {
         expect(
-            resultsActions.recieveResults([], ts)
+            resultsActions.recieveResults([], ts, 10)
         ).toEqual({
+            count: 10,
             type: "RECEIVE_RESULTS",
             results: [],
             receivedAt: ts

@@ -20,6 +20,7 @@ const facetResults: { [key: string]: Store.FacetResult[] } = {
 const searchResponse = {
     "@odata.context": "",
     "@odata.nextLink": "",
+    "@odata.count": 6,
     "@search.facets": facetResults,
     value: [
         { foo: "bar" },
@@ -52,7 +53,7 @@ describe("actions/async", () => {
 
         const expectedActions = [
             { type: "INITIATE_SEARCH" },
-            { type: "RECEIVE_RESULTS", results: searchResponse.value, receivedAt: Date.now() },
+            { type: "RECEIVE_RESULTS", results: searchResponse.value, receivedAt: Date.now(), count: 6},
             { type: "SET_FACETS_VALUES", facets: facetResults}
         ];
 
@@ -89,7 +90,7 @@ describe("actions/async", () => {
 
         const expectedActions = [
             { type: "INITIATE_SEARCH" },
-            { type: "RECEIVE_RESULTS", results: searchResponse.value, receivedAt: Date.now() },
+            { type: "RECEIVE_RESULTS", results: searchResponse.value, receivedAt: Date.now(), count: 6 },
             { type: "UPDATE_FACETS_VALUES", facets: facetResults}
         ];
 

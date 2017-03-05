@@ -5,6 +5,7 @@
     1. ~~action creation + tests~~
     2. ~~reducer + tests~~
     3. ~~url composition + tests~~
+    4. ~~support $count~~
 2. ~~api verions~~
     1. ~~action creation + tests~~
     2. ~~reducer + tests~~

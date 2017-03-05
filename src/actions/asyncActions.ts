@@ -10,7 +10,7 @@ import thunk, { ThunkAction } from "redux-thunk";
 
 
 const searchAndDispatch: ThunkAction<Promise<void>, Store.SearchState, {
-    resultsActionToDispatch: (results: {}[], recievedAt: number) => resultsActions.ResultsAction,
+    resultsActionToDispatch: (results: {}[], recievedAt: number, count?: number) => resultsActions.ResultsAction,
     facetsActionToDispatch: (facets: { [key: string]: Store.FacetResult[] }) => facetsActions.FacetsAction
 }> =
     (dispatch, getState, {resultsActionToDispatch, facetsActionToDispatch}) => {
@@ -24,7 +24,9 @@ const searchAndDispatch: ThunkAction<Promise<void>, Store.SearchState, {
             .then(response => response.json())
             .then(json => {
                 const results: {}[] = json.value;
-                dispatch(resultsActionToDispatch(results, Date.now()));
+                let count: number = json["@odata.count"];
+                count = count >= 0 ? count : -1;
+                dispatch(resultsActionToDispatch(results, Date.now(), count));
                 const facets: { [key: string]: Store.FacetResult[] } = json["@search.facets"];
                 if (facetsActionToDispatch) {
                     dispatch(facetsActionToDispatch(facets));
