@@ -10,7 +10,7 @@ export type FacetsAction =
     UpdateFacetValuesAction;
 export type UpdateFacetValuesAction = {
     type: "UPDATE_FACETS_VALUES",
-    facets: {}
+    facets: { [key: string]: Store.FacetResult[] }
 };
 export type SetFacetsValuesAction = {
     type: "SET_FACETS_VALUES",

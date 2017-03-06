@@ -62,7 +62,7 @@ function setRangeFacetValues(facet: Store.RangeFacet, facetResults: Store.FacetR
 }
 
 function setCheckboxFacetValues(facet: Store.CheckboxFacet, facetResults: Store.FacetResult[]): Store.CheckboxFacet {
-    let values: {[key: string]: Store.CheckboxFacetItem} = {};
+    let values: { [key: string]: Store.CheckboxFacetItem } = {};
     facetResults.forEach((facetResult) => {
         const { value, count } = facetResult;
         values[value] = {
@@ -75,7 +75,35 @@ function setCheckboxFacetValues(facet: Store.CheckboxFacet, facetResults: Store.
 }
 
 function updateFacetsValues(state: Store.Facets, action: UpdateFacetValuesAction): Store.Facets {
-    return state;
+    const updatedFacets: { [key: string]: Store.Facet } = {};
+    Object.keys(action.facets).forEach((key) => {
+        const facet = state.facets[key];
+        const currentItem = action.facets[key];
+        switch (facet.type) {
+            case "RangeFacet":
+                updatedFacets[key] = updateObject(facet, {
+                    lowerBucketCount: currentItem[0].count,
+                    middleBucketCount: currentItem[1].count,
+                    upperBucketCount: currentItem[2].count
+                });
+                break;
+            case "CheckboxFacet":
+                const updatedValues: { [key: string]: Store.CheckboxFacetItem } = {};
+                currentItem.forEach((item) => {
+                    updatedValues[item.value] = {
+                        count: item.count,
+                        value: item.value,
+                        selected: facet.values[item.value] ? facet.values[item.value].selected : false
+                    };
+                });
+                const values = updateObject(facet.values, updatedValues);
+                updatedFacets[key] = updateObject(facet, { values });
+                break;
+            default: break;
+        }
+    });
+    const facets = updateObject(state.facets, updatedFacets);
+    return updateObject(state, { facets });
 }
 
 function setFacetMode(state: Store.Facets, action: SetFacetModeAction): Store.Facets {

@@ -7,16 +7,16 @@ const reducer = facets.facets;
 const testResults = [
     { text: "foo" },
     { text: "bar" },
-    { text: "buzz"}
+    { text: "buzz" }
 ];
 
 const appendResults = [
     { text: "foo" },
     { text: "bar" },
-    { text: "buzz"},
+    { text: "buzz" },
     { text: "foo" },
     { text: "bar" },
-    { text: "buzz"}
+    { text: "buzz" }
 ];
 
 const ts = Date.now();
@@ -120,11 +120,11 @@ describe("reducers/facets", () => {
         };
         const initialFacets: Store.Facets = {
             facetMode: "simple",
-            facets: {foo: initialFacet, dummy: dummyFacet}
+            facets: { foo: initialFacet, dummy: dummyFacet }
         };
         const expectedFacets: Store.Facets = {
             facetMode: "simple",
-            facets: {foo: expectedFacet, dummy: dummyFacet}
+            facets: { foo: expectedFacet, dummy: dummyFacet }
         };
         expect(
             reducer(initialFacets, facetsAction.setFacetRange("foo", 5, 7))
@@ -217,15 +217,15 @@ describe("reducers/facets", () => {
         };
         const initialFacets: Store.Facets = {
             facetMode: "simple",
-            facets: {foo: initialFacet, dummy: dummyFacet}
+            facets: { foo: initialFacet, dummy: dummyFacet }
         };
         const firstToggleExpectedFacets: Store.Facets = {
             facetMode: "simple",
-            facets: {foo: firstToggleFacet, dummy: dummyFacet}
+            facets: { foo: firstToggleFacet, dummy: dummyFacet }
         };
         const secondToggleExpectedFacets: Store.Facets = {
             facetMode: "simple",
-            facets: {foo: secondToggleFacet, dummy: dummyFacet}
+            facets: { foo: secondToggleFacet, dummy: dummyFacet }
         };
         expect(
             reducer(initialFacets, facetsAction.toggleCheckboxFacetSelection("foo", "a"))
@@ -323,18 +323,155 @@ describe("reducers/facets", () => {
 
         const facetResults: { [key: string]: Store.FacetResult[] } = {
             "foo": [
-                { value: "c", count: 10},
-                { value: "d", count: 17}
+                { value: "c", count: 10 },
+                { value: "d", count: 17 }
             ],
             "bar": [
-                {to: rangeFacet.min, count: 0},
-                {from: rangeFacet.min, to: rangeFacet.max, count: 100},
-                {from: rangeFacet.max, count: 0}
+                { to: rangeFacet.min, count: 0 },
+                { from: rangeFacet.min, to: rangeFacet.max, count: 100 },
+                { from: rangeFacet.max, count: 0 }
             ]
         };
 
         expect(
             reducer(initialFacets, facetsAction.setFacetsValues(facetResults))
+        ).toEqual(expectedFacets);
+    });
+    it("should update incoming values for facets", () => {
+        const checkFacet: Store.CheckboxFacet = {
+            type: "CheckboxFacet",
+            key: "foo",
+            isNumeric: false,
+            values: {
+                a: {
+                    value: "a",
+                    count: 5,
+                    selected: true
+                },
+                b: {
+                    value: "b",
+                    count: 5,
+                    selected: false
+                }
+            },
+            count: 5,
+            sort: "count",
+            filterClause: "( foo eq 'a )",
+            facetClause: "foo,count:5,sort:count"
+        };
+        const rangeFacet: Store.RangeFacet = {
+            type: "RangeFacet",
+            key: "bar",
+            min: 0,
+            max: 10,
+            filterLowerBound: 5,
+            filterUpperBound: 7,
+            lowerBucketCount: 0,
+            middleBucketCount: 0,
+            upperBucketCount: 0,
+            filterClause: "bar ge 5 and bar le 7",
+            facetClause: "bar,values:0|10"
+        };
+
+        const dummyCheckFacet: Store.CheckboxFacet = {
+            type: "CheckboxFacet",
+            key: "buzz",
+            isNumeric: false,
+            values: {
+                c: {
+                    value: "c",
+                    count: 10,
+                    selected: true
+                },
+                d: {
+                    value: "d",
+                    count: 17,
+                    selected: false
+                }
+            },
+            count: 5,
+            sort: "count",
+            filterClause: "( buzz eq 'c' )",
+            facetClause: "buzz,count:5,sort:count"
+        };
+        const expectedCheckFacet: Store.CheckboxFacet = {
+            type: "CheckboxFacet",
+            key: "foo",
+            isNumeric: false,
+            values: {
+                a: {
+                    value: "a",
+                    count: 11,
+                    selected: true
+                },
+                b: {
+                    value: "b",
+                    count: 5,
+                    selected: false
+                },
+                c: {
+                    value: "c",
+                    count: 12,
+                    selected: false
+                },
+                d: {
+                    value: "d",
+                    count: 13,
+                    selected: false
+                }
+            },
+            count: 5,
+            sort: "count",
+            filterClause: "( foo eq 'a )",
+            facetClause: "foo,count:5,sort:count"
+        };
+        const expectedRangeFacet: Store.RangeFacet = {
+            type: "RangeFacet",
+            key: "bar",
+            min: 0,
+            max: 10,
+            filterLowerBound: 5,
+            filterUpperBound: 7,
+            lowerBucketCount: 1,
+            middleBucketCount: 2,
+            upperBucketCount: 3,
+            filterClause: "bar ge 5 and bar le 7",
+            facetClause: "bar,values:0|10"
+        };
+
+        const initialFacets: Store.Facets = {
+            facetMode: "simple",
+            facets: {
+                "foo": checkFacet,
+                "bar": rangeFacet,
+                "buzz": dummyCheckFacet
+            }
+        };
+
+        const expectedFacets: Store.Facets = {
+            facetMode: "simple",
+            facets: {
+                "foo": expectedCheckFacet,
+                "bar": expectedRangeFacet,
+                "buzz": dummyCheckFacet
+            }
+        };
+
+        const facetResults: { [key: string]: Store.FacetResult[] } = {
+            "foo": [
+                { value: "a", count: 11 },
+                { value: "c", count: 12 },
+                { value: "d", count: 13 }
+            ],
+            "bar": [
+                { to: 5, count: 1 },
+                { from: 5, to: 7, count: 2 },
+                { from: 7, count: 3 }
+            ]
+        };
+
+        expect(
+            reducer(initialFacets, facetsAction.updateFacetsValues(facetResults))
         ).toEqual(expectedFacets);
     });
 });
