@@ -22,6 +22,19 @@ export namespace Store {
         apiVersion: SearchApiVersion
     };
 
+    export type SearchParametersUpdate = {
+        input?: string,
+        count?: boolean,
+        top?: number,
+        skip?: number,
+        orderBy?: string,
+        searchMode?: SearchMode,
+        scoringProfile?: string,
+        select?: string,
+        searchFields?: string,
+        apiVersion?: SearchApiVersion
+    };
+
     export type SearchResults = {
         count: number,
         isFetching: boolean,

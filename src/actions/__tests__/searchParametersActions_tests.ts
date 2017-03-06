@@ -27,6 +27,14 @@ describe("actions/searchParameters", () => {
             parameters: searchParameters.initialState
         });
     });
+    it("should create action to update parameters", () => {
+        expect(
+            searchParametersActions.updateParameters(searchParameters.initialState)
+        ).toEqual({
+            type: "UPDATE_PARAMETERS",
+            parameters: searchParameters.initialState
+        });
+    });
     it("should create action to incrememt skip", () => {
         expect(
             searchParametersActions.incrementsSkip()

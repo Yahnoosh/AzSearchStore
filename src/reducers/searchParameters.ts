@@ -1,6 +1,6 @@
 import { SearchParametersAction } from "../actions/searchParametersActions";
 import { Store } from "../store";
-import * as objectAssign from "object-assign";
+import { updateObject } from "./reducerUtils";
 
 export const initialState: Store.SearchParameters = {
     input: "*",
@@ -18,17 +18,19 @@ export const initialState: Store.SearchParameters = {
 export function searchParameters(state: Store.SearchParameters = initialState, action: SearchParametersAction): Store.SearchParameters {
     switch (action.type) {
         case "SET_INPUT":
-            return objectAssign({}, state, { input: action.input });
+            return updateObject( state, { input: action.input });
         case "SET_APIVERSION":
-            return objectAssign({}, state, { apiVersion: action.apiVersion });
+            return updateObject(state, { apiVersion: action.apiVersion });
         case "SET_PARAMETERS":
             return action.parameters;
+        case "UPDATE_PARAMETERS":
+            return updateObject(state, action.parameters);
         case "INCREMENT_SKIP":
-            return objectAssign({}, state, { skip: state.skip + state.top });
+            return updateObject(state, { skip: state.skip + state.top });
         case "DECREMENT_SKIP":
             let skip = state.skip - state.top;
             skip = skip >= 0 ? skip : 0;
-            return objectAssign({}, state, { skip });
+            return updateObject(state, { skip });
         default:
             return state;
     }

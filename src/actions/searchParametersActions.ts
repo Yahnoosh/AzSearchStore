@@ -14,6 +14,10 @@ export type SearchParametersAction =
         parameters: Store.SearchParameters
     } |
     {
+        type: "UPDATE_PARAMETERS",
+        parameters: Store.SearchParametersUpdate
+    } |
+    {
         type: "INCREMENT_SKIP",
     } |
     {
@@ -32,6 +36,11 @@ export const setApiVersion = (apiVersion: Store.SearchApiVersion): SearchParamet
 
 export const setParameters = (parameters: Store.SearchParameters): SearchParametersAction => ({
     type: "SET_PARAMETERS",
+    parameters
+});
+
+export const updateParameters = (parameters: Store.SearchParametersUpdate): SearchParametersAction => ({
+    type: "UPDATE_PARAMETERS",
     parameters
 });
 
