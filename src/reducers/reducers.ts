@@ -1,6 +1,6 @@
 import { ConfigAction } from "../actions/configActions";
 import { Store } from "../store";
-import { combineReducers } from "redux";
+import { combineReducers, Action } from "redux";
 import { config } from "./config";
 import { results } from "./results";
 import { searchParameters } from "./searchParameters";

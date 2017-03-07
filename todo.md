@@ -29,6 +29,7 @@
         2. ~~expose set as async action, e2e tests~~
         3. ~~update reducers/actions & tests~~
         4. ~~expose update as async action, e2e tests~~
+    7. clear facets
 5. ~~filtering~~
     1. ~~simple filter url building~~
     2. advanced filter url building -- DEFERRED
@@ -38,3 +39,6 @@
 7. ~~refactor facets reducer~~
 6. extensibility
     1. accept js callbacks for search, suggestions. could be via buildSearchURI, could create function that accepts URL and executes it on server
+7. Reliability
+    1. more error handling for network requests
+    2. retries
