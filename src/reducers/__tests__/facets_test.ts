@@ -474,4 +474,95 @@ describe("reducers/facets", () => {
             reducer(initialFacets, facetsAction.updateFacetsValues(facetResults))
         ).toEqual(expectedFacets);
     });
+    it("should clear all selected values/ranges and clear filter for all facets", () => {
+        const checkFacet: Store.CheckboxFacet = {
+            type: "CheckboxFacet",
+            key: "foo",
+            isNumeric: false,
+            values: {
+                a: {
+                    value: "a",
+                    count: 5,
+                    selected: true
+                },
+                b: {
+                    value: "b",
+                    count: 5,
+                    selected: false
+                }
+            },
+            count: 5,
+            sort: "count",
+            filterClause: "( foo eq 'a )",
+            facetClause: "foo,count:5,sort:count"
+        };
+        const rangeFacet: Store.RangeFacet = {
+            type: "RangeFacet",
+            key: "bar",
+            min: 0,
+            max: 10,
+            filterLowerBound: 5,
+            filterUpperBound: 7,
+            lowerBucketCount: 4,
+            middleBucketCount: 5,
+            upperBucketCount: 3,
+            filterClause: "bar ge 5 and bar le 7",
+            facetClause: "bar,values:0|10"
+        };
+
+        const expectedCheckFacet: Store.CheckboxFacet = {
+            type: "CheckboxFacet",
+            key: "foo",
+            isNumeric: false,
+            values: {
+                a: {
+                    value: "a",
+                    count: 0,
+                    selected: false
+                },
+                b: {
+                    value: "b",
+                    count: 0,
+                    selected: false
+                }
+            },
+            count: 5,
+            sort: "count",
+            filterClause: "",
+            facetClause: "foo,count:5,sort:count"
+        };
+        const expectedRangeFacet: Store.RangeFacet = {
+            type: "RangeFacet",
+            key: "bar",
+            min: 0,
+            max: 10,
+            filterLowerBound: 0,
+            filterUpperBound: 10,
+            lowerBucketCount: 0,
+            middleBucketCount: 0,
+            upperBucketCount: 0,
+            filterClause: "",
+            facetClause: "bar,values:0|10"
+        };
+
+        const initialFacets: Store.Facets = {
+            facetMode: "simple",
+            facets: {
+                "foo": checkFacet,
+                "bar": rangeFacet,
+            }
+        };
+
+        const expectedFacets: Store.Facets = {
+            facetMode: "simple",
+            facets: {
+                "foo": expectedCheckFacet,
+                "bar": expectedRangeFacet,
+            }
+        };
+
+        expect(
+            reducer(initialFacets, facetsAction.clearFacetsSelections())
+        ).toEqual(expectedFacets);
+    });
 });

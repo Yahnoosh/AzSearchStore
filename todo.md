@@ -29,7 +29,7 @@
         2. ~~expose set as async action, e2e tests~~
         3. ~~update reducers/actions & tests~~
         4. ~~expose update as async action, e2e tests~~
-    7. clear facets
+    7. ~~clear facets~~
 5. ~~filtering~~
     1. ~~simple filter url building~~
     2. advanced filter url building -- DEFERRED

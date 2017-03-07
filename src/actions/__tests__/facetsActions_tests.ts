@@ -67,4 +67,11 @@ describe("actions/facets", () => {
             facets: {}
         });
     });
+    it("should create action to clear selected values/ranges from facets", () => {
+        expect(
+            facetsActions.clearFacetsSelections()
+        ).toEqual({
+            type: "CLEAR_FACETS_SELECTIONS",
+        });
+    });
 });

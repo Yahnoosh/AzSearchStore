@@ -7,7 +7,11 @@ export type FacetsAction =
     SetFacetRangeAction |
     SetFacetModeAction |
     SetFacetsValuesAction |
-    UpdateFacetValuesAction;
+    UpdateFacetValuesAction |
+    ClearFacetsSelectionsAction;
+export type ClearFacetsSelectionsAction = {
+    type: "CLEAR_FACETS_SELECTIONS",
+};
 export type UpdateFacetValuesAction = {
     type: "UPDATE_FACETS_VALUES",
     facets: { [key: string]: Store.FacetResult[] }
@@ -87,3 +91,5 @@ export const setFacetRange = (key: string, lowerBound: number, upperBound: numbe
     lowerBound,
     upperBound
 });
+
+export const clearFacetsSelections = (): FacetsAction => ({ type: "CLEAR_FACETS_SELECTIONS" });

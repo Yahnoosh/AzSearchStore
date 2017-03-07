@@ -1,7 +1,7 @@
 import {
     FacetsAction, SetFacetRangeAction, ToggleCheckboxFacetAction,
     AddCheckboxFacetAction, AddRangeFacetAction, SetFacetModeAction,
-    SetFacetsValuesAction, UpdateFacetValuesAction
+    SetFacetsValuesAction, UpdateFacetValuesAction, ClearFacetsSelectionsAction
 }
     from "../actions/facetsActions";
 import { Store } from "../store";
@@ -22,9 +22,42 @@ export function facets(state: Store.Facets = initialState, action: FacetsAction)
         case "SET_FACET_RANGE": return setFacetRange(state, action);
         case "SET_FACETS_VALUES": return setFacetsValues(state, action);
         case "UPDATE_FACETS_VALUES": return updateFacetsValues(state, action);
+        case "CLEAR_FACETS_SELECTIONS": return clearFacetsSelections(state, action);
         default:
             return state;
     }
+}
+
+function clearFacetsSelections(state: Store.Facets, action: ClearFacetsSelectionsAction): Store.Facets {
+    let facets: { [key: string]: Store.Facet } = {};
+    Object.keys(state.facets).forEach((key) => {
+        const facet = state.facets[key];
+        switch (facet.type) {
+            case "CheckboxFacet":
+                const values: { [key: string]: Store.CheckboxFacetItem } = {};
+                Object.keys(facet.values).forEach((value) => {
+                    const currentItem = facet.values[value];
+                    const item = updateObject(currentItem, { selected: false, count: 0 });
+                    values[value] = item;
+                });
+                facets[key] = updateObject(facet, { values, filterClause: "" });
+                break;
+            case "RangeFacet":
+                facets[key] = updateObject(facet,
+                    {
+                        filterLowerBound: facet.min,
+                        filterUpperBound: facet.max,
+                        lowerBucketCount: 0,
+                        middleBucketCount: 0,
+                        upperBucketCount: 0,
+                        filterClause: ""
+                    }
+                );
+                break;
+            default: break;
+        }
+    });
+    return updateObject(state, { facets });
 }
 
 function setFacetsValues(state: Store.Facets, action: SetFacetsValuesAction): Store.Facets {
