@@ -3,7 +3,6 @@ import { Store } from "../store";
 import { updateObject } from "./reducerUtils";
 
 export const initialState: Store.SearchParameters = {
-    input: "*",
     count: false,
     orderBy: null,
     scoringProfile: null,
@@ -17,13 +16,11 @@ export const initialState: Store.SearchParameters = {
 
 export function searchParameters(state: Store.SearchParameters = initialState, action: SearchParametersAction): Store.SearchParameters {
     switch (action.type) {
-        case "SET_INPUT":
-            return updateObject( state, { input: action.input });
-        case "SET_APIVERSION":
+        case "SET_SEARCH_APIVERSION":
             return updateObject(state, { apiVersion: action.apiVersion });
-        case "SET_PARAMETERS":
+        case "SET_SEARCH_PARAMETERS":
             return action.parameters;
-        case "UPDATE_PARAMETERS":
+        case "UPDATE_SEARCH_PARAMETERS":
             return updateObject(state, action.parameters);
         case "INCREMENT_SKIP":
             return updateObject(state, { skip: state.skip + state.top });

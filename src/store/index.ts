@@ -10,7 +10,6 @@ export namespace Store {
     export type SearchMode = "any" | "all";
 
     export type SearchParameters = {
-        input: string,
         count: boolean,
         top: number,
         skip: number,
@@ -19,11 +18,11 @@ export namespace Store {
         scoringProfile: string,
         select: string,
         searchFields: string,
+        minimumCoverage?: string,
         apiVersion: SearchApiVersion
     };
 
     export type SearchParametersUpdate = {
-        input?: string,
         count?: boolean,
         top?: number,
         skip?: number,
@@ -32,7 +31,40 @@ export namespace Store {
         scoringProfile?: string,
         select?: string,
         searchFields?: string,
+        minimumCoverage?: string,
         apiVersion?: SearchApiVersion
+    };
+
+    export type SuggestionsParameters = {
+        top: number,
+        filter: string,
+        orderBy: string,
+        fuzzy: boolean,
+        highlightPreTag: string,
+        highlightPostTag: string
+        select: string,
+        searchFields: string,
+        minimumCoverage?: string,
+        apiVersion: SearchApiVersion
+    };
+
+    export type SuggestionsParametersUpdate = {
+        top?: number,
+        filter?: string,
+        orderBy?: string,
+        fuzzy?: boolean,
+        highlightPreTag?: string,
+        highlightPostTag?: string
+        select?: string,
+        searchFields?: string,
+        minimumCoverage?: string,
+        apiVersion?: SearchApiVersion
+    };
+
+    export type Parameters = {
+        searchParameters: SearchParameters,
+        suggestionsParameters: SuggestionsParameters,
+        input: string
     };
 
     export type SearchResults = {
@@ -98,6 +130,6 @@ export namespace Store {
         results: SearchResults,
         suggestions: {}[],
         facets: Facets
-        searchParameters: SearchParameters
+        parameters: Parameters
     };
 }

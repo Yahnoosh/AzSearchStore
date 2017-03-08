@@ -7,6 +7,7 @@ import { Store } from "./store";
 import * as asyncActions from "./actions/asyncActions";
 import * as configActions from "./actions/configActions";
 import * as searchParameterActions from "./actions/searchParametersActions";
+import * as inputActions from "./actions/inputActions";
 import * as facetsActions from "./actions/facetsActions";
 import * as promise from "es6-promise";
 
@@ -23,7 +24,7 @@ store.subscribe(() => {
     const state = store.getState();
     console.info("--------------------state--------------------");
     console.info(`config: ${JSON.stringify(state.config)}`);
-    console.info(`search params: ${JSON.stringify(state.searchParameters)}`);
+    console.info(`search params: ${JSON.stringify(state.parameters)}`);
     console.info(`facets: ${JSON.stringify(state.facets)}`);
     console.info(`results: ${JSON.stringify(state.results.count)}`);
 
@@ -31,8 +32,8 @@ store.subscribe(() => {
 
 // configuration
 store.dispatch(configActions.setConfig({ index: "wikiversity", queryKey: "4412747C72BF48B6C761ED7E00D9964D", service: "azsdoofgod" }));
-store.dispatch(searchParameterActions.updateParameters({ count: true }));
-store.dispatch(searchParameterActions.setInput("*"));
+store.dispatch(searchParameterActions.updateSearchParameters({ count: true }));
+store.dispatch(inputActions.setInput("*"));
 store.dispatch(facetsActions.addCheckboxFacet("campusType", false));
 store.dispatch(facetsActions.addRangeFacet("studentsCount", 0, 100000));
 store.dispatch(facetsActions.addRangeFacet("endowmentAmount", 0, 5000000000));
@@ -53,7 +54,7 @@ class SearchPage extends React.Component<SearchProps, Store.SearchState> {
         this.state = props.store.getState();
     }
     handleChange(event: any) {
-        this.props.store.dispatch(searchParameterActions.setInput(event.target.value));
+        this.props.store.dispatch(inputActions.setInput(event.target.value));
     }
     onKeyPress(event: any) {
         if (event.key === "Enter") {
@@ -68,7 +69,7 @@ class SearchPage extends React.Component<SearchProps, Store.SearchState> {
         }
         return (
             <div>
-                <input value={state.searchParameters.input} onChange={this.handleChange.bind(this)} onKeyPress={this.onKeyPress.bind(this)}></input>
+                <input value={state.parameters.input} onChange={this.handleChange.bind(this)} onKeyPress={this.onKeyPress.bind(this)}></input>
                 <h3>count: {state.results.count}</h3>
                 <ul>
                     {results.map((result: any) => {

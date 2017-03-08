@@ -4,6 +4,14 @@ import * as nock from "nock";
 import * as actions from "../asyncActions";
 import { Store } from "../../store";
 import * as searchParameters from "../../reducers/searchParameters";
+import * as suggestionsParameters from "../../reducers/suggestionsParameters";
+import * as input from "../../reducers/input";
+
+const parameterInitialState: Store.Parameters = {
+    input: input.initialState,
+    searchParameters: searchParameters.initialState,
+    suggestionsParameters: suggestionsParameters.initialState
+};
 
 const facetResults: { [key: string]: Store.FacetResult[] } = {
             "foo": [
@@ -57,7 +65,7 @@ describe("actions/async", () => {
             { type: "SET_FACETS_VALUES", facets: facetResults}
         ];
 
-        const store = mockStore({ config, searchParameters: searchParameters.initialState, facets });
+        const store = mockStore({ config, parameters: parameterInitialState, facets });
 
         store.dispatch(actions.fetchSearchResults).then(() => {
             expect(store.getActions()).toEqual(expectedActions);
@@ -75,7 +83,7 @@ describe("actions/async", () => {
             { type: "APPEND_RESULTS", results: searchResponse.value, receivedAt: Date.now() }
         ];
 
-        const store = mockStore({ config, searchParameters: searchParameters.initialState, facets });
+        const store = mockStore({ config, parameters: parameterInitialState, facets });
 
         store.dispatch(actions.loadMoreSearchResults).then(() => {
             expect(store.getActions()).toEqual(expectedActions);
@@ -94,7 +102,7 @@ describe("actions/async", () => {
             { type: "UPDATE_FACETS_VALUES", facets: facetResults}
         ];
 
-        const store = mockStore({ config, searchParameters: searchParameters.initialState, facets });
+        const store = mockStore({ config, parameters: parameterInitialState, facets });
 
         store.dispatch(actions.fetchSearchResultsFromFacet).then(() => {
             expect(store.getActions()).toEqual(expectedActions);

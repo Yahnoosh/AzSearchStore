@@ -11,27 +11,8 @@ describe("reducers/searchParameters", () => {
             searchParameters.searchParameters(<Store.SearchParameters>undefined, <searchParametersActions.SearchParametersAction>{})
         ).toEqual(initialState);
     });
-    it("should properly set input", () => {
-        expect(
-            searchParameters.searchParameters(initialState, searchParametersActions.setInput("foo"))
-        ).toEqual({
-            input: "foo",
-            count: false,
-            orderBy: null,
-            scoringProfile: null,
-            searchFields: null,
-            select: null,
-            skip: 0,
-            top: 50,
-            apiVersion: "2016-09-01",
-            searchMode: "any"
-        });
-    });
     it("should properly set api version", () => {
-        expect(
-            searchParameters.searchParameters(initialState, searchParametersActions.setApiVersion("2015-02-28-Preview"))
-        ).toEqual({
-            input: "*",
+        const expectedParams: Store.SearchParameters = {
             count: false,
             orderBy: null,
             scoringProfile: null,
@@ -41,11 +22,13 @@ describe("reducers/searchParameters", () => {
             top: 50,
             apiVersion: "2015-02-28-Preview",
             searchMode: "any"
-        });
+        };
+        expect(
+            searchParameters.searchParameters(initialState, searchParametersActions.setSearchApiVersion("2015-02-28-Preview"))
+        ).toEqual(expectedParams);
     });
     it("should properly set all searchParameters", () => {
         const testParameters: Store.SearchParameters = {
-            input: "show me the money",
             apiVersion: "2015-02-28-Preview",
             count: true,
             orderBy: "foobar",
@@ -57,12 +40,33 @@ describe("reducers/searchParameters", () => {
             top: 3,
         };
         expect(
-            searchParameters.searchParameters(initialState, searchParametersActions.setParameters(testParameters))
+            searchParameters.searchParameters(initialState, searchParametersActions.setSearchParameters(testParameters))
         ).toEqual(testParameters);
+    });
+    it("should properly update subset of searchParameters", () => {
+        const testParameters: Store.SearchParametersUpdate = {
+            skip: 1000,
+            top: 3,
+            searchMode: "all"
+        };
+        const expectedParams: Store.SearchParameters = {
+            count: false,
+            orderBy: null,
+            scoringProfile: null,
+            searchFields: null,
+            select: null,
+            skip: 1000,
+            top: 3,
+            apiVersion: "2016-09-01",
+            searchMode: "all"
+        };
+        expect(
+            searchParameters.searchParameters(initialState, searchParametersActions.updateSearchParameters(testParameters))
+        ).toEqual(expectedParams);
     });
     it("should increment skip from default state", () => {
         expect(
-            searchParameters.searchParameters(initialState, searchParametersActions.incrementsSkip()).skip
+            searchParameters.searchParameters(initialState, searchParametersActions.incrementSkip()).skip
         ).toEqual(50);
     });
     it("should decrement skip from default state and not go below zero", () => {
@@ -72,7 +76,6 @@ describe("reducers/searchParameters", () => {
     });
     it("should decrement skip", () => {
         const testParameters: Store.SearchParameters = {
-            input: "show me the money",
             apiVersion: "2015-02-28-Preview",
             count: true,
             orderBy: "foobar",

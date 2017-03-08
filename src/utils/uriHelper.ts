@@ -13,21 +13,26 @@ const parameterNameLookup = {
     top: "$top",
     apiVersion: "api-version",
     facet: "facet",
-    filter: "$filter"
+    filter: "$filter",
+    minimumCoverage: "minimumCoverage",
+    fuzzy: "fuzzy",
+    highlightPostTag: "highlightPostTag",
+    highlightPreTag: "highlightPreTag"
 };
 
-function appendQueryParams(searchURI: uri.URI, parameters: Store.SearchParameters, facets: Store.Facets): uri.URI {
+function appendQueryParams(searchURI: uri.URI, parameters: Store.Parameters, facets: Store.Facets): uri.URI {
+    const searchParameters = parameters.searchParameters;
     let params: { [id: string]: string | string[] | boolean | number } = {};
     params[parameterNameLookup.input] = parameters.input;
-    params[parameterNameLookup.apiVersion] = parameters.apiVersion;
-    params[parameterNameLookup.skip] = parameters.skip;
-    params[parameterNameLookup.top] = parameters.top;
-    params[parameterNameLookup.searchMode] = parameters.searchMode;
-    parameters.count ? params[parameterNameLookup.count] = parameters.count : 0;
-    parameters.orderBy ? params[parameterNameLookup.orderBy] = parameters.orderBy : 0;
-    parameters.scoringProfile ? params[parameterNameLookup.scoringProfile] = parameters.scoringProfile : 0;
-    parameters.searchFields ? params[parameterNameLookup.searchFields] = parameters.searchFields : 0;
-    parameters.select ? params[parameterNameLookup.select] = parameters.select : 0;
+    params[parameterNameLookup.apiVersion] = searchParameters.apiVersion;
+    params[parameterNameLookup.skip] = searchParameters.skip;
+    params[parameterNameLookup.top] = searchParameters.top;
+    params[parameterNameLookup.searchMode] = searchParameters.searchMode;
+    searchParameters.count ? params[parameterNameLookup.count] = searchParameters.count : 0;
+    searchParameters.orderBy ? params[parameterNameLookup.orderBy] = searchParameters.orderBy : 0;
+    searchParameters.scoringProfile ? params[parameterNameLookup.scoringProfile] = searchParameters.scoringProfile : 0;
+    searchParameters.searchFields ? params[parameterNameLookup.searchFields] = searchParameters.searchFields : 0;
+    searchParameters.select ? params[parameterNameLookup.select] = searchParameters.select : 0;
     const facetClauses = getFacetClauses(facets);
     facetClauses ? params[parameterNameLookup.facet] = facetClauses : 0;
     const filter = getFilterClauses(facets);
@@ -55,7 +60,7 @@ function getFacetClauses(facets: Store.Facets): string[] {
 }
 
 
-export function buildSearchURI(config: Store.Config, parameters: Store.SearchParameters, facets: Store.Facets): string {
+export function buildSearchURI(config: Store.Config, parameters: Store.Parameters, facets: Store.Facets): string {
     const {service, index} = config;
     const uriTemplate = `https://${service}.search.windows.net/indexes/${index}/docs`;
     let searchURI = URI(uriTemplate);

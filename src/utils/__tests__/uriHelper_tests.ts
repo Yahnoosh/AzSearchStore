@@ -1,4 +1,6 @@
 import * as searchParameters from "../../reducers/searchParameters";
+import * as suggestionsParameters from "../../reducers/suggestionsParameters";
+import * as input from "../../reducers/input";
 import { Store } from "../../store";
 import * as uriHelper from "../uriHelper";
 import * as URI from "urijs";
@@ -9,8 +11,7 @@ const config: Store.Config = {
     service: "buzz"
 };
 
-const testParameters: Store.SearchParameters = {
-    input: "show me the money",
+const testSearchParameters: Store.SearchParameters = {
     apiVersion: "2015-02-28-Preview",
     count: true,
     orderBy: "foobar",
@@ -20,6 +21,30 @@ const testParameters: Store.SearchParameters = {
     select: "hij",
     skip: 1000,
     top: 3,
+};
+
+const testSuggestionsParameters: Store.SuggestionsParameters = {
+    orderBy: null,
+    searchFields: null,
+    select: null,
+    top: 5,
+    apiVersion: "2016-09-01",
+    filter: null,
+    fuzzy: false,
+    highlightPostTag: null,
+    highlightPreTag: null,
+};
+
+const testParameters: Store.Parameters = {
+    input: "show me the money",
+    searchParameters: testSearchParameters,
+    suggestionsParameters: testSuggestionsParameters
+};
+
+const parameterInitialState: Store.Parameters = {
+    input: input.initialState,
+    searchParameters: searchParameters.initialState,
+    suggestionsParameters: suggestionsParameters.initialState
 };
 
 const initFacets: Store.Facets = {
@@ -96,9 +121,9 @@ const filteredFacets: Store.Facets = {
     }
 };
 
-describe("utils/searchParameters", () => {
-    it("should create a uri from test config and default searchParameters", () => {
-        const uriString = uriHelper.buildSearchURI(config, searchParameters.initialState, initFacets);
+describe("utils/uriHelper", () => {
+    it("should create a uri from test config and default parameters", () => {
+        const uriString = uriHelper.buildSearchURI(config, parameterInitialState, initFacets);
         const searchURI = URI(uriString);
         expect(
             searchURI.valueOf()
@@ -109,7 +134,7 @@ describe("utils/searchParameters", () => {
         expect(searchURI.hasQuery("$top", 50)).toBe(true);
         expect(searchURI.hasQuery("$skip", 0)).toBe(true);
     });
-    it("should create a uri from test config and custom searchParameters", () => {
+    it("should create a uri from test config and custom parameters", () => {
         const uriString = uriHelper.buildSearchURI(config, testParameters, initFacets);
         const searchURI = URI(uriString);
         expect(
@@ -127,7 +152,7 @@ describe("utils/searchParameters", () => {
         expect(searchURI.hasQuery("$select", "hij")).toBe(true);
     });
     it("should create a uri from test config, default searchParameters and custom facets", () => {
-        const uriString = uriHelper.buildSearchURI(config, searchParameters.initialState, testFacets);
+        const uriString = uriHelper.buildSearchURI(config, parameterInitialState, testFacets);
         const searchURI = URI(uriString);
         expect(
             searchURI.valueOf()
@@ -141,7 +166,7 @@ describe("utils/searchParameters", () => {
         expect(searchURI.hasQuery("facet", "bar,count:5,sort:count", true)).toBe(true);
     });
     it("should create a uri from test config, default searchParameters and custom facets with filters", () => {
-        const uriString = uriHelper.buildSearchURI(config, searchParameters.initialState, filteredFacets);
+        const uriString = uriHelper.buildSearchURI(config, parameterInitialState, filteredFacets);
         const searchURI = URI(uriString);
         expect(
             searchURI.valueOf()

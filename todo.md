@@ -36,8 +36,12 @@
     3. ~~behavior for search vs load more~~
     4. ~~tests~~
 5. suggestions
+    1. ~~Refactor parameters into searchParams and suggestion params, add tests~~
+    2. state tree + actions/params to hold suggestion results
+    3. URI building e2e tests
 7. ~~refactor facets reducer~~
 6. extensibility
+    1. Migrate to use POST for requests, will make it easier for extensibility as well as remove limitations.
     1. accept js callbacks for search, suggestions. could be via buildSearchURI, could create function that accepts URL and executes it on server
 7. Reliability
     1. more error handling for network requests
