@@ -125,62 +125,66 @@ const filteredFacets: Store.Facets = {
 
 describe("utils/uriHelper", () => {
     it("should create a search uri from test config and default parameters", () => {
-        const uriString = uriHelper.buildSearchURI(config, parameterInitialState, initFacets);
+        const uriString = uriHelper.buildSearchURI(config, parameterInitialState);
         const searchURI = URI(uriString);
         expect(
             searchURI.valueOf()
-        ).toEqual("https://buzz.search.windows.net/indexes/foo/docs?search=%2A&api-version=2016-09-01&%24skip=0&%24top=50&searchMode=any&queryType=simple");
-        expect(searchURI.hasQuery("search", "*")).toBe(true);
+        ).toEqual("https://buzz.search.windows.net/indexes/foo/docs?api-version=2016-09-01");
         expect(searchURI.hasQuery("api-version", "2016-09-01")).toBe(true);
-        expect(searchURI.hasQuery("searchMode", "any")).toBe(true);
-        expect(searchURI.hasQuery("$top", 50)).toBe(true);
-        expect(searchURI.hasQuery("$skip", 0)).toBe(true);
     });
-    it("should create a search uri from test config and custom parameters", () => {
-        const uriString = uriHelper.buildSearchURI(config, testParameters, initFacets);
-        const searchURI = URI(uriString);
+    it("should create a search post body from test config and custom parameters", () => {
+        const postBody = uriHelper.buildPostBody(testParameters.searchParameters, testParameters.input, uriHelper.searchParameterValidator, initFacets);
         expect(
-            searchURI.valueOf()
-        ).toEqual("https://buzz.search.windows.net/indexes/foo/docs?search=show+me+the+money&api-version=2015-02-28-Preview&%24skip=1000&%24top=3&searchMode=all&%24count=true&%24orderby=foobar&scoringProfile=abc&searchFields=def&%24select=hij&queryType=simple");
-        expect(searchURI.hasQuery("search", "show me the money")).toBe(true);
-        expect(searchURI.hasQuery("api-version", "2015-02-28-Preview")).toBe(true);
-        expect(searchURI.hasQuery("searchMode", "all")).toBe(true);
-        expect(searchURI.hasQuery("$top", 3)).toBe(true);
-        expect(searchURI.hasQuery("$skip", 1000)).toBe(true);
-        expect(searchURI.hasQuery("$count", true)).toBe(true);
-        expect(searchURI.hasQuery("$orderby", "foobar")).toBe(true);
-        expect(searchURI.hasQuery("scoringProfile", "abc")).toBe(true);
-        expect(searchURI.hasQuery("searchFields", "def")).toBe(true);
-        expect(searchURI.hasQuery("$select", "hij")).toBe(true);
+            postBody
+        ).toEqual({
+            "count": true,
+            "orderby": "foobar",
+            "queryType": "simple",
+            "scoringProfile": "abc",
+            "search": "show me the money",
+            "searchFields": "def",
+            "searchMode": "all",
+            "select": "hij",
+            "skip": 1000,
+            "top": 3
+        });
     });
     it("should create a search uri from test config, default searchParameters and custom facets", () => {
-        const uriString = uriHelper.buildSearchURI(config, parameterInitialState, testFacets);
-        const searchURI = URI(uriString);
+        const postBody = uriHelper.buildPostBody(testParameters.searchParameters, testParameters.input, uriHelper.searchParameterValidator, testFacets);
         expect(
-            searchURI.valueOf()
-        ).toEqual("https://buzz.search.windows.net/indexes/foo/docs?search=%2A&api-version=2016-09-01&%24skip=0&%24top=50&searchMode=any&queryType=simple&facet=foo%2Cvalues%3A0%7C10&facet=bar%2Ccount%3A5%2Csort%3Acount");
-        expect(searchURI.hasQuery("search", "*")).toBe(true);
-        expect(searchURI.hasQuery("api-version", "2016-09-01")).toBe(true);
-        expect(searchURI.hasQuery("searchMode", "any")).toBe(true);
-        expect(searchURI.hasQuery("$top", 50)).toBe(true);
-        expect(searchURI.hasQuery("$skip", 0)).toBe(true);
-        expect(searchURI.hasQuery("facet", "foo,values:0|10", true)).toBe(true);
-        expect(searchURI.hasQuery("facet", "bar,count:5,sort:count", true)).toBe(true);
+            postBody
+        ).toEqual({
+            "count": true,
+            "facets": ["foo,values:0|10", "bar,count:5,sort:count"],
+            "orderby": "foobar",
+            "queryType": "simple",
+            "scoringProfile": "abc",
+            "search": "show me the money",
+            "searchFields": "def",
+            "searchMode": "all",
+            "select": "hij",
+            "skip": 1000,
+            "top": 3
+        });
     });
     it("should create a search uri from test config, default searchParameters and custom facets with filters", () => {
-        const uriString = uriHelper.buildSearchURI(config, parameterInitialState, filteredFacets);
-        const searchURI = URI(uriString);
+        const postBody = uriHelper.buildPostBody(testParameters.searchParameters, testParameters.input, uriHelper.searchParameterValidator, filteredFacets);
         expect(
-            searchURI.valueOf()
-        ).toEqual("https://buzz.search.windows.net/indexes/foo/docs?search=%2A&api-version=2016-09-01&%24skip=0&%24top=50&searchMode=any&queryType=simple&facet=foo%2Cvalues%3A0%7C10&facet=bar%2Ccount%3A5%2Csort%3Acount&%24filter=foo+ge+5+and+foo+le+7+and+%28bar+eq+%27a%27%29");
-        expect(searchURI.hasQuery("search", "*")).toBe(true);
-        expect(searchURI.hasQuery("api-version", "2016-09-01")).toBe(true);
-        expect(searchURI.hasQuery("searchMode", "any")).toBe(true);
-        expect(searchURI.hasQuery("$top", 50)).toBe(true);
-        expect(searchURI.hasQuery("$skip", 0)).toBe(true);
-        expect(searchURI.hasQuery("facet", "foo,values:0|10", true)).toBe(true);
-        expect(searchURI.hasQuery("facet", "bar,count:5,sort:count", true)).toBe(true);
-        expect(searchURI.hasQuery("$filter", "foo ge 5 and foo le 7 and (bar eq 'a')")).toBe(true);
+            postBody
+        ).toEqual({
+            "count": true,
+            "facets": ["foo,values:0|10", "bar,count:5,sort:count"],
+            "filter": "foo ge 5 and foo le 7 and (bar eq \'a\')",
+            "orderby": "foobar",
+            "queryType": "simple",
+            "scoringProfile": "abc",
+            "search": "show me the money",
+            "searchFields": "def",
+            "searchMode": "all",
+            "select": "hij",
+            "skip": 1000,
+            "top": 3
+        });
     });
     it("should create a suggest uri from test config, and test suggestions parameters", () => {
         const uriString = uriHelper.buildSuggestionsURI(config, testParameters);
@@ -191,7 +195,7 @@ describe("utils/uriHelper", () => {
         expect(searchURI.hasQuery("api-version", "2016-09-01")).toBe(true);
     });
     it("should create a suggestions post body from test config, and test suggestions parameters", () => {
-        const postBody = uriHelper.buildSuggestionsPostBody(testParameters);
+        const postBody = uriHelper.buildPostBody(testParameters.suggestionsParameters, testParameters.input, uriHelper.suggestParameterValidator);
         expect(
             postBody
         ).toEqual({

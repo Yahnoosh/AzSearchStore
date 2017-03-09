@@ -65,7 +65,7 @@ describe("actions/async", () => {
     });
     it("should create opening and closing actions when fetching search results as well as set facet action", () => {
         nock(`https://${config.service}.search.windows.net`)
-            .get(`/indexes/${config.index}/docs`)
+            .post(`/indexes/${config.index}/docs`)
             .query(true)
             .reply(200, searchResponse);
 
@@ -83,7 +83,7 @@ describe("actions/async", () => {
     });
     it("should create opening and closing actions when appending search results", () => {
         nock(`https://${config.service}.search.windows.net`)
-            .get(`/indexes/${config.index}/docs`)
+            .post(`/indexes/${config.index}/docs`)
             .query(true)
             .times(2)
             .reply(200, searchResponse);
@@ -101,7 +101,7 @@ describe("actions/async", () => {
     });
     it("should create opening and closing actions as well as update action when search is initiated form facet", () => {
         nock(`https://${config.service}.search.windows.net`)
-            .get(`/indexes/${config.index}/docs`)
+            .post(`/indexes/${config.index}/docs`)
             .query(true)
             .times(2)
             .reply(200, searchResponse);

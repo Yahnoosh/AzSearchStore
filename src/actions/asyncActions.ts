@@ -3,7 +3,7 @@ import * as resultsActions from "./resultsActions";
 import * as suggestionsActions from "./suggestionsActions";
 import * as facetsActions from "./facetsActions";
 import * as promise from "es6-promise";
-import { buildSearchURI, buildSuggestionsURI, buildSuggestionsPostBody } from "../utils/uriHelper";
+import { buildSearchURI, buildSuggestionsURI, buildPostBody, suggestParameterValidator, searchParameterValidator } from "../utils/uriHelper";
 // todo this should probably be at the entry point of app
 promise.polyfill();
 import * as fetch from "isomorphic-fetch";
@@ -18,13 +18,23 @@ const searchAndDispatch: ThunkAction<Promise<void>, Store.SearchState, {
         const searchState: Store.SearchState = getState();
         const service = searchState.config.service;
         const index = searchState.config.index;
-        const searchURI = buildSearchURI(searchState.config, searchState.parameters, searchState.facets);
-        let headers = new Headers({ "api-key": searchState.config.queryKey });
+        const parameters = searchState.parameters;
+        const searchURI = buildSearchURI(searchState.config, parameters);
+        const postBody = buildPostBody(parameters.searchParameters, parameters.input, searchParameterValidator, searchState.facets);
+        let headers = new Headers({
+            "api-key": searchState.config.queryKey,
+            "Content-Type": "application/json"
+        });
         dispatch(resultsActions.initiateSearch());
-        return fetch(searchURI, { mode: "cors", headers })
+        return fetch(searchURI, {
+            mode: "cors",
+            headers,
+            method: "POST",
+            body: JSON.stringify(postBody)
+        })
             .then(response => response.json())
             .then(json => {
-                const results: {}[] = json.value;
+                const results: {}[] = json["value"];
                 let count: number = json["@odata.count"];
                 count = count >= 0 ? count : -1;
                 dispatch(resultsActionToDispatch(results, Date.now(), count));
@@ -55,8 +65,9 @@ export const suggest: ThunkAction<Promise<void>, Store.SearchState, {}> =
         const searchState: Store.SearchState = getState();
         const service = searchState.config.service;
         const index = searchState.config.index;
+        const parameters = searchState.parameters;
         const suggestURI = buildSuggestionsURI(searchState.config, searchState.parameters);
-        const postBody = buildSuggestionsPostBody(searchState.parameters);
+        const postBody = buildPostBody(parameters.suggestionsParameters, parameters.input, suggestParameterValidator);
         let headers = new Headers({
             "api-key": searchState.config.queryKey,
             "Content-Type": "application/json"
@@ -71,7 +82,7 @@ export const suggest: ThunkAction<Promise<void>, Store.SearchState, {}> =
             })
             .then(response => response.json())
             .then(json => {
-                const suggestions: {}[] = json.value;
+                const suggestions: {}[] = json["value"];
                 dispatch(suggestionsActions.recieveSuggestions(suggestions, Date.now()));
             })
             .catch(error => {
