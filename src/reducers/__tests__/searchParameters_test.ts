@@ -14,7 +14,7 @@ describe("reducers/searchParameters", () => {
     it("should properly set api version", () => {
         const expectedParams: Store.SearchParameters = {
             count: false,
-            orderBy: null,
+            orderby: null,
             scoringProfile: null,
             searchFields: null,
             select: null,
@@ -32,7 +32,7 @@ describe("reducers/searchParameters", () => {
         const testParameters: Store.SearchParameters = {
             apiVersion: "2015-02-28-Preview",
             count: true,
-            orderBy: "foobar",
+            orderby: "foobar",
             scoringProfile: "abc",
             searchFields: "def",
             searchMode: "all",
@@ -54,7 +54,7 @@ describe("reducers/searchParameters", () => {
         };
         const expectedParams: Store.SearchParameters = {
             count: false,
-            orderBy: null,
+            orderby: null,
             scoringProfile: null,
             searchFields: null,
             select: null,
@@ -82,7 +82,7 @@ describe("reducers/searchParameters", () => {
         const testParameters: Store.SearchParameters = {
             apiVersion: "2015-02-28-Preview",
             count: true,
-            orderBy: "foobar",
+            orderby: "foobar",
             scoringProfile: "abc",
             searchFields: "def",
             searchMode: "all",

@@ -6,11 +6,12 @@ import { Store } from "../../store";
 import * as searchParameters from "../../reducers/searchParameters";
 import * as suggestionsParameters from "../../reducers/suggestionsParameters";
 import * as input from "../../reducers/input";
+import {updateObject} from "../../reducers/reducerUtils";
 
 const parameterInitialState: Store.Parameters = {
     input: input.initialState,
     searchParameters: searchParameters.initialState,
-    suggestionsParameters: suggestionsParameters.initialState
+    suggestionsParameters: updateObject(suggestionsParameters.initialState, { suggesterName: "sg"})
 };
 
 const facetResults: { [key: string]: Store.FacetResult[] } = {
@@ -30,6 +31,15 @@ const searchResponse = {
     "@odata.nextLink": "",
     "@odata.count": 6,
     "@search.facets": facetResults,
+    value: [
+        { foo: "bar" },
+        { foo: "bar" },
+        { foo: "bar" }
+    ]
+};
+
+const suggestionsResponse = {
+    "@odata.context": "",
     value: [
         { foo: "bar" },
         { foo: "bar" },
@@ -105,6 +115,23 @@ describe("actions/async", () => {
         const store = mockStore({ config, parameters: parameterInitialState, facets });
 
         store.dispatch(actions.fetchSearchResultsFromFacet).then(() => {
+            expect(store.getActions()).toEqual(expectedActions);
+        });
+    });
+    it("should create opening and closing actions when fetching suggestions", () => {
+        nock(`https://${config.service}.search.windows.net`)
+            .post(`/indexes/${config.index}/docs/suggest`)
+            .query(true)
+            .reply(200, searchResponse);
+
+        const expectedActions = [
+            { type: "INITIATE_SUGGEST" },
+            { type: "RECEIVE_SUGGESTIONS", suggestions: suggestionsResponse.value, receivedAt: Date.now()},
+        ];
+
+        const store = mockStore({ config, parameters: parameterInitialState, facets });
+
+        store.dispatch(actions.suggest).then(() => {
             expect(store.getActions()).toEqual(expectedActions);
         });
     });

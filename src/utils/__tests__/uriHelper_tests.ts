@@ -14,7 +14,7 @@ const config: Store.Config = {
 const testSearchParameters: Store.SearchParameters = {
     apiVersion: "2015-02-28-Preview",
     count: true,
-    orderBy: "foobar",
+    orderby: "foobar",
     scoringProfile: "abc",
     searchFields: "def",
     searchMode: "all",
@@ -25,7 +25,7 @@ const testSearchParameters: Store.SearchParameters = {
 };
 
 const testSuggestionsParameters: Store.SuggestionsParameters = {
-    orderBy: null,
+    orderby: null,
     searchFields: null,
     select: null,
     top: 5,
@@ -34,6 +34,7 @@ const testSuggestionsParameters: Store.SuggestionsParameters = {
     fuzzy: false,
     highlightPostTag: null,
     highlightPreTag: null,
+    suggesterName: "sg"
 };
 
 const testParameters: Store.Parameters = {
@@ -123,7 +124,7 @@ const filteredFacets: Store.Facets = {
 };
 
 describe("utils/uriHelper", () => {
-    it("should create a uri from test config and default parameters", () => {
+    it("should create a search uri from test config and default parameters", () => {
         const uriString = uriHelper.buildSearchURI(config, parameterInitialState, initFacets);
         const searchURI = URI(uriString);
         expect(
@@ -135,7 +136,7 @@ describe("utils/uriHelper", () => {
         expect(searchURI.hasQuery("$top", 50)).toBe(true);
         expect(searchURI.hasQuery("$skip", 0)).toBe(true);
     });
-    it("should create a uri from test config and custom parameters", () => {
+    it("should create a search uri from test config and custom parameters", () => {
         const uriString = uriHelper.buildSearchURI(config, testParameters, initFacets);
         const searchURI = URI(uriString);
         expect(
@@ -152,7 +153,7 @@ describe("utils/uriHelper", () => {
         expect(searchURI.hasQuery("searchFields", "def")).toBe(true);
         expect(searchURI.hasQuery("$select", "hij")).toBe(true);
     });
-    it("should create a uri from test config, default searchParameters and custom facets", () => {
+    it("should create a search uri from test config, default searchParameters and custom facets", () => {
         const uriString = uriHelper.buildSearchURI(config, parameterInitialState, testFacets);
         const searchURI = URI(uriString);
         expect(
@@ -166,7 +167,7 @@ describe("utils/uriHelper", () => {
         expect(searchURI.hasQuery("facet", "foo,values:0|10", true)).toBe(true);
         expect(searchURI.hasQuery("facet", "bar,count:5,sort:count", true)).toBe(true);
     });
-    it("should create a uri from test config, default searchParameters and custom facets with filters", () => {
+    it("should create a search uri from test config, default searchParameters and custom facets with filters", () => {
         const uriString = uriHelper.buildSearchURI(config, parameterInitialState, filteredFacets);
         const searchURI = URI(uriString);
         expect(
@@ -180,5 +181,25 @@ describe("utils/uriHelper", () => {
         expect(searchURI.hasQuery("facet", "foo,values:0|10", true)).toBe(true);
         expect(searchURI.hasQuery("facet", "bar,count:5,sort:count", true)).toBe(true);
         expect(searchURI.hasQuery("$filter", "foo ge 5 and foo le 7 and (bar eq 'a')")).toBe(true);
+    });
+    it("should create a suggest uri from test config, and test suggestions parameters", () => {
+        const uriString = uriHelper.buildSuggestionsURI(config, testParameters);
+        const searchURI = URI(uriString);
+        expect(
+            searchURI.valueOf()
+        ).toEqual("https://buzz.search.windows.net/indexes/foo/docs/suggest?api-version=2016-09-01");
+        expect(searchURI.hasQuery("api-version", "2016-09-01")).toBe(true);
+    });
+    it("should create a suggestions post body from test config, and test suggestions parameters", () => {
+        const postBody = uriHelper.buildSuggestionsPostBody(testParameters);
+        expect(
+            postBody
+        ).toEqual({
+            top: 5,
+            fuzzy: false,
+            suggesterName: "sg",
+            search: "show me the money"
+        });
+
     });
 });

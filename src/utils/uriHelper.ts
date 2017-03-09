@@ -53,7 +53,7 @@ export function buildSuggestionsPostBody(parameters: Store.Parameters): { [key: 
     let params: { [id: string]: string | string[] | boolean | number } = {};
     Object.keys(suggestionsParameters).forEach((parameter) => {
         const value = suggestionsParameters[parameter];
-        value && parameter !== "apiVersion" ? params[parameter] = value : 0;
+        !(value == null) && parameter !== "apiVersion" ? params[parameter] = value : 0;
     });
     params["search"] = parameters.input;
     return params;
