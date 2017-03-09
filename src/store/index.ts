@@ -77,6 +77,12 @@ export namespace Store {
         results: {}[]
     };
 
+    export type Suggestions = {
+        isFetching: boolean,
+        lastUpdated: number,
+        suggestions: {}[]
+    };
+
     export type CheckboxFacetItem = {
         value: string | number,
         count: number
@@ -131,7 +137,7 @@ export namespace Store {
     export type SearchState = {
         config: Config,
         results: SearchResults,
-        suggestions: {}[],
+        suggestions: Suggestions,
         facets: Facets
         parameters: Parameters
     };
