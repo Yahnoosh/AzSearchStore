@@ -3,7 +3,7 @@ import { Store } from "../store";
 import { updateObject } from "./reducerUtils";
 
 export const initialState: Store.SuggestionsParameters = {
-    orderBy: null,
+    orderby: null,
     searchFields: null,
     select: null,
     top: 5,
@@ -12,6 +12,7 @@ export const initialState: Store.SuggestionsParameters = {
     fuzzy: false,
     highlightPostTag: null,
     highlightPreTag: null,
+    suggesterName: null
 };
 
 export function suggestionsParameters(state: Store.SuggestionsParameters = initialState, action: SuggestionsParametersAction): Store.SuggestionsParameters {

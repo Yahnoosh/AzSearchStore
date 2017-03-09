@@ -1,8 +1,9 @@
 import { Store } from "../store";
 import * as resultsActions from "./resultsActions";
+import * as suggestionsActions from "./suggestionsActions";
 import * as facetsActions from "./facetsActions";
 import * as promise from "es6-promise";
-import { buildSearchURI } from "../utils/uriHelper";
+import { buildSearchURI, buildSuggestionsURI, buildSuggestionsPostBody } from "../utils/uriHelper";
 // todo this should probably be at the entry point of app
 promise.polyfill();
 import * as fetch from "isomorphic-fetch";
@@ -48,3 +49,32 @@ export const loadMoreSearchResults: ThunkAction<Promise<void>, Store.SearchState
 export const fetchSearchResultsFromFacet: ThunkAction<Promise<void>, Store.SearchState, {}> = (dispatch, getState) => {
     return searchAndDispatch(dispatch, getState, { resultsActionToDispatch: resultsActions.recieveResults, facetsActionToDispatch: facetsActions.updateFacetsValues });
 };
+
+export const suggest: ThunkAction<Promise<void>, Store.SearchState, {}> =
+    (dispatch, getState) => {
+        const searchState: Store.SearchState = getState();
+        const service = searchState.config.service;
+        const index = searchState.config.index;
+        const suggestURI = buildSuggestionsURI(searchState.config, searchState.parameters);
+        const postBody = buildSuggestionsPostBody(searchState.parameters);
+        let headers = new Headers({
+            "api-key": searchState.config.queryKey,
+            "Content-Type": "application/json"
+        });
+        dispatch(suggestionsActions.initiateSuggest());
+        return fetch(suggestURI,
+            {
+                mode: "cors",
+                headers,
+                method: "POST",
+                body: JSON.stringify(postBody)
+            })
+            .then(response => response.json())
+            .then(json => {
+                const suggestions: {}[] = json.value;
+                dispatch(suggestionsActions.recieveSuggestions(suggestions, Date.now()));
+            })
+            .catch(error => {
+                dispatch(suggestionsActions.handleSuggestError(error.message));
+            });
+    };

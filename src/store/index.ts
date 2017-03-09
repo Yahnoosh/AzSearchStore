@@ -14,7 +14,7 @@ export namespace Store {
         count: boolean,
         top: number,
         skip: number,
-        orderBy: string,
+        orderby: string,
         searchMode: SearchMode,
         scoringProfile: string,
         select: string,
@@ -28,7 +28,7 @@ export namespace Store {
         count?: boolean,
         top?: number,
         skip?: number,
-        orderBy?: string,
+        orderby?: string,
         searchMode?: SearchMode,
         scoringProfile?: string,
         select?: string,
@@ -41,27 +41,29 @@ export namespace Store {
     export type SuggestionsParameters = {
         top: number,
         filter: string,
-        orderBy: string,
+        orderby: string,
         fuzzy: boolean,
         highlightPreTag: string,
         highlightPostTag: string
         select: string,
         searchFields: string,
         minimumCoverage?: string,
-        apiVersion: SearchApiVersion
+        apiVersion: SearchApiVersion,
+        suggesterName: string
     };
 
     export type SuggestionsParametersUpdate = {
         top?: number,
         filter?: string,
-        orderBy?: string,
+        orderby?: string,
         fuzzy?: boolean,
         highlightPreTag?: string,
         highlightPostTag?: string
         select?: string,
         searchFields?: string,
         minimumCoverage?: string,
-        apiVersion?: SearchApiVersion
+        apiVersion?: SearchApiVersion,
+        suggesterName?: string
     };
 
     export type Parameters = {

@@ -13,7 +13,7 @@ describe("reducers/suggestionsParameters", () => {
     });
     it("should properly set api version", () => {
         const expectedParams: Store.SuggestionsParameters = {
-            orderBy: null,
+            orderby: null,
             searchFields: null,
             select: null,
             top: 5,
@@ -22,6 +22,7 @@ describe("reducers/suggestionsParameters", () => {
             fuzzy: false,
             highlightPostTag: null,
             highlightPreTag: null,
+            suggesterName: null
         };
         expect(
             suggestionsParameters.suggestionsParameters(initialState, suggestionsParametersActions.setSuggestionsApiVersion("2015-02-28-Preview"))
@@ -30,7 +31,7 @@ describe("reducers/suggestionsParameters", () => {
     it("should properly set all searchParameters", () => {
         const testParameters: Store.SuggestionsParameters = {
             apiVersion: "2015-02-28-Preview",
-            orderBy: "foobar",
+            orderby: "foobar",
             searchFields: "def",
             select: "hij",
             top: 3,
@@ -38,6 +39,7 @@ describe("reducers/suggestionsParameters", () => {
             fuzzy: true,
             highlightPostTag: "abcdef",
             highlightPreTag: "hijck",
+            suggesterName: null
         };
         expect(
             suggestionsParameters.suggestionsParameters(initialState, suggestionsParametersActions.setSuggestionsParameters(testParameters))
@@ -49,7 +51,7 @@ describe("reducers/suggestionsParameters", () => {
             fuzzy: true
         };
         const expectedParams: Store.SuggestionsParameters = {
-            orderBy: null,
+            orderby: null,
             searchFields: null,
             select: null,
             top: 3,
@@ -58,6 +60,7 @@ describe("reducers/suggestionsParameters", () => {
             fuzzy: true,
             highlightPostTag: null,
             highlightPreTag: null,
+            suggesterName: null
         };
         expect(
             suggestionsParameters.suggestionsParameters(initialState, suggestionsParametersActions.updateSuggestionsParameters(testParameters))

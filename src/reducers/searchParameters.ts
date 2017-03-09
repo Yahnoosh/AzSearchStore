@@ -4,7 +4,7 @@ import { updateObject } from "./reducerUtils";
 
 export const initialState: Store.SearchParameters = {
     count: false,
-    orderBy: null,
+    orderby: null,
     scoringProfile: null,
     searchFields: null,
     select: null,

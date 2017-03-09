@@ -7,8 +7,10 @@ import { Store } from "./store";
 import * as asyncActions from "./actions/asyncActions";
 import * as configActions from "./actions/configActions";
 import * as searchParameterActions from "./actions/searchParametersActions";
+import * as suggestionsParameterActions from "./actions/suggestionsParametersActions";
 import * as inputActions from "./actions/inputActions";
 import * as facetsActions from "./actions/facetsActions";
+import * as suggestionsActions from "./actions/suggestionsActions";
 import * as promise from "es6-promise";
 
 
@@ -37,6 +39,7 @@ store.dispatch(inputActions.setInput("*"));
 store.dispatch(facetsActions.addCheckboxFacet("campusType", false));
 store.dispatch(facetsActions.addRangeFacet("studentsCount", 0, 100000));
 store.dispatch(facetsActions.addRangeFacet("endowmentAmount", 0, 5000000000));
+store.dispatch(suggestionsParameterActions.updateSuggestionsParameters({ suggesterName: "titleSuggester" }));
 
 
 interface SearchProps {
@@ -58,12 +61,15 @@ class SearchPage extends React.Component<SearchProps, Store.SearchState> {
     }
     onKeyPress(event: any) {
         if (event.key === "Enter") {
-            this.props.store.dispatch(asyncActions.fetchSearchResults);
+            return this.props.store.dispatch(asyncActions.fetchSearchResults);
         }
+        this.props.store.dispatch(asyncActions.suggest);
     }
     render() {
         const state = this.state;
         const results: any = this.state.results.results;
+                const suggestions: any = this.state.suggestions.suggestions;
+
         if (!state) {
             return <div />;
         }
@@ -71,6 +77,13 @@ class SearchPage extends React.Component<SearchProps, Store.SearchState> {
             <div>
                 <input value={state.parameters.input} onChange={this.handleChange.bind(this)} onKeyPress={this.onKeyPress.bind(this)}></input>
                 <h3>count: {state.results.count}</h3>
+                <h2>Suggestions</h2>
+                <ul>
+                    {suggestions && suggestions.map((suggestion: any) => {
+                        return <li>{suggestion["@search.text"]}</li>;
+                    })}
+                </ul>
+                <h2>Results</h2>
                 <ul>
                     {results.map((result: any) => {
                         return <li>{result.title}</li>;

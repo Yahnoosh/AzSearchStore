@@ -30,7 +30,7 @@ function appendQueryParams(searchURI: uri.URI, parameters: Store.Parameters, fac
     params[parameterNameLookup.top] = searchParameters.top;
     params[parameterNameLookup.searchMode] = searchParameters.searchMode;
     searchParameters.count ? params[parameterNameLookup.count] = searchParameters.count : 0;
-    searchParameters.orderBy ? params[parameterNameLookup.orderBy] = searchParameters.orderBy : 0;
+    searchParameters.orderby ? params[parameterNameLookup.orderBy] = searchParameters.orderby : 0;
     searchParameters.scoringProfile ? params[parameterNameLookup.scoringProfile] = searchParameters.scoringProfile : 0;
     searchParameters.searchFields ? params[parameterNameLookup.searchFields] = searchParameters.searchFields : 0;
     searchParameters.select ? params[parameterNameLookup.select] = searchParameters.select : 0;
@@ -43,6 +43,22 @@ function appendQueryParams(searchURI: uri.URI, parameters: Store.Parameters, fac
     searchURI.addQuery(params);
     return searchURI;
 }
+
+
+export function buildSuggestionsPostBody(parameters: Store.Parameters): { [key: string]: any } {
+    if (!parameters.suggestionsParameters.suggesterName) {
+        throw new Error("Parameter 'suggesterName' is required to generate valid suggest api request");
+    }
+    const suggestionsParameters = parameters.suggestionsParameters as { [key: string]: any };
+    let params: { [id: string]: string | string[] | boolean | number } = {};
+    Object.keys(suggestionsParameters).forEach((parameter) => {
+        const value = suggestionsParameters[parameter];
+        value && parameter !== "apiVersion" ? params[parameter] = value : 0;
+    });
+    params["search"] = parameters.input;
+    return params;
+}
+
 
 function getFilterClauses(facets: Store.Facets): string {
     let filteredFacets = Object.keys(facets.facets).filter((key) => {
@@ -68,5 +84,13 @@ export function buildSearchURI(config: Store.Config, parameters: Store.Parameter
     const uriTemplate = `https://${service}.search.windows.net/indexes/${index}/docs`;
     let searchURI = URI(uriTemplate);
     searchURI = appendQueryParams(searchURI, parameters, facets);
+    return searchURI.valueOf();
+}
+
+export function buildSuggestionsURI(config: Store.Config, parameters: Store.Parameters): string {
+    const {service, index} = config;
+    const apiVersion = parameters.suggestionsParameters.apiVersion;
+    const uriTemplate = `https://${service}.search.windows.net/indexes/${index}/docs/suggest?api-version=${apiVersion}`;
+    let searchURI = URI(uriTemplate);
     return searchURI.valueOf();
 }
