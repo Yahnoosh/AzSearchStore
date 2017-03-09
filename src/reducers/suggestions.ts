@@ -12,8 +12,11 @@ export function suggestions(state: Store.Suggestions = initialState, action: Sug
     switch (action.type) {
         case "INITIATE_SUGGEST":
             return updateObject(state, { isFetching: true });
+        case "SET_SUGGESTIONS_PROCESSOR":
+            return updateObject(state, { suggestionsProcessor: action.suggestionsProcessor });
         case "RECEIVE_SUGGESTIONS":
-            return updateObject(state, { isFetching: false, lastUpdated: action.receivedAt, suggestions: action.suggestions });
+            const suggestions = state.suggestionsProcessor ? state.suggestionsProcessor(action.suggestions) : action.suggestions;
+            return updateObject(state, { isFetching: false, lastUpdated: action.receivedAt, suggestions });
         default:
             return state;
     }

@@ -19,6 +19,7 @@ const searchAndDispatch: ThunkAction<Promise<void>, Store.SearchState, {
         const service = searchState.config.service;
         const index = searchState.config.index;
         const parameters = searchState.parameters;
+        const searchCallback = searchState.config.searchCallback;
         const searchURI = buildSearchURI(searchState.config, parameters);
         const postBody = buildPostBody(parameters.searchParameters, parameters.input, searchParameterValidator, searchState.facets);
         let headers = new Headers({
@@ -26,13 +27,14 @@ const searchAndDispatch: ThunkAction<Promise<void>, Store.SearchState, {
             "Content-Type": "application/json"
         });
         dispatch(resultsActions.initiateSearch());
-        return fetch(searchURI, {
-            mode: "cors",
-            headers,
-            method: "POST",
-            body: JSON.stringify(postBody)
-        })
-            .then(response => response.json())
+        const promise = searchCallback ? searchCallback(searchState, postBody) :
+            fetch(searchURI, {
+                mode: "cors",
+                headers,
+                method: "POST",
+                body: JSON.stringify(postBody)
+            });
+        return promise.then(response => response.json())
             .then(json => {
                 const results: {}[] = json["value"];
                 let count: number = json["@odata.count"];
@@ -65,6 +67,7 @@ export const suggest: ThunkAction<Promise<void>, Store.SearchState, {}> =
         const searchState: Store.SearchState = getState();
         const service = searchState.config.service;
         const index = searchState.config.index;
+        const suggestCallBack = searchState.config.suggestCallback;
         const parameters = searchState.parameters;
         const suggestURI = buildSuggestionsURI(searchState.config, searchState.parameters);
         const postBody = buildPostBody(parameters.suggestionsParameters, parameters.input, suggestParameterValidator);
@@ -73,14 +76,15 @@ export const suggest: ThunkAction<Promise<void>, Store.SearchState, {}> =
             "Content-Type": "application/json"
         });
         dispatch(suggestionsActions.initiateSuggest());
-        return fetch(suggestURI,
-            {
-                mode: "cors",
-                headers,
-                method: "POST",
-                body: JSON.stringify(postBody)
-            })
-            .then(response => response.json())
+        const promise = suggestCallBack ? suggestCallBack(searchState, postBody) :
+            fetch(suggestURI,
+                {
+                    mode: "cors",
+                    headers,
+                    method: "POST",
+                    body: JSON.stringify(postBody)
+                });
+        return promise.then(response => response.json())
             .then(json => {
                 const suggestions: {}[] = json["value"];
                 dispatch(suggestionsActions.recieveSuggestions(suggestions, Date.now()));

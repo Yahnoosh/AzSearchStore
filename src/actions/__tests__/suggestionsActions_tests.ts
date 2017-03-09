@@ -19,4 +19,20 @@ describe("actions/suggestions", () => {
             receivedAt: ts
         });
     });
+    it("should create action to set suggestionsProcessor", () => {
+        let suggestionsProcessor = (suggestions: {}[]) => {
+            return suggestions.map((suggestion) => {
+                return {
+                    "foo": "bar",
+                    "search": "fuzz"
+                };
+            });
+        };
+        expect(
+            suggestionsActions.setSuggestionsProcessor(suggestionsProcessor)
+        ).toEqual({
+            type: "SET_SUGGESTIONS_PROCESSOR",
+            suggestionsProcessor
+        });
+    });
 });

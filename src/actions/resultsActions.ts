@@ -3,6 +3,10 @@ export type ResultsAction =
         type: "INITIATE_SEARCH",
     } |
     {
+        type: "SET_RESULTS_PROCESSOR",
+        resultsProcessor: (results: {}[]) => {}[]
+    } |
+    {
         type: "RECEIVE_RESULTS",
         results: {}[],
         receivedAt: number,
@@ -20,6 +24,11 @@ export type ResultsAction =
 
 export const initiateSearch = (): ResultsAction => ({
     type: "INITIATE_SEARCH"
+});
+
+export const setResultsProcessor = (resultsProcessor: (results: {}[]) => {}[]) => ({
+    type: "SET_RESULTS_PROCESSOR",
+    resultsProcessor
 });
 
 export const recieveResults = (results: {}[], receivedAt: number, count: number): ResultsAction => ({

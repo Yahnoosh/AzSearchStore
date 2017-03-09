@@ -29,4 +29,20 @@ describe("actions/results", () => {
             receivedAt: ts
         });
     });
+    it("should create action to set resultsProcessor", () => {
+        let resultsProcessor = (results: {}[]) => {
+            return results.map((result) => {
+                return {
+                    "foo": "bar",
+                    "search": "fuzz"
+                };
+            });
+        };
+        expect(
+            resultsActions.setResultsProcessor(resultsProcessor)
+        ).toEqual({
+            type: "SET_RESULTS_PROCESSOR",
+            resultsProcessor
+        });
+    });
 });

@@ -41,12 +41,12 @@
     3. ~~URI building e2e tests~~
     4. ~~async action tests~~
 7. ~~refactor facets reducer~~
-6. extensibility
+6. ~~extensibility~~
     1. ~~Migrate to use POST for requests, will make it easier for extensibility as well as remove limitations.~~
         1. ~~suggestions~~
         2. ~~search~~
-    1. accept js callbacks for search, suggestions. could be via buildSearchURI, could create function that accepts URL and executes it on server
-    2. accept js callbacks for processResult, processSuggestion, to change the result layout or do any additional user specified processing. Should also map @search.text->searchText
+    1. ~~accept js callbacks for search, suggestions~~
+    2. ~~accept js callbacks for processResult, processSuggestion, to change the result layout or do any additional user specified processing. Should also map @search.text->searchText~~
 7. Reliability
     1. more error handling for network requests
     2. retries

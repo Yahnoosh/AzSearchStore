@@ -4,6 +4,15 @@ import { Store } from "../../store";
 
 const reducer = suggestions.suggestions;
 
+let suggestionsProcessor = (suggestions: {}[]) => {
+            return suggestions.map((suggestion) => {
+                return {
+                    "foo": "bar",
+                    "search": "fuzz"
+                };
+            });
+        };
+
 const testSuggestions = [
     { text: "foo" },
     { text: "bar" },
@@ -43,6 +52,26 @@ describe("reducers/suggestions", () => {
             isFetching: false,
             lastUpdated: ts,
             suggestions: testSuggestions
+        });
+    });
+    it("should set suggestionsProcessor", () => {
+        expect(
+            reducer(<Store.Suggestions>{ isFetching: false, lastUpdated: 0, suggestions: [] }, suggestionsActions.setSuggestionsProcessor(suggestionsProcessor))
+        ).toEqual({
+            isFetching: false,
+            lastUpdated: 0,
+            suggestions: [],
+            suggestionsProcessor
+        });
+    });
+    it("should save suggestions and reset fetching using suggestionsProcessor", () => {
+        expect(
+            reducer(<Store.Suggestions>{ isFetching: true, lastUpdated: 0, suggestions: [], suggestionsProcessor }, suggestionsActions.recieveSuggestions(testSuggestions, ts))
+        ).toEqual({
+            isFetching: false,
+            lastUpdated: ts,
+            suggestions: suggestionsProcessor(testSuggestions),
+            suggestionsProcessor
         });
     });
 });

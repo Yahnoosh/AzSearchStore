@@ -3,6 +3,10 @@ export type SuggestionsAction =
         type: "INITIATE_SUGGEST",
     } |
     {
+        type: "SET_SUGGESTIONS_PROCESSOR",
+        suggestionsProcessor: (suggestions: {}[]) => {}[]
+    } |
+    {
         type: "RECEIVE_SUGGESTIONS",
         suggestions: {}[],
         receivedAt: number,
@@ -14,6 +18,11 @@ export type SuggestionsAction =
 
 export const initiateSuggest = (): SuggestionsAction => ({
     type: "INITIATE_SUGGEST"
+});
+
+export const setSuggestionsProcessor = (suggestionsProcessor: (suggestions: {}[]) => {}[]) => ({
+    type: "SET_SUGGESTIONS_PROCESSOR",
+    suggestionsProcessor
 });
 
 export const recieveSuggestions = (suggestions: {}[], receivedAt: number): SuggestionsAction => ({

@@ -4,6 +4,8 @@ export namespace Store {
         index: string,
         queryKey: string,
         service: string
+        suggestCallback?: (state: Store.SearchState, postBody: { [key: string]: any }) => Promise<any>,
+        searchCallback?: (state: Store.SearchState, postBody: { [key: string]: any }) => Promise<any>,
     };
 
     export type SearchApiVersion = "2016-09-01" | "2015-02-28-Preview";
@@ -76,12 +78,14 @@ export namespace Store {
         count: number,
         isFetching: boolean,
         lastUpdated: number,
+        resultsProcessor?: (results: {}[]) => {}[],
         results: {}[]
     };
 
     export type Suggestions = {
         isFetching: boolean,
         lastUpdated: number,
+        suggestionsProcessor?: (suggestions: {}[]) => {}[],
         suggestions: {}[]
     };
 
@@ -111,7 +115,7 @@ export namespace Store {
         type: "CheckboxFacet"
         isNumeric: boolean,
         key: string,
-        values: {[key: string]: CheckboxFacetItem}
+        values: { [key: string]: CheckboxFacetItem }
         count: number,
         sort: FacetSortingMode
         facetClause: string,
@@ -131,7 +135,7 @@ export namespace Store {
 
     export type Facets = {
         facetMode: FacetMode,
-        facets: {[key: string]: Facet}
+        facets: { [key: string]: Facet }
     };
 
     export type Facet = RangeFacet | CheckboxFacet;
