@@ -21,7 +21,8 @@ describe("reducers/searchParameters", () => {
             skip: 0,
             top: 50,
             apiVersion: "2015-02-28-Preview",
-            searchMode: "any"
+            searchMode: "any",
+            queryType: "simple"
         };
         expect(
             searchParameters.searchParameters(initialState, searchParametersActions.setSearchApiVersion("2015-02-28-Preview"))
@@ -37,6 +38,7 @@ describe("reducers/searchParameters", () => {
             searchMode: "all",
             select: "hij",
             skip: 1000,
+            queryType: "full",
             top: 3,
         };
         expect(
@@ -47,7 +49,8 @@ describe("reducers/searchParameters", () => {
         const testParameters: Store.SearchParametersUpdate = {
             skip: 1000,
             top: 3,
-            searchMode: "all"
+            searchMode: "all",
+            queryType: "full"
         };
         const expectedParams: Store.SearchParameters = {
             count: false,
@@ -57,6 +60,7 @@ describe("reducers/searchParameters", () => {
             select: null,
             skip: 1000,
             top: 3,
+            queryType: "full",
             apiVersion: "2016-09-01",
             searchMode: "all"
         };
@@ -83,6 +87,7 @@ describe("reducers/searchParameters", () => {
             searchFields: "def",
             searchMode: "all",
             select: "hij",
+            queryType: "simple",
             skip: 1000,
             top: 3,
         };

@@ -17,7 +17,8 @@ const parameterNameLookup = {
     minimumCoverage: "minimumCoverage",
     fuzzy: "fuzzy",
     highlightPostTag: "highlightPostTag",
-    highlightPreTag: "highlightPreTag"
+    highlightPreTag: "highlightPreTag",
+    queryType: "queryType"
 };
 
 function appendQueryParams(searchURI: uri.URI, parameters: Store.Parameters, facets: Store.Facets): uri.URI {
@@ -33,6 +34,8 @@ function appendQueryParams(searchURI: uri.URI, parameters: Store.Parameters, fac
     searchParameters.scoringProfile ? params[parameterNameLookup.scoringProfile] = searchParameters.scoringProfile : 0;
     searchParameters.searchFields ? params[parameterNameLookup.searchFields] = searchParameters.searchFields : 0;
     searchParameters.select ? params[parameterNameLookup.select] = searchParameters.select : 0;
+    searchParameters.minimumCoverage ? params[parameterNameLookup.minimumCoverage] = searchParameters.minimumCoverage : 0;
+    searchParameters.queryType ? params[parameterNameLookup.queryType] = searchParameters.queryType : 0;
     const facetClauses = getFacetClauses(facets);
     facetClauses ? params[parameterNameLookup.facet] = facetClauses : 0;
     const filter = getFilterClauses(facets);

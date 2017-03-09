@@ -21,6 +21,7 @@ const testSearchParameters: Store.SearchParameters = {
     select: "hij",
     skip: 1000,
     top: 3,
+    queryType: "simple"
 };
 
 const testSuggestionsParameters: Store.SuggestionsParameters = {
@@ -127,7 +128,7 @@ describe("utils/uriHelper", () => {
         const searchURI = URI(uriString);
         expect(
             searchURI.valueOf()
-        ).toEqual("https://buzz.search.windows.net/indexes/foo/docs?search=%2A&api-version=2016-09-01&%24skip=0&%24top=50&searchMode=any");
+        ).toEqual("https://buzz.search.windows.net/indexes/foo/docs?search=%2A&api-version=2016-09-01&%24skip=0&%24top=50&searchMode=any&queryType=simple");
         expect(searchURI.hasQuery("search", "*")).toBe(true);
         expect(searchURI.hasQuery("api-version", "2016-09-01")).toBe(true);
         expect(searchURI.hasQuery("searchMode", "any")).toBe(true);
@@ -139,7 +140,7 @@ describe("utils/uriHelper", () => {
         const searchURI = URI(uriString);
         expect(
             searchURI.valueOf()
-        ).toEqual("https://buzz.search.windows.net/indexes/foo/docs?search=show+me+the+money&api-version=2015-02-28-Preview&%24skip=1000&%24top=3&searchMode=all&%24count=true&%24orderby=foobar&scoringProfile=abc&searchFields=def&%24select=hij");
+        ).toEqual("https://buzz.search.windows.net/indexes/foo/docs?search=show+me+the+money&api-version=2015-02-28-Preview&%24skip=1000&%24top=3&searchMode=all&%24count=true&%24orderby=foobar&scoringProfile=abc&searchFields=def&%24select=hij&queryType=simple");
         expect(searchURI.hasQuery("search", "show me the money")).toBe(true);
         expect(searchURI.hasQuery("api-version", "2015-02-28-Preview")).toBe(true);
         expect(searchURI.hasQuery("searchMode", "all")).toBe(true);
@@ -156,7 +157,7 @@ describe("utils/uriHelper", () => {
         const searchURI = URI(uriString);
         expect(
             searchURI.valueOf()
-        ).toEqual("https://buzz.search.windows.net/indexes/foo/docs?search=%2A&api-version=2016-09-01&%24skip=0&%24top=50&searchMode=any&facet=foo%2Cvalues%3A0%7C10&facet=bar%2Ccount%3A5%2Csort%3Acount");
+        ).toEqual("https://buzz.search.windows.net/indexes/foo/docs?search=%2A&api-version=2016-09-01&%24skip=0&%24top=50&searchMode=any&queryType=simple&facet=foo%2Cvalues%3A0%7C10&facet=bar%2Ccount%3A5%2Csort%3Acount");
         expect(searchURI.hasQuery("search", "*")).toBe(true);
         expect(searchURI.hasQuery("api-version", "2016-09-01")).toBe(true);
         expect(searchURI.hasQuery("searchMode", "any")).toBe(true);
@@ -170,7 +171,7 @@ describe("utils/uriHelper", () => {
         const searchURI = URI(uriString);
         expect(
             searchURI.valueOf()
-        ).toEqual("https://buzz.search.windows.net/indexes/foo/docs?search=%2A&api-version=2016-09-01&%24skip=0&%24top=50&searchMode=any&facet=foo%2Cvalues%3A0%7C10&facet=bar%2Ccount%3A5%2Csort%3Acount&%24filter=foo+ge+5+and+foo+le+7+and+%28bar+eq+%27a%27%29");
+        ).toEqual("https://buzz.search.windows.net/indexes/foo/docs?search=%2A&api-version=2016-09-01&%24skip=0&%24top=50&searchMode=any&queryType=simple&facet=foo%2Cvalues%3A0%7C10&facet=bar%2Ccount%3A5%2Csort%3Acount&%24filter=foo+ge+5+and+foo+le+7+and+%28bar+eq+%27a%27%29");
         expect(searchURI.hasQuery("search", "*")).toBe(true);
         expect(searchURI.hasQuery("api-version", "2016-09-01")).toBe(true);
         expect(searchURI.hasQuery("searchMode", "any")).toBe(true);

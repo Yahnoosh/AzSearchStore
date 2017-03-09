@@ -8,6 +8,7 @@ export namespace Store {
 
     export type SearchApiVersion = "2016-09-01" | "2015-02-28-Preview";
     export type SearchMode = "any" | "all";
+    export type QueryType = "simple" | "full";
 
     export type SearchParameters = {
         count: boolean,
@@ -19,7 +20,8 @@ export namespace Store {
         select: string,
         searchFields: string,
         minimumCoverage?: string,
-        apiVersion: SearchApiVersion
+        apiVersion: SearchApiVersion,
+        queryType: QueryType
     };
 
     export type SearchParametersUpdate = {
@@ -32,7 +34,8 @@ export namespace Store {
         select?: string,
         searchFields?: string,
         minimumCoverage?: string,
-        apiVersion?: SearchApiVersion
+        apiVersion?: SearchApiVersion,
+        queryType?: QueryType
     };
 
     export type SuggestionsParameters = {

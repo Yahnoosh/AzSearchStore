@@ -1,7 +1,7 @@
 import { ResultsAction } from "../actions/resultsActions";
 import { Store } from "../store";
 import { combineReducers } from "redux";
-import * as objectAssign from "object-assign";
+import { updateObject } from "./reducerUtils";
 
 export const initialState: Store.SearchResults = {
     count: -1,
@@ -13,12 +13,12 @@ export const initialState: Store.SearchResults = {
 export function results(state: Store.SearchResults = initialState, action: ResultsAction): Store.SearchResults {
     switch (action.type) {
         case "INITIATE_SEARCH":
-            return objectAssign({}, state, { isFetching: true });
+            return updateObject(state, { isFetching: true });
         case "RECEIVE_RESULTS":
-            return objectAssign({}, state, { isFetching: false, lastUpdated: action.receivedAt, results: action.results, count: action.count });
+            return updateObject(state, { isFetching: false, lastUpdated: action.receivedAt, results: action.results, count: action.count });
         case "APPEND_RESULTS":
             const results = state.results.concat(action.results);
-            return objectAssign({}, state, { isFetching: false, lastUpdated: action.receivedAt, results });
+            return updateObject(state, { isFetching: false, lastUpdated: action.receivedAt, results });
         default:
             return state;
     }

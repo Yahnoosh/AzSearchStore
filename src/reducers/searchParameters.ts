@@ -11,7 +11,8 @@ export const initialState: Store.SearchParameters = {
     skip: 0,
     top: 50,
     apiVersion: "2016-09-01",
-    searchMode: "any"
+    searchMode: "any",
+    queryType: "simple"
 };
 
 export function searchParameters(state: Store.SearchParameters = initialState, action: SearchParametersAction): Store.SearchParameters {
