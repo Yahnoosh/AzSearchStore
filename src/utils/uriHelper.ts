@@ -53,7 +53,7 @@ function getFacetClauses(facets: Store.Facets): string[] {
 export function buildSearchURI(config: Store.Config, parameters: Store.Parameters): string {
     const {service, index} = config;
     const apiVersion = parameters.searchParameters.apiVersion;
-    const uriTemplate = `https://${service}.search.windows.net/indexes/${index}/docs?api-version=${apiVersion}`;
+    const uriTemplate = `https://${service}.search.windows.net/indexes/${index}/docs/search?api-version=${apiVersion}`;
     let searchURI = URI(uriTemplate);
     return searchURI.valueOf();
 }

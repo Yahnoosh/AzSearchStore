@@ -129,7 +129,7 @@ describe("utils/uriHelper", () => {
         const searchURI = URI(uriString);
         expect(
             searchURI.valueOf()
-        ).toEqual("https://buzz.search.windows.net/indexes/foo/docs?api-version=2016-09-01");
+        ).toEqual("https://buzz.search.windows.net/indexes/foo/docs/search?api-version=2016-09-01");
         expect(searchURI.hasQuery("api-version", "2016-09-01")).toBe(true);
     });
     it("should create a search post body from test config and custom parameters", () => {
