@@ -2,7 +2,7 @@
   "name": "azsearchstore",
   "version": "1.0.0",
   "description": "explorations of moving azsearchjs to ts and redux",
-  "main": "index.js",
+  "main": "dist/AzSearchStore.js",
   "scripts": {
     "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
     "pretest": "npm run lint",

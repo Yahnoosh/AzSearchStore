@@ -1,26 +1,11 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import * as redux from "redux";
-import ReduxThunk from "redux-thunk";
-import { reducers } from "./reducers/reducers";
 import { Store } from "./store";
-import * as asyncActions from "./actions/asyncActions";
-import * as configActions from "./actions/configActions";
-import * as searchParameterActions from "./actions/searchParametersActions";
-import * as suggestionsParameterActions from "./actions/suggestionsParametersActions";
-import * as inputActions from "./actions/inputActions";
-import * as facetsActions from "./actions/facetsActions";
-import * as suggestionsActions from "./actions/suggestionsActions";
-import * as promise from "es6-promise";
-
+import { AzSearchStore } from "./AzSearchStore";
 
 // create store
-const store = redux.createStore(
-    reducers,
-    {} as Store.SearchState,
-    redux.applyMiddleware(ReduxThunk)
-);
-
+const store = new AzSearchStore();
 // subscribe and dump state transitions to console
 store.subscribe(() => {
     const state = store.getState();
@@ -33,17 +18,17 @@ store.subscribe(() => {
 });
 
 // configuration
-store.dispatch(configActions.setConfig({ index: "wikiversity", queryKey: "4412747C72BF48B6C761ED7E00D9964D", service: "azsdoofgod" }));
-store.dispatch(searchParameterActions.updateSearchParameters({ count: true }));
-store.dispatch(inputActions.setInput("*"));
-store.dispatch(facetsActions.addCheckboxFacet("campusType", false));
-store.dispatch(facetsActions.addRangeFacet("studentsCount", 0, 100000));
-store.dispatch(facetsActions.addRangeFacet("endowmentAmount", 0, 5000000000));
-store.dispatch(suggestionsParameterActions.updateSuggestionsParameters({ suggesterName: "titleSuggester" }));
+store.setConfig({ index: "wikiversity", queryKey: "4412747C72BF48B6C761ED7E00D9964D", service: "azsdoofgod" });
+store.updateSearchParameters({ count: true });
+store.setInput("*");
+store.addCheckboxFacet("campusType", false);
+store.addRangeFacet("studentsCount", 0, 100000);
+store.addRangeFacet("endowmentAmount", 0, 5000000000);
+store.updateSuggestionsParameters({ suggesterName: "titleSuggester" });
 
 
 interface SearchProps {
-    store: redux.Store<Store.SearchState>;
+    store: AzSearchStore;
 }
 
 
@@ -57,18 +42,18 @@ class SearchPage extends React.Component<SearchProps, Store.SearchState> {
         this.state = props.store.getState();
     }
     handleChange(event: any) {
-        this.props.store.dispatch(inputActions.setInput(event.target.value));
+        this.props.store.setInput(event.target.value);
     }
     onKeyPress(event: any) {
         if (event.key === "Enter") {
-            return this.props.store.dispatch(asyncActions.fetchSearchResults);
+            return this.props.store.search();
         }
-        this.props.store.dispatch(asyncActions.suggest);
+        this.props.store.suggest();
     }
     render() {
         const state = this.state;
         const results: any = this.state.results.results;
-                const suggestions: any = this.state.suggestions.suggestions;
+        const suggestions: any = this.state.suggestions.suggestions;
 
         if (!state) {
             return <div />;
