@@ -2,7 +2,8 @@ module.exports = {
     entry: "./src/AzSearchStore.ts",
     output: {
         filename: "bundle.js",
-        path: __dirname + "/dist"
+        path: __dirname + "/dist",
+        library: ['AzSearchStore']
     },
 
     // Enable sourcemaps for debugging webpack's output.

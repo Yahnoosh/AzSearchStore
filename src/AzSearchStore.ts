@@ -128,5 +128,3 @@ export class AzSearchStore {
     }
 
 }
-
-(window as any).AzSearchStore = AzSearchStore;
