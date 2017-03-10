@@ -28,9 +28,12 @@ All samples and documentation assume the real estate sample index available thro
     * [Calling your own server](https://github.com/EvanBoyle/AzSearchStore#calling-your-own-server)
     * [Client side results processing](https://github.com/EvanBoyle/AzSearchStore#client-side-results-processing)
     
+## Install
+```
+npm install azsearchstore
+```
 
-
-## Getting Started
+## Getting Started 
 1. Clone the repo
 2. Install dependencies 
    ``` 
