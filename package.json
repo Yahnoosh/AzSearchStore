@@ -2,6 +2,10 @@
   "name": "azsearchstore",
   "version": "0.0.1",
   "description": "redux based UI state management for applications consuming Azure Search",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EvanBoyle/AzSearchStore.git"
+  },
   "main": "dist/AzSearchStore.js",
   "browser": "dist/bundle.js",
   "typings": "dist/AzSearchStore.d.ts",
