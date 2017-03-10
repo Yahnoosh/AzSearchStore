@@ -41,6 +41,10 @@ A UI state management library to build js apps against Azure Serach. Built with 
     ```
     tsc
     ```
+    
+    if you run into errors from tsc about not finding 'iterable' run:  npm install --save-dev @types/node
+    make sure tsc -v shows version 2.1.5
+
     ```
     webpack
     ```
