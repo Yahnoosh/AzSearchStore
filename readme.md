@@ -2,6 +2,31 @@
 
 A UI state management library to build js apps against Azure Serach. Built with redux and typescript. Provides simple apis for searching, suggestions, and faceted navigation. Built in extensibility endpoints allow you to call your own controllers rather than the search service directly, allowing for custom authentication or server side processing of results.
 
+## Contents
+* [Getting Started](https://github.com/EvanBoyle/AzSearchStore#getting-started)
+* [Basic Usage](https://github.com/EvanBoyle/AzSearchStore#basic-usage)
+    * [Setup](https://github.com/EvanBoyle/AzSearchStore#setup)
+    * [Reading Data](https://github.com/EvanBoyle/AzSearchStore#reading-data)
+    * [Basic APIs](https://github.com/EvanBoyle/AzSearchStore#reading-data)
+* [State Tree](https://github.com/EvanBoyle/AzSearchStore#state-tree)
+* [Configuration](https://github.com/EvanBoyle/AzSearchStore#configuration)
+    * [Search Parameters](https://github.com/EvanBoyle/AzSearchStore#searchparameters)
+    * [Seach Parameter APIs](https://github.com/EvanBoyle/AzSearchStore#searchparameters-apis)
+    * [Suggestions Parameters](https://github.com/EvanBoyle/AzSearchStore#suggestionsparameters)
+    * [Suggestions Parameters APIs](https://github.com/EvanBoyle/AzSearchStore#suggestionsparameters-apis)
+* [Search & Suggest](https://github.com/EvanBoyle/AzSearchStore#search--suggest)
+    * [Search APIs](https://github.com/EvanBoyle/AzSearchStore#search-apis)
+    * [Suggest API](https://github.com/EvanBoyle/AzSearchStore#suggest-api)
+* [Faceting & Filtering](https://github.com/EvanBoyle/AzSearchStore#faceting--filtering)
+    * [CheckboxFacet](https://github.com/EvanBoyle/AzSearchStore#checkboxfacet)
+    * [RangeFacet](https://github.com/EvanBoyle/AzSearchStore#rangefacet)
+    * [Facet APIs](https://github.com/EvanBoyle/AzSearchStore#facet-apis)
+* [Extensibility](https://github.com/EvanBoyle/AzSearchStore#extensibility)
+    * [Calling your own server](https://github.com/EvanBoyle/AzSearchStore#calling-your-own-server)
+    * [Client side results processing](https://github.com/EvanBoyle/AzSearchStore#client-side-results-processing)
+    
+
+
 ## Getting Started
 1. Clone the repo
 2. Install dependencies 
@@ -179,6 +204,8 @@ decrementSkip();
 
 ### suggestionsParameters
 
+map directly to the api: https://docs.microsoft.com/en-us/rest/api/searchservice/suggestions
+
 * `top`: number. Determines number of results to load, default 50 max 1000.
 * `filter`: string. Expression that limits documents considered for suggestions
 * `orderby`: string. Used for sorting,
@@ -280,14 +307,14 @@ AzSearchStore calls the search service directly by default. Some scenarios may n
 
 ```js
 // specified callback will be invoked with both the full state, and the postBody computed for search POST request
-var searchCallBack = function(state, postBody) {
+var searchCallback = function(state, postBody) {
     // do something, maybe authentication?
     // make an http call and return a promise
     // promise must resolve with data in the same format returned by the search api
 };
 
 // same contract as searchCallback
-var suggestCallBack = ...;
+var suggestCallback = ...;
 
 
 setSearchCallback(searchCallback);
