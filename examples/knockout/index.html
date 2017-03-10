@@ -1,0 +1,70 @@
+<html>
+
+<body>
+    <input data-bind="value: searchText, event: { keyup: keyHandler }" />
+    <button data-bind="click: search">search</button>
+    <h2>suggestions</h2>
+    <ul data-bind="foreach: suggestions">
+        <li>
+            <b data-bind="text: title"></b >
+            </li>
+        </ul>
+    <h2>results</h2>
+    <ul data-bind="foreach: results">
+        <li>
+            <b data-bind="text: title"></b >
+            </li>
+        </ul>
+    </body>
+</html>
+
+<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-3.3.0.js"></script>
+<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.0.min.js"></script>
+<script src="../../dist/bundle.js"></script>
+<script type="text/javascript">
+    var store = new AzSearchStore();
+    store.setConfig({ index: "wikiversity", queryKey: "4412747C72BF48B6C761ED7E00D9964D", service: "azsdoofgod" });
+    store.updateSearchParameters({ count: true });
+    store.setInput("*");
+    store.addCheckboxFacet("campusType", false);
+    store.addRangeFacet("studentsCount", 0, 100000);
+    store.addRangeFacet("endowmentAmount", 0, 5000000000);
+    store.updateSuggestionsParameters({ suggesterName: "titleSuggester", select: "title" });
+    function SearchViewModel() {
+        _that = this;
+        this.results = ko.observableArray([
+            {
+                title: "no results"
+            }
+        ]);
+        this.suggestions = ko.observableArray([
+            {
+                title: "no suggestions"
+            }
+        ]);
+        this.results = ko.observableArray([
+            {
+                title: "no results"
+            }
+        ]);
+        this.searchText = ko.observable("");
+        this.updateViewModel = function () {
+            var state = store.getState();
+            _that.results(state.results.results);
+            _that.suggestions(state.suggestions.suggestions);
+        }
+        this.search = function () {
+            store.search()
+        }
+        this.keyHandler = function (data, event) {
+            if (event.key === "Enter") {
+                return store.search();
+            }
+            store.setInput(event.target.value);
+            store.suggest()
+        }
+    }
+    var viewModel = new SearchViewModel();
+    ko.applyBindings(viewModel);
+    store.subscribe(viewModel.updateViewModel)
+</script>
