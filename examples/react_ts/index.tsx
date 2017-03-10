@@ -16,20 +16,24 @@ store.subscribe(() => {
 });
 
 // configuration
-store.setConfig({ index: "wikiversity", queryKey: "4412747C72BF48B6C761ED7E00D9964D", service: "azsdoofgod" });
+store.setConfig({ index: "realestate-us-sample", queryKey: "8EF3C0C4BD32C51BCCA4D74AABFA118E", service: "azs-playground" });
 store.updateSearchParameters({ count: true });
 store.setInput("*");
-store.addCheckboxFacet("campusType", false);
-store.addRangeFacet("studentsCount", 0, 100000);
-store.addRangeFacet("endowmentAmount", 0, 5000000000);
-store.updateSuggestionsParameters({ suggesterName: "titleSuggester" });
+store.addCheckboxFacet("beds", true);
+store.addRangeFacet("sqft", 0, 20000);
+store.addCheckboxFacet("baths", true);
+// set suggester, project some additional fields into the returned suggestions
+store.updateSuggestionsParameters({
+    suggesterName: "sg",
+    select: "number,street,city,region,countryCode"
+});
 
 
 interface SearchProps {
     store: AzSearchStore;
 }
 
-class SearchPage extends React.Component<SearchProps, Store.SearchState > {
+class SearchPage extends React.Component<SearchProps, Store.SearchState> {
     componentDidMount() {
         this.props.store.subscribe(() => { this.setState(this.props.store.getState()); });
     }
@@ -62,13 +66,13 @@ class SearchPage extends React.Component<SearchProps, Store.SearchState > {
                 <h2>Suggestions</h2>
                 <ul>
                     {suggestions && suggestions.map((suggestion: any) => {
-                        return <li>{suggestion["@search.text"]}</li>;
+                        return <li>{suggestion.number} {suggestion.street} {suggestion.city}, {suggestion.region} {suggestion.countryCode}</li>;
                     })}
                 </ul>
                 <h2>Results</h2>
                 <ul>
                     {results.map((result: any) => {
-                        return <li>{result.title}</li>;
+                        return <li>{result.number} {result.street} {result.city}, {result.region} {result.countryCode}</li>;
                     })}
                 </ul>
             </div>

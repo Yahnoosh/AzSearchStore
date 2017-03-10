@@ -103,10 +103,10 @@ export class AzSearchStore {
         this.store.dispatch(configActions.setSuggestCallback(suggestCallback));
     }
     public setResultsProcessor(resultsProcessor: (results: {}[]) => {}[]) {
-        this.store.dispatch(resultsActions.setResultsProcessor);
+        this.store.dispatch(resultsActions.setResultsProcessor(resultsProcessor));
     }
     public setSuggestionsProcessor(suggestionsProcessor: (suggestions: {}[]) => {}[]) {
-        this.store.dispatch(suggestionsActions.setSuggestionsProcessor);
+        this.store.dispatch(suggestionsActions.setSuggestionsProcessor(suggestionsProcessor));
     }
 
     // search

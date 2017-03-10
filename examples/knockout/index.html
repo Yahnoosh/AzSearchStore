@@ -6,13 +6,13 @@
     <h2>suggestions</h2>
     <ul data-bind="foreach: suggestions">
         <li>
-            <b data-bind="text: title"></b >
+            <b data-bind="text: displayText"></b >
             </li>
         </ul>
     <h2>results</h2>
     <ul data-bind="foreach: results">
         <li>
-            <b data-bind="text: title"></b >
+            <b data-bind="text: displayText"></b >
             </li>
         </ul>
     </body>
@@ -23,35 +23,50 @@
 <script src="../../dist/bundle.js"></script>
 <script type="text/javascript">
     var store = new AzSearchStore.AzSearchStore();
-    store.setConfig({ index: "wikiversity", queryKey: "4412747C72BF48B6C761ED7E00D9964D", service: "azsdoofgod" });
+    store.setConfig({ index: "realestate-us-sample", queryKey: "8EF3C0C4BD32C51BCCA4D74AABFA118E", service: "azs-playground" });
     store.updateSearchParameters({ count: true });
     store.setInput("*");
-    store.addCheckboxFacet("campusType", false);
-    store.addRangeFacet("studentsCount", 0, 100000);
-    store.addRangeFacet("endowmentAmount", 0, 5000000000);
-    store.updateSuggestionsParameters({ suggesterName: "titleSuggester", select: "title" });
+    store.addCheckboxFacet("beds", true);
+    store.addRangeFacet("sqft", 0, 20000);
+    store.addCheckboxFacet("baths", true);
+    // create a post processor to create the desired display text since knockout lacks ritch templating
+    var postProcessor = function(results) {
+        return results.map(function(result){
+            result.displayText = result.number + " " + result.street+ " " +result.city+ ", " +result.region+ " " +result.countryCode;
+            return result;
+        });
+    };
+    // set post processors to run after results are recieved
+    store.setResultsProcessor(postProcessor);
+    store.setSuggestionsProcessor(postProcessor);
+    // set suggester, project some additional fields into the returned suggestions
+    store.updateSuggestionsParameters({
+        suggesterName: "sg",
+        select: "number,street,city,region,countryCode"
+    });
     function SearchViewModel() {
         _that = this;
         this.results = ko.observableArray([
             {
-                title: "no results"
+                displayText: "no results"
             }
         ]);
         this.suggestions = ko.observableArray([
             {
-                title: "no suggestions"
+                displayText: "no suggestions"
             }
         ]);
-        this.results = ko.observableArray([
-            {
-                title: "no results"
-            }
-        ]);
+
         this.searchText = ko.observable("");
         this.updateViewModel = function () {
             var state = store.getState();
-            _that.results(state.results.results);
-            _that.suggestions(state.suggestions.suggestions);
+            if(state.results.results && state.results.results.length){
+                _that.results(state.results.results);
+            }
+            if(state.suggestions.suggestions && state.suggestions.suggestions.length){
+                _that.suggestions(state.suggestions.suggestions);
+            }
+            
         }
         this.search = function () {
             store.search()

@@ -2,6 +2,9 @@
 
 A UI state management library to build js apps against Azure Search. Built with redux and typescript. Provides simple apis for searching, suggestions, and faceted navigation. Built in extensibility endpoints allow you to call your own controllers rather than the search service directly, allowing for custom authentication or server side processing of results.
 
+## Quick note on data
+All samples and documentation assume the real estate sample index available through the portal. A demo account is provided for the samples. To create your own service and load the real estate sample [see this guide](https://docs.microsoft.com/en-us/azure/search/search-get-started-portal).
+
 ## Contents
 * [Getting Started](https://github.com/EvanBoyle/AzSearchStore#getting-started)
 * [Basic Usage](https://github.com/EvanBoyle/AzSearchStore#basic-usage)
@@ -127,13 +130,13 @@ Basic facet usage:
 // checkbox facets are used for discrete value filtering
 // a common scenario is ratings on ecommerce sites 
 // a website might display checkboxes to filter by 1* 2* 3* 4* 5* rated products
-store.addCheckboxFacet("campusType", false);
+store.addCheckboxFacet("beds", true);
 // issue a search request that will populate facets for that field
 // note search() returns a promise 
 store.search().then(...)
 // simulates a user selecting a facet checkbox for the value "urban"
-// will produce the filter $filte="campusType eq 'urban'"
-store.toggleCheckboxFacet("campusType", "urban");
+// will produce the filter $filter="beds eq 3"
+store.toggleCheckboxFacet("beds", "3");
 // make the request to retrieve results, applying the recently generated filter
 store.searchFromFacetAction();
 ```
@@ -142,9 +145,9 @@ Suggestions:
 
 ```js
 // set input for suggestions
-store.setInput("enginee");
+store.setInput("redmo");
 // set the suggester we will make requests against
-store.updateSuggestionsParameters({ suggesterName: "titleSuggester" });
+store.updateSuggestionsParameters({ suggesterName: "sg" });
 // send http request to get suggestions
 store.suggest();
 ```
