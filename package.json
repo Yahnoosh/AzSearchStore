@@ -3,6 +3,8 @@
   "version": "0.0.1",
   "description": "redux based UI state management for applications consuming Azure Search",
   "main": "dist/AzSearchStore.js",
+  "browser": "dist/bundle.js",
+  "typings": "dist/AzSearchStore.d.ts",
   "scripts": {
     "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
     "pretest": "npm run lint",
@@ -32,7 +34,7 @@
     "ts-loader": "^1.3.3",
     "typescript": "^2.1.5"
   },
-  "peerDependencies": {
+  "dependencies": {
     "redux": "^3.6.0",
     "redux-thunk": "^2.2.0",
     "object-assign": "^4.1.1",

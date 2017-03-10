@@ -1,7 +1,8 @@
 import * as redux from "redux";
 import ReduxThunk from "redux-thunk";
+import * as promise from "es6-promise";
+import * as fetch from "isomorphic-fetch";
 import { reducers } from "./reducers/reducers";
-import { Store } from "./store";
 import * as asyncActions from "./actions/asyncActions";
 import * as configActions from "./actions/configActions";
 import * as searchParameterActions from "./actions/searchParametersActions";
@@ -10,6 +11,9 @@ import * as inputActions from "./actions/inputActions";
 import * as facetsActions from "./actions/facetsActions";
 import * as suggestionsActions from "./actions/suggestionsActions";
 import * as resultsActions from "./actions/resultsActions";
+
+import { Store } from "./store";
+export { Store } from "./store";
 
 export class AzSearchStore {
     public store: redux.Store<Store.SearchState>;
@@ -26,7 +30,7 @@ export class AzSearchStore {
     public subscribe(listener: () => void) {
         this.store.subscribe(listener);
     }
-    public getState() {
+    public getState(): Store.SearchState {
         return this.store.getState();
     }
 

@@ -1,8 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import * as redux from "redux";
-import { Store } from "./store";
-import { AzSearchStore } from "./AzSearchStore";
+import { AzSearchStore, Store } from "../../dist/AzSearchStore";
 
 // create store
 const store = new AzSearchStore();
@@ -14,7 +13,6 @@ store.subscribe(() => {
     console.info(`search params: ${JSON.stringify(state.parameters)}`);
     console.info(`facets: ${JSON.stringify(state.facets)}`);
     console.info(`results: ${JSON.stringify(state.results.count)}`);
-
 });
 
 // configuration
@@ -31,8 +29,7 @@ interface SearchProps {
     store: AzSearchStore;
 }
 
-
-class SearchPage extends React.Component<SearchProps, Store.SearchState> {
+class SearchPage extends React.Component<SearchProps, Store.SearchState > {
     componentDidMount() {
         this.props.store.subscribe(() => { this.setState(this.props.store.getState()); });
     }

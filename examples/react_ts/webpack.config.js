@@ -1,5 +1,5 @@
 module.exports = {
-    entry: "./src/AzSearchStore.ts",
+    entry: "./index.tsx",
     output: {
         filename: "bundle.js",
         path: __dirname + "/dist"
@@ -30,6 +30,7 @@ module.exports = {
     // This is important because it allows us to avoid bundling all of our
     // dependencies, which allows browsers to cache those libraries between builds.
     externals: {
-        "redux": "redux"
+        "react": "React",
+        "react-dom": "ReactDOM",
     },
 };
