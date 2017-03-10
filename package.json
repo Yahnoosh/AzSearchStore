@@ -36,7 +36,8 @@
     "source-map-loader": "^0.1.6",
     "ts-jest": "^18.0.2",
     "ts-loader": "^1.3.3",
-    "typescript": "^2.1.5"
+    "typescript": "^2.1.5",
+    "webpack": "1.14.0"
   },
   "dependencies": {
     "redux": "^3.6.0",

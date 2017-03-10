@@ -33,7 +33,7 @@ All samples and documentation assume the real estate sample index available thro
 npm install azsearchstore
 ```
 
-## Getting Started 
+## Getting Started with local development
 1. Clone the repo
 2. Install dependencies 
    ``` 
@@ -44,12 +44,19 @@ npm install azsearchstore
    npm install -g http-server
    ```
 4. Build the project:
+
+    ```
+    npm install typescript@2.1.5 -g
+    ```
+    ```
+    npm install webpack@1.14.0 -g
+    ```
     ```
     tsc
     ```
+    If you run into errors, check to make sure that webpack and tsc are using the proper versions 2.1.5 and 1.14.0 respectively
     
-    if you run into errors from tsc about not finding 'iterable' run:  npm install --save-dev @types/node
-    make sure tsc -v shows version 2.1.5
+    If you find TSC errors regarding 'iterable' run:  npm install --save-dev @types/node
 
     ```
     webpack
