@@ -1,8 +1,8 @@
-#AzSearch.js
+# AzSearch.js
 
 A UI state management library to build js apps against Azure Serach. Built with redux and typescript. Provides simple apis for searching, suggestions, and faceted navigation. Built in extensibility endpoints allow you to call your own controllers rather than the search service directly, allowing for custom authentication or server side processing of results.
 
-##Getting Started
+## Getting Started
 1. Clone the repo
 2. Install dependencies 
    ``` 
@@ -95,6 +95,9 @@ Basic facet usage:
 
 ```js
 // create an checkbox facet, updates internal application state
+// checkbox facets are used for discrete value filtering
+// a common scenario is ratings on ecommerce sites 
+// a website might display checkboxes to filter by 1* 2* 3* 4* 5* rated products
 store.addCheckboxFacet("campusType", false);
 // issue a search request that will populate facets for that field
 // note search() returns a promise 
@@ -106,7 +109,76 @@ store.toggleCheckboxFacet("campusType", "urban");
 store.searchFromFacetAction();
 ```
 
+Suggestions:
+
+```js
+// set input for suggestions
+store.setInput("enginee");
+// set the suggester we will make requests against
+store.updateSuggestionsParameters({ suggesterName: "titleSuggester" });
+// send http request to get suggestions
+store.suggest();
+```
+
 ## Configuration
+
+### searchParameters
+
+searchParameters control different aspects of search such as paging, field selection, and sorting. These map directly to the api: https://docs.microsoft.com/en-us/rest/api/searchservice/search-documents 
+
+### searchParameters
+
+* `count`: boolean. When set to true, will request count of total matches to be returned with search results
+* `top`: number. Determines number of results to load, default 50 max 1000.
+* `skip`: number. Used for paging results. 
+* `orderby`: string. Used for sorting,
+* `searchMode`: string, either "any" or "all". See api docs for details
+* `scoringProfile`: string. Used to alter result scoring, see api reference.
+* `select`: string. Limits the fields retrieved with search request
+* `searchFields`: string. controls which fields to search on a given query
+* `minimumCoverage`: number. Advanced, the percentage of the index that must be covered by a search query
+* `apiVersion`: string. Either: "2016-09-01" or "2015-02-28-Preview"
+* `queryType`: string. Either "simple" or "full". Defaults to simple. Standard keyword search scenarios use simple.
+
+### searchParameters APIs
+
+```js
+// set api version for search
+setSearchApiVersion(apiVersion);
+// overwrite all parameters
+setSearchParameters(searchParameters);
+// merge in a subset of parameters
+updateSearchParameters({ searchMode: "all" });
+// convenient apis for manipulating $skip in the context of paging
+incrementSkip();
+decrementSkip();
+```
+
+#### suggestionsParameters
+
+* `top`: number. Determines number of results to load, default 50 max 1000.
+* `filter`: string. Expression that limits documents considered for suggestions
+* `orderby`: string. Used for sorting,
+* `fuzzy`: boolean. Defaults to false. Enables fuzzy matching for suggestions.
+* `highlightPreTag`: string. Opening HTML tag that is applied to matched text ex: <b>
+* `highlightPostTag`: string. Closing HTML tag that is applied to matched text ex: </b>
+* `select`: string. Limits the fields retrieved with search request
+* `searchFields`: string. controls which fields to search on a given query
+* `minimumCoverage`: number. Advanced, the percentage of the index that must be covered by a search query
+* `apiVersion`: string. Either: "2016-09-01" or "2015-02-28-Preview"
+* `suggesterName`: string. Name of suggester associated with index that will be called for suggest()
+
+#### suggestionsParameters APIs
+
+```js
+// set api version for suggest
+setSuggestionsApiVersion(apiVersion);
+// overwrite all parameters for suggest
+setSuggestionsParameters(suggestionsParameters);
+// update a subset of parameters for suggest
+updateSuggestionsParameters({ suggesterName: "sg" });
+
+```
 
 ## Search & Suggest
 
