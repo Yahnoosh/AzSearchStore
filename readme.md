@@ -119,14 +119,37 @@ store.updateSuggestionsParameters({ suggesterName: "titleSuggester" });
 // send http request to get suggestions
 store.suggest();
 ```
+## State Tree
+* config
+    * index
+    * queryKey
+    * service
+    * suggestCallback
+    * searchCallback
+* results
+    * results
+    * isFetching
+    * lastUpdated
+    * count
+    * resultsProcessor
+* suggestions
+    * suggestions
+    * isFetching
+    * lastUpdated
+    * suggestionsProcessor
+* facets
+    * facetMode
+    * facets
+* parameters 
+    * input
+    * searchParameters
+    * suggestionsParameters
 
 ## Configuration
 
 ### searchParameters
 
 searchParameters control different aspects of search such as paging, field selection, and sorting. These map directly to the api: https://docs.microsoft.com/en-us/rest/api/searchservice/search-documents 
-
-### searchParameters
 
 * `count`: boolean. When set to true, will request count of total matches to be returned with search results
 * `top`: number. Determines number of results to load, default 50 max 1000.
@@ -154,7 +177,7 @@ incrementSkip();
 decrementSkip();
 ```
 
-#### suggestionsParameters
+### suggestionsParameters
 
 * `top`: number. Determines number of results to load, default 50 max 1000.
 * `filter`: string. Expression that limits documents considered for suggestions
@@ -168,7 +191,7 @@ decrementSkip();
 * `apiVersion`: string. Either: "2016-09-01" or "2015-02-28-Preview"
 * `suggesterName`: string. Name of suggester associated with index that will be called for suggest()
 
-#### suggestionsParameters APIs
+### suggestionsParameters APIs
 
 ```js
 // set api version for suggest
@@ -182,6 +205,107 @@ updateSuggestionsParameters({ suggesterName: "sg" });
 
 ## Search & Suggest
 
+### Search APIs
+
+```js
+// standard search action, replaces current results
+search()
+// usually used in combination with incrementPage(), appends search results
+loadMore()
+// usually used after a change to facet selections, replaces current results and merges in new facet values
+searchFromFacetAction()
+```
+
+### Suggest API
+
+```js
+// makes http call to retrieve suggestions
+suggest()
+```
+
 ## Faceting & Filtering
 
+Facets are stored as key value pairs in the part of the state tree corresponding to /facets/facets.
+
+### CheckboxFacet
+
+CheckboxFacet is for discreet value filtering. Think of a typical ratings filter on an e-commerce website. The internal state is as follows:
+
+* `type`: "CheckboxFacet"
+* `isNumeric`: boolean, are the discreet values to filter on numeric or strings?
+* `key`: string. The name of the field the faceting/filtering is applied to
+* `values`: { [key: string]: CheckboxFacetItem }. Key value pairs containing individual options that map to checkboxes. CheckboxFacetItem has properties `value`, `count`, and `selected`
+* `count`: number of values to retrieve. Defaults to 5, currently not configurable.
+* `sort`: determines sorting of the retrieved values, currently not configurable.
+* `facetClause`: string. read only. facet clause auto-generated for the field in question
+* `filterClause`: string. ready only. filter clause auto-generated based on currently selected values.
+
+### RangeFacet
+
+RangeFacet is for filtering based on a user defined range. Typically this is done through a slider control, or two input boxes.
+
+* `type`: "RangeFacet"
+* `key`: string. The name of the field the faceting/filtering is applied to
+* `min`: number. minimum value for the field
+* `max`: number. maximum value for the field
+* `filterLowerBound`: number. Defaults to min. The lower range of the filter.
+* `filterUpperBound`: number. Defaults to max. The upper range of the filter. 
+* `lowerBucketCount`: number. Count of values falling below specified range.
+* `middleBucketCount`: number. Count of values falling within specified range.
+* `upperBucketCount`: number. Count of values above specified range.
+* `facetClause`: string. read only. facet clause auto-generated for the field in question
+* `filterClause`: string. ready only. filter clause auto-generated based on currently selected values.
+
+### Facet APIs
+
+```js
+// configure a range facet for a field 
+addRangeFacet(fieldName, min, max);
+// configure a checkbox facet for a field
+addCheckboxFacet(fieldName, isNumeric);
+// set the filtering limits for a range facet
+setFacetRange(fieldName, lowerBound, upperBound);
+// set selection and filter by a given value for a checkbox facet
+toggleCheckboxFacet(fieldName, value);
+// reset all selected values/ranged for all facets
+clearFacetsSelections();
+```
+
 ## Extensibility
+
+### Calling your own server
+
+AzSearchStore calls the search service directly by default. Some scenarios may not allow disclosing the query key to the client. You may want to roll additional authentication, or augment search results on the server before displaying them in the client. For any of these cases, you can specify both `searchCallback`, and `suggestCallback` functions. When specified, AzSearchStore will call these functions in place of making an HTTP call directly to the service.
+
+
+```js
+// specified callback will be invoked with both the full state, and the postBody computed for search POST request
+var searchCallBack = function(state, postBody) {
+    // do something, maybe authentication?
+    // make an http call and return a promise
+    // promise must resolve with data in the same format returned by the search api
+};
+
+// same contract as searchCallback
+var suggestCallBack = ...;
+
+
+setSearchCallback(searchCallback);
+setSuggestCallback(suggestCallback);
+```
+
+### Client side results processing
+
+Wanting to remap, or compute additional statistics about results or suggestions is common. When specified the `suggestionsProcessor`, and `resultsProcessor` functions will be called after every search/suggest request.
+
+```js
+// processor called on every results set before they store in the state
+// parameter 'results' is an array of objects containing result fields
+var resultsProcessor = function(results){
+    return results.map(function(result){
+        return result;
+    })
+};
+setResultsProcessor(resultsProcessor);
+setSuggestionsProcessor(suggestionsProcessor);
+```
