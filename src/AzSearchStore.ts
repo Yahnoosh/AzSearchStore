@@ -10,9 +10,9 @@ import * as inputActions from "./actions/inputActions";
 import * as facetsActions from "./actions/facetsActions";
 import * as suggestionsActions from "./actions/suggestionsActions";
 import * as resultsActions from "./actions/resultsActions";
-
 import { Store } from "./store";
-export { Store } from "./store";
+
+export {asyncActions, configActions, searchParameterActions, suggestionsParameterActions, inputActions, facetsActions, suggestionsActions, resultsActions, Store};
 
 export class AzSearchStore {
     public store: redux.Store<Store.SearchState>;
