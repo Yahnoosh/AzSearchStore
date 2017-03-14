@@ -3,10 +3,10 @@ import * as resultsActions from "./resultsActions";
 import * as suggestionsActions from "./suggestionsActions";
 import * as facetsActions from "./facetsActions";
 import * as promise from "es6-promise";
+import "isomorphic-fetch";
 import { buildSearchURI, buildSuggestionsURI, buildPostBody, suggestParameterValidator, searchParameterValidator } from "../utils/uriHelper";
 // todo this should probably be at the entry point of app
 promise.polyfill();
-import * as fetch from "isomorphic-fetch";
 import thunk, { ThunkAction } from "redux-thunk";
 
 

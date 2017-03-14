@@ -46,20 +46,11 @@ npm install azsearchstore
 4. Build the project:
 
     ```
-    npm install typescript@2.1.5 -g
+    npm run tscompile
     ```
-    ```
-    npm install webpack@1.14.0 -g
-    ```
-    ```
-    tsc
-    ```
-    If you run into errors, check to make sure that webpack and tsc are using the proper versions 2.1.5 and 1.14.0 respectively
-    
-    If you find TSC errors regarding 'iterable' run:  npm install --save-dev @types/node
 
     ```
-    webpack
+    npm run devPack
     ```
 5. Install demos
     1. react

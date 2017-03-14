@@ -1,7 +1,6 @@
 import * as redux from "redux";
 import ReduxThunk from "redux-thunk";
 import * as promise from "es6-promise";
-import * as fetch from "isomorphic-fetch";
 import { reducers } from "./reducers/reducers";
 import * as asyncActions from "./actions/asyncActions";
 import * as configActions from "./actions/configActions";
