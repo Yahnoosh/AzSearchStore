@@ -8,6 +8,9 @@
   },
   "main": "dist/AzSearchStore.js",
   "browser": "dist/bundle.js",
+  "files": [
+    "dist"
+  ],
   "typings": "dist/AzSearchStore.d.ts",
   "scripts": {
     "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
