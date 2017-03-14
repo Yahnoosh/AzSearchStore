@@ -1,6 +1,6 @@
 # AzSearchStore (Preview)
 
-A UI state management library to build js apps against Azure Search. Built with redux and typescript. Provides simple apis for searching, suggestions, and faceted navigation. Built in extensibility endpoints allow you to call your own controllers rather than the search service directly, allowing for custom authentication or server side processing of results.
+A UI state management library to build js apps against Azure Search. Built with redux and typescript. Provides simple APIs for searching, suggestions, and faceted navigation. Built in extensibility endpoints allow you to call your own controllers rather than the search service directly, allowing for custom authentication or server side processing of results.
 
 ## Quick note on data
 All samples and documentation assume the real estate sample index available through the portal. A demo account is provided for the samples. To create your own service and load the real estate sample [see this guide](https://docs.microsoft.com/en-us/azure/search/search-get-started-portal).
@@ -48,7 +48,6 @@ npm install azsearchstore
     ```
     npm run tscompile
     ```
-
     ```
     npm run devPack
     ```
@@ -63,7 +62,7 @@ npm install azsearchstore
    ```
    npm run start_server
    ```
-6. Navigate to 127.0.0.1:8080/examples/react_ts/index.html or 127.0.0.1:8080/examples/knockout/index.html
+6. Navigate to `127.0.0.1:8080/examples/react_ts/index.html` or `127.0.0.1:8080/examples/knockout/index.html`
 
 ## Basic Usage
 
@@ -85,7 +84,7 @@ store.setConfig(
     });
 ```
 
-If you've used redux, some of the following may look familiar. AzSearchStore is built as a redux store. The raw redux store can be accessed via store.store. AzSearchStore can be tought of as two parts. First, as data representing the state of a search application including search results, suggestions, and facets. Second, as a set of APIs to manipulate search state, these correspond with common actions performed by search UI elements such as autocomplete, or faceted search.
+If you've used redux, some of the following may look familiar. AzSearchStore is built as a redux store. The raw redux store can be accessed via store.store. AzSearchStore can be thought of as two parts. First, as data representing the state of a search application including search results, suggestions, and facets. Second, as a set of APIs to manipulate search state, these correspond with common actions performed by search UI elements such as autocomplete, or faceted search.
 
 ### Reading data
 
@@ -107,9 +106,9 @@ store.subscribe(callback)
 
 ### Basic APIs
 
-AzSearchStore has high level APIs that abstract the guts of searching, faceting, and managing search application state. Something missing from your scenario (for example, date faceting support)? Please file an request to help us prioritize. 
+AzSearchStore has high level APIs that abstract the guts of searching, faceting, and managing search application state. Something missing from your scenario (for example, date faceting support)? Please file a request to help us prioritize. 
 
-In the following example we issue set some search parameters and issue a query:
+In the following example, we issue set some search parameters and issue a query:
 
 ```js
 // update a parameter used for searching, in this instance $count
@@ -182,7 +181,7 @@ store.suggest();
 
 ### searchParameters
 
-searchParameters control different aspects of search such as paging, field selection, and sorting. These map directly to the api: https://docs.microsoft.com/en-us/rest/api/searchservice/search-documents 
+searchParameters control different aspects of search such as paging, field selection, and sorting. These map directly to the API: https://docs.microsoft.com/en-us/rest/api/searchservice/search-documents 
 
 * `count`: boolean. When set to true, will request count of total matches to be returned with search results
 * `top`: number. Determines number of results to load, default 50 max 1000.
