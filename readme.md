@@ -257,6 +257,9 @@ searchFromFacetAction()
 ```js
 // makes http call to retrieve suggestions
 suggest()
+
+// clears all suggestions from store
+clearSuggestions()
 ```
 
 ## Faceting & Filtering
