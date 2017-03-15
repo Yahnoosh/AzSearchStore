@@ -6,8 +6,8 @@
     "type": "git",
     "url": "https://github.com/EvanBoyle/AzSearchStore.git"
   },
-  "main": "dist/AzSearchStore.js",
-  "browser": "dist/bundle.js",
+  "module": "dist/AzSearchStore.js",
+  "main": "dist/bundle.js",
   "files": [
     "dist"
   ],

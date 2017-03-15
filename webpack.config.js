@@ -3,7 +3,8 @@ module.exports = {
     output: {
         filename: "bundle.js",
         path: __dirname + "/dist",
-        library: ['AzSearchStore']
+        library: 'AzSearchStore',
+        libraryTarget: "umd"
     },
 
     // Enable sourcemaps for debugging webpack's output.
