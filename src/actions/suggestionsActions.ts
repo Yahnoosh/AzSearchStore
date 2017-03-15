@@ -12,6 +12,9 @@ export type SuggestionsAction =
         receivedAt: number,
     } |
     {
+        type: "CLEAR_SUGGESTIONS"
+    } |
+    {
         type: "HANDLE_ERROR",
         error: string
     };
@@ -29,6 +32,10 @@ export const recieveSuggestions = (suggestions: {}[], receivedAt: number): Sugge
     type: "RECEIVE_SUGGESTIONS",
     suggestions,
     receivedAt,
+});
+
+export const clearSuggestions = (): SuggestionsAction => ({
+    type: "CLEAR_SUGGESTIONS",
 });
 
 export const handleSuggestError = (error: string): SuggestionsAction => ({

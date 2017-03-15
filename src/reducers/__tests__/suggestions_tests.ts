@@ -54,6 +54,15 @@ describe("reducers/suggestions", () => {
             suggestions: testSuggestions
         });
     });
+    it("should clear suggestions", () => {
+        expect(
+            reducer(<Store.Suggestions>{ isFetching: false, lastUpdated: ts, suggestions: testSuggestions }, suggestionsActions.clearSuggestions())
+        ).toEqual({
+            isFetching: false,
+            lastUpdated: ts,
+            suggestions: []
+        });
+    });
     it("should set suggestionsProcessor", () => {
         expect(
             reducer(<Store.Suggestions>{ isFetching: false, lastUpdated: 0, suggestions: [] }, suggestionsActions.setSuggestionsProcessor(suggestionsProcessor))

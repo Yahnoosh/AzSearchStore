@@ -12,7 +12,7 @@ import * as suggestionsActions from "./actions/suggestionsActions";
 import * as resultsActions from "./actions/resultsActions";
 import { Store } from "./store";
 
-export {asyncActions, configActions, searchParameterActions, suggestionsParameterActions, inputActions, facetsActions, suggestionsActions, resultsActions, Store};
+export { asyncActions, configActions, searchParameterActions, suggestionsParameterActions, inputActions, facetsActions, suggestionsActions, resultsActions, Store };
 
 export class AzSearchStore {
     public store: redux.Store<Store.SearchState>;
@@ -124,6 +124,10 @@ export class AzSearchStore {
 
     public suggest() {
         return this.store.dispatch(asyncActions.suggest);
+    }
+
+    public clearSuggestions() {
+        return this.store.dispatch(suggestionsActions.clearSuggestions());
     }
 
 }

@@ -35,4 +35,11 @@ describe("actions/suggestions", () => {
             suggestionsProcessor
         });
     });
+    it("should create action to clear suggestions", () => {
+        expect(
+            suggestionsActions.clearSuggestions()
+        ).toEqual({
+            type: "CLEAR_SUGGESTIONS"
+        });
+    });
 });
