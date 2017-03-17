@@ -136,7 +136,7 @@ function updateFacetsValues(state: Store.Facets, action: UpdateFacetValuesAction
                     const updateIndex = currentItemKeys.indexOf(valueKey);
                     if (updateIndex >= 0) {
                         const item = currentItem[updateIndex];
-                        values[item.value] = {
+                        values[valueKey] = {
                             count: item.count,
                             value: item.value,
                             selected: facet.values[item.value] ? facet.values[item.value].selected : false
