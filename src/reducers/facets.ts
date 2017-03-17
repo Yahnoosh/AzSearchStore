@@ -127,17 +127,23 @@ function updateFacetsValues(state: Store.Facets, action: UpdateFacetValuesAction
             case "CheckboxFacet":
                 const values: { [key: string]: Store.CheckboxFacetItem } = {};
                 // set counts for values that got updates
-                currentItem.forEach((item) => {
-                    values[item.value] = {
-                        count: item.count,
-                        value: item.value,
-                        selected: facet.values[item.value] ? facet.values[item.value].selected : false
-                    };
-                });
-                // set counts to zero for values that didn't get updates, but that we still want remember
+
+                const currentItemKeys = currentItem.map((item) => { return item.value; });
+
+                // make update in order to ensure stability of facets list
                 Object.keys(facet.values).forEach((valueKey) => {
-                    const value = facet.values[valueKey];
-                    if (!values[valueKey]) {
+                    // do we have an update for the current key
+                    const updateIndex = currentItemKeys.indexOf(valueKey);
+                    if (updateIndex >= 0) {
+                        const item = currentItem[updateIndex];
+                        values[item.value] = {
+                            count: item.count,
+                            value: item.value,
+                            selected: facet.values[item.value] ? facet.values[item.value].selected : false
+                        };
+                    }
+                    else {
+                        const value = facet.values[valueKey];
                         values[valueKey] = {
                             count: 0,
                             selected: value.selected,
@@ -145,6 +151,18 @@ function updateFacetsValues(state: Store.Facets, action: UpdateFacetValuesAction
                         };
                     }
                 });
+
+                // fill in new values at the end
+                currentItem.forEach((item) => {
+                    if (!values[item.value]) {
+                        values[item.value] = {
+                            count: item.count,
+                            value: item.value,
+                            selected: facet.values[item.value] ? facet.values[item.value].selected : false
+                        };
+                    }
+                });
+
                 updatedFacets[key] = updateObject(facet, { values });
                 break;
             default: break;
