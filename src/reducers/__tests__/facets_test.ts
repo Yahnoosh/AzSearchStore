@@ -234,7 +234,7 @@ describe("reducers/facets", () => {
             reducer(firstToggleExpectedFacets, facetsAction.toggleCheckboxFacetSelection("foo", "b"))
         ).toEqual(secondToggleExpectedFacets);
     });
-    it("should set incoming values for facets", () => {
+    it("should set incoming values for facets, ignoring @odata type annotations", () => {
         const checkFacet: Store.CheckboxFacet = {
             type: "CheckboxFacet",
             key: "foo",
@@ -330,14 +330,15 @@ describe("reducers/facets", () => {
                 { to: rangeFacet.min, count: 0 },
                 { from: rangeFacet.min, to: rangeFacet.max, count: 100 },
                 { from: rangeFacet.max, count: 0 }
-            ]
+            ],
+            "bar@odata.type": <any>"#Collection(Microsoft.Azure.Search.V2016_09_01.QueryResultFacet)"
         };
 
         expect(
             reducer(initialFacets, facetsAction.setFacetsValues(facetResults))
         ).toEqual(expectedFacets);
     });
-    it("should update incoming values for facets", () => {
+    it("should update incoming values for facets, ignoring @odata keys", () => {
         const checkFacet: Store.CheckboxFacet = {
             type: "CheckboxFacet",
             key: "foo",
@@ -467,7 +468,8 @@ describe("reducers/facets", () => {
                 { to: 5, count: 1 },
                 { from: 5, to: 7, count: 2 },
                 { from: 7, count: 3 }
-            ]
+            ],
+            "bar@odata.type": <any>"#Collection(Microsoft.Azure.Search.V2016_09_01.QueryResultFacet)"
         };
 
         expect(

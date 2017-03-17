@@ -13,6 +13,8 @@ export const initialState: Store.Facets = {
     facets: {}
 };
 
+const odataString = "@odata";
+
 export function facets(state: Store.Facets = initialState, action: FacetsAction): Store.Facets {
     switch (action.type) {
         case "SET_FACET_MODE": return setFacetMode(state, action);
@@ -109,7 +111,9 @@ function setCheckboxFacetValues(facet: Store.CheckboxFacet, facetResults: Store.
 
 function updateFacetsValues(state: Store.Facets, action: UpdateFacetValuesAction): Store.Facets {
     const updatedFacets: { [key: string]: Store.Facet } = {};
-    Object.keys(action.facets).forEach((key) => {
+    // filter out @odata type annotations
+    const keys = Object.keys(action.facets).filter((key) => { return key.toLowerCase().indexOf(odataString) < 0; });
+    keys.forEach((key) => {
         const facet = state.facets[key];
         const currentItem = action.facets[key];
         switch (facet.type) {
@@ -133,14 +137,13 @@ function updateFacetsValues(state: Store.Facets, action: UpdateFacetValuesAction
                 // set counts to zero for values that didn't get updates, but that we still want remember
                 Object.keys(facet.values).forEach((valueKey) => {
                     const value = facet.values[valueKey];
-                    if (values[valueKey]) {
-                        return;
+                    if (!values[valueKey]) {
+                        values[valueKey] = {
+                            count: 0,
+                            selected: value.selected,
+                            value: value.value
+                        };
                     }
-                    values[valueKey] = {
-                        count: 0,
-                        selected: value.selected,
-                        value: value.value
-                    };
                 });
                 updatedFacets[key] = updateObject(facet, { values });
                 break;
