@@ -406,7 +406,7 @@ describe("reducers/facets", () => {
                 },
                 b: {
                     value: "b",
-                    count: 5,
+                    count: 0,
                     selected: false
                 },
                 c: {

@@ -121,15 +121,27 @@ function updateFacetsValues(state: Store.Facets, action: UpdateFacetValuesAction
                 });
                 break;
             case "CheckboxFacet":
-                const updatedValues: { [key: string]: Store.CheckboxFacetItem } = {};
+                const values: { [key: string]: Store.CheckboxFacetItem } = {};
+                // set counts for values that got updates
                 currentItem.forEach((item) => {
-                    updatedValues[item.value] = {
+                    values[item.value] = {
                         count: item.count,
                         value: item.value,
                         selected: facet.values[item.value] ? facet.values[item.value].selected : false
                     };
                 });
-                const values = updateObject(facet.values, updatedValues);
+                // set counts to zero for values that didn't get updates, but that we still want remember
+                Object.keys(facet.values).forEach((valueKey) => {
+                    const value = facet.values[valueKey];
+                    if (values[valueKey]) {
+                        return;
+                    }
+                    values[valueKey] = {
+                        count: 0,
+                        selected: value.selected,
+                        value: value.value
+                    };
+                });
                 updatedFacets[key] = updateObject(facet, { values });
                 break;
             default: break;
@@ -202,7 +214,7 @@ function toggleFacetSelection(state: Store.Facets, action: ToggleCheckboxFacetAc
 }
 
 function setFacetRange(state: Store.Facets, action: SetFacetRangeAction): Store.Facets {
-    const { key, lowerBound, upperBound} = action;
+    const { key, lowerBound, upperBound } = action;
     const existingFacet = state.facets[key];
     if (existingFacet.type !== "RangeFacet") {
         throw new Error(`SET_FACET_RANGE must be called on facet of type 'RangeFacet', actual: ${existingFacet.type}`);
