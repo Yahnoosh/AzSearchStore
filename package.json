@@ -48,9 +48,11 @@
     "es6-promise": "^4.0.5",
     "isomorphic-fetch": "^2.2.1",
     "object-assign": "^4.1.1",
-    "redux": "^3.6.0",
     "redux-thunk": "^2.2.0",
     "urijs": "^1.18.5"
+  },
+  "peerDependencies": {
+    "redux": "^3.6.0"
   },
   "jest": {
     "moduleFileExtensions": [

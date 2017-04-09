@@ -20,6 +20,7 @@
   "dependencies": {
     "react": "15.4.2",
     "react-dom": "^15.4.2",
-    "azsearchstore": "0.0.1"
+    "redux": "^3.6.0",
+    "azsearchstore": "0.0.13"
   }
 }

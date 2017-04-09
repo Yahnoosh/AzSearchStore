@@ -6,7 +6,9 @@ module.exports = {
         library: 'AzSearchStore',
         libraryTarget: "umd"
     },
-
+    externals: {
+        redux: "Redux"
+    },
     // Enable sourcemaps for debugging webpack's output.
     devtool: "source-map",
 
