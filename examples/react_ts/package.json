@@ -7,6 +7,8 @@
     "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
     "pretest": "npm run lint",
     "test": "jest",
+    "tscompile": "tsc",
+    "prodpack": "webpack -p",
     "start_server": "http-server"
   },
   "author": "Evan Boyle (https://github.com/EvanBoyle)",
@@ -15,10 +17,11 @@
     "awesome-typescript-loader": "^3.0.0-beta.18",
     "source-map-loader": "^0.1.6",
     "ts-loader": "^1.3.3",
-    "typescript": "^2.1.5"
+    "typescript": "^2.1.5",
+    "webpack": "^2.3.3"
   },
   "dependencies": {
-    "react": "15.4.2",
+    "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "redux": "^3.6.0",
     "azsearchstore": "0.0.13"
