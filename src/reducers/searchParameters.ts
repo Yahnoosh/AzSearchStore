@@ -29,6 +29,11 @@ export function searchParameters(state: Store.SearchParameters = initialState, a
             let skip = state.skip - state.top;
             skip = skip >= 0 ? skip : 0;
             return updateObject(state, { skip });
+        case "SET_PAGE":
+            skip = (action.page - 1) * state.top;
+            skip = skip >= 0 ? skip : 0;
+            skip = skip <= 100000 ? skip : 100000;
+            return updateObject(state, { skip });
         default:
             return state;
     }

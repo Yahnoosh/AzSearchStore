@@ -57,6 +57,10 @@ export class AzSearchStore {
         this.store.dispatch(searchParameterActions.decrementSkip);
     }
 
+    public setPage(page: number) {
+        this.store.dispatch(searchParameterActions.setPage(page));
+    }
+
     // manipulating suggestions parameters
 
     public setSuggestionsApiVersion(apiVersion: Store.SearchApiVersion) {

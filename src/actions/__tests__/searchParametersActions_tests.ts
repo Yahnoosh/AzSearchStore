@@ -41,4 +41,12 @@ describe("actions/searchParameters", () => {
             type: "DECREMENT_SKIP"
         });
     });
+    it("should create action to set page number", () => {
+        expect(
+            searchParametersActions.setPage(5)
+        ).toEqual({
+            type: "SET_PAGE",
+            page: 5
+        });
+    });
 });

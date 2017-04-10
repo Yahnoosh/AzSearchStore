@@ -119,10 +119,12 @@ store.updateSearchParameters({ count: true });
 store.setInput("*");
 // make an http request to fetch search results
 store.search();
-// simulate a user loading an additional page of results
-store.incrementPage();
-// make an http request to fetch and append results to existing results
+// these two actions together fetch the next $top results and appending them to the existing results set in memory
+store.incrementSkip();
 store.loadMore();
+// fetches the third page of results
+store.setPage(3);
+store.search();
 ```
 
 Basic facet usage:

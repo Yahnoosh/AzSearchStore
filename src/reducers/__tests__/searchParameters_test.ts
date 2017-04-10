@@ -95,4 +95,33 @@ describe("reducers/searchParameters", () => {
             searchParameters.searchParameters(testParameters, searchParametersActions.decrementSkip()).skip
         ).toEqual(997);
     });
+    it("should correctly page to various values, properly observing limits.", () => {
+        const testParameters: Store.SearchParameters = {
+            apiVersion: "2015-02-28-Preview",
+            count: true,
+            orderby: "foobar",
+            scoringProfile: "abc",
+            searchFields: "def",
+            searchMode: "all",
+            select: "hij",
+            queryType: "simple",
+            skip: 1000,
+            top: 10,
+        };
+        expect(
+            searchParameters.searchParameters(testParameters, searchParametersActions.setPage(-4)).skip
+        ).toEqual(0);
+        expect(
+            searchParameters.searchParameters(testParameters, searchParametersActions.setPage(1)).skip
+        ).toEqual(0);
+        expect(
+            searchParameters.searchParameters(testParameters, searchParametersActions.setPage(10001)).skip
+        ).toEqual(100000);
+        expect(
+            searchParameters.searchParameters(testParameters, searchParametersActions.setPage(10002)).skip
+        ).toEqual(100000);
+        expect(
+            searchParameters.searchParameters(testParameters, searchParametersActions.setPage(5)).skip
+        ).toEqual(40);
+    });
 });
