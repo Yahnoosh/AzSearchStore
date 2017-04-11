@@ -283,14 +283,15 @@ CheckboxFacet is for discreet value filtering. Think of a typical ratings filter
 
 ### RangeFacet
 
-RangeFacet is for filtering based on a user defined range. Typically this is done through a slider control, or two input boxes.
+RangeFacet is for filtering based on a user defined range. Typically this is done through a slider control, or two input boxes. RangeFacet supports both numeric and date based fields.
 
 * `type`: "RangeFacet"
 * `key`: string. The name of the field the faceting/filtering is applied to
-* `min`: number. minimum value for the field
-* `max`: number. maximum value for the field
-* `filterLowerBound`: number. Defaults to min. The lower range of the filter.
-* `filterUpperBound`: number. Defaults to max. The upper range of the filter. 
+* `dataType`: "number" | "date". The data type of the field to facet/filter on.
+* `min`: number | Date. minimum value for the field
+* `max`: number | Date. maximum value for the field
+* `filterLowerBound`: number | Date. Defaults to min. The lower range of the filter.
+* `filterUpperBound`: number | Date. Defaults to max. The upper range of the filter. 
 * `lowerBucketCount`: number. Count of values falling below specified range.
 * `middleBucketCount`: number. Count of values falling within specified range.
 * `upperBucketCount`: number. Count of values above specified range.
@@ -300,8 +301,10 @@ RangeFacet is for filtering based on a user defined range. Typically this is don
 ### Facet APIs
 
 ```js
-// configure a range facet for a field 
-addRangeFacet(fieldName, min, max);
+// configure a numberic range facet for a field 
+addRangeFacet(fieldName, "number" min, max);
+// configure a date range facet for a field 
+addRangeFacet(fieldName, "date" new Date(1990), new Date());
 // configure a checkbox facet for a field
 addCheckboxFacet(fieldName, isNumeric);
 // set the filtering limits for a range facet

@@ -11,14 +11,26 @@ describe("actions/facets", () => {
             facetMode: "advanced"
         });
     });
-    it("should create action to to add range facet", () => {
+    it("should create action to to add numeric range facet", () => {
         expect(
-            facetsActions.addRangeFacet("foo", 0, 10)
+            facetsActions.addRangeFacet("foo", "number", 0, 10)
         ).toEqual({
             type: "ADD_RANGE_FACET",
+            dataType: "number",
             key: "foo",
             min: 0,
             max: 10
+        });
+    });
+    it("should create action to to add date range facet", () => {
+        expect(
+            facetsActions.addRangeFacet("bar", "date", new Date(1990), new Date(2017))
+        ).toEqual({
+            type: "ADD_RANGE_FACET",
+            dataType: "date",
+            key: "bar",
+            min: new Date(1990),
+            max: new Date(2017)
         });
     });
     it("should create action to add checkbox facet", () => {

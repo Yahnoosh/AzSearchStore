@@ -97,13 +97,16 @@ export namespace Store {
 
     export type FacetSortingMode = "count" | "count-" | "value" | "value-";
 
+    export type RangeDataType = "number" | "date";
+
     export type RangeFacet = {
         type: "RangeFacet"
+        dataType: RangeDataType,
         key: string,
-        min: number,
-        max: number,
-        filterLowerBound: number,
-        filterUpperBound: number,
+        min: number | Date,
+        max: number | Date,
+        filterLowerBound: number | Date,
+        filterUpperBound: number | Date,
         lowerBucketCount: number,
         middleBucketCount: number,
         upperBucketCount: number,

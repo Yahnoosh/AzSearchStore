@@ -26,9 +26,10 @@ export type SetFacetModeAction = {
 };
 export type AddRangeFacetAction = {
     type: "ADD_RANGE_FACET"
+    dataType: Store.RangeDataType
     key: string,
-    min: number,
-    max: number
+    min: number | Date,
+    max: number | Date
 };
 export type AddCheckboxFacetAction = {
     type: "ADD_CHECKBOX_FACET"
@@ -45,8 +46,8 @@ export type ToggleCheckboxFacetAction = {
 export type SetFacetRangeAction = {
     type: "SET_FACET_RANGE",
     key: string,
-    lowerBound: number,
-    upperBound: number
+    lowerBound: number | Date,
+    upperBound: number | Date
 };
 
 export const setFacetsValues = (facets: { [key: string]: Store.FacetResult[] }): FacetsAction => ({
@@ -67,8 +68,9 @@ export const addCheckboxFacet = (key: string, isNumeric: boolean, count: number 
     sort
 });
 
-export const addRangeFacet = (key: string, min: number, max: number): FacetsAction => ({
+export const addRangeFacet = (key: string, dataType: Store.RangeDataType, min: number | Date, max: number | Date): FacetsAction => ({
     type: "ADD_RANGE_FACET",
+    dataType,
     key,
     min,
     max
@@ -85,7 +87,7 @@ export const toggleCheckboxFacetSelection = (key: string, value: string): Facets
     value
 });
 
-export const setFacetRange = (key: string, lowerBound: number, upperBound: number): FacetsAction => ({
+export const setFacetRange = (key: string, lowerBound: number | Date, upperBound: number | Date): FacetsAction => ({
     type: "SET_FACET_RANGE",
     key,
     lowerBound,

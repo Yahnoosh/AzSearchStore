@@ -178,11 +178,26 @@ function setFacetMode(state: Store.Facets, action: SetFacetModeAction): Store.Fa
 }
 
 function addRangeFacetAction(state: Store.Facets, action: AddRangeFacetAction): Store.Facets {
-    let { key, min, max } = action;
+    let { key, min, max, dataType } = action;
     const filterLowerBound = min,
         filterUpperBound = max;
+    let lowerClause;
+    let upperClause;
+    switch (action.dataType) {
+        case "number":
+            lowerClause = filterLowerBound;
+            upperClause = filterUpperBound;
+            break;
+        case "date":
+            lowerClause = (filterLowerBound as Date).toISOString();
+            upperClause = (filterUpperBound as Date).toISOString();
+            break;
+        default:
+            break;
+    }
     const rangeFacet: Store.RangeFacet = {
         type: "RangeFacet",
+        dataType,
         key,
         min,
         max,
@@ -192,7 +207,7 @@ function addRangeFacetAction(state: Store.Facets, action: AddRangeFacetAction): 
         middleBucketCount: 0,
         upperBucketCount: 0,
         filterClause: "",
-        facetClause: `${key},values:${filterLowerBound}|${filterUpperBound}`
+        facetClause: `${key},values:${lowerClause}|${upperClause}`
     };
     const facets = updateObjectAtKey(state.facets, rangeFacet, key);
     return updateObject(state, { facets });
@@ -268,15 +283,30 @@ function buildCheckboxFilter(facet: Store.CheckboxFacet): string {
 }
 
 function buildRangeFilter(facet: Store.RangeFacet): string {
+    let lowerFilter;
+    let upperFilter;
+    switch (facet.dataType) {
+        case "number":
+            lowerFilter = facet.filterLowerBound;
+            upperFilter = facet.filterUpperBound;
+            break;
+        case "date":
+            lowerFilter = (facet.filterLowerBound as Date).toISOString();
+            upperFilter = (facet.filterUpperBound as Date).toISOString();
+            break;
+        default:
+            break;
+    }
+
     if (facet.min === facet.filterLowerBound && facet.max === facet.filterUpperBound) {
         return "";
     }
     if (facet.min === facet.filterLowerBound) {
-        return `${facet.key} le ${facet.filterUpperBound}`;
+        return `${facet.key} le ${upperFilter}`;
     }
     if (facet.max === facet.filterUpperBound) {
-        return `${facet.key} ge ${facet.filterLowerBound}`;
+        return `${facet.key} ge ${lowerFilter}`;
     }
 
-    return `${facet.key} ge ${facet.filterLowerBound} and ${facet.key} le ${facet.filterUpperBound}`;
+    return `${facet.key} ge ${lowerFilter} and ${facet.key} le ${upperFilter}`;
 }

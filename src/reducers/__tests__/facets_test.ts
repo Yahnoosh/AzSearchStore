@@ -35,9 +35,10 @@ describe("reducers/facets", () => {
             facetMode: "advanced"
         });
     });
-    it("should add a range facet", () => {
+    it("should add a number range facet", () => {
         const expectedFacet: Store.RangeFacet = {
             type: "RangeFacet",
+            dataType: "number",
             key: "foo",
             min: 0,
             max: 10,
@@ -50,7 +51,31 @@ describe("reducers/facets", () => {
             facetClause: "foo,values:0|10"
         };
         expect(
-            reducer(facets.initialState, facetsAction.addRangeFacet(expectedFacet.key, expectedFacet.min, expectedFacet.max))
+            reducer(facets.initialState, facetsAction.addRangeFacet(expectedFacet.key, "number", expectedFacet.min, expectedFacet.max))
+        ).toEqual({
+            facets: {
+                "foo": expectedFacet
+            },
+            facetMode: "simple"
+        });
+    });
+    it("should add a date range facet", () => {
+        const expectedFacet: Store.RangeFacet = {
+            type: "RangeFacet",
+            dataType: "date",
+            key: "foo",
+            min: new Date(1990),
+            max: new Date(2017),
+            filterLowerBound: new Date(1990),
+            filterUpperBound: new Date(2017),
+            lowerBucketCount: 0,
+            middleBucketCount: 0,
+            upperBucketCount: 0,
+            filterClause: "",
+            facetClause: "foo,values:1970-01-01T00:00:01.990Z|1970-01-01T00:00:02.017Z"
+        };
+        expect(
+            reducer(facets.initialState, facetsAction.addRangeFacet(expectedFacet.key, "date", expectedFacet.min, expectedFacet.max))
         ).toEqual({
             facets: {
                 "foo": expectedFacet
@@ -78,9 +103,10 @@ describe("reducers/facets", () => {
             facetMode: "simple"
         });
     });
-    it("should set the range for a range facet", () => {
+    it("should set the range for a number range facet", () => {
         const initialFacet: Store.RangeFacet = {
             type: "RangeFacet",
+            dataType: "number",
             key: "foo",
             min: 0,
             max: 10,
@@ -95,6 +121,7 @@ describe("reducers/facets", () => {
         const dummyFacet: Store.RangeFacet = {
             type: "RangeFacet",
             key: "dummy",
+            dataType: "number",
             min: 0,
             max: 10,
             filterLowerBound: 0,
@@ -108,6 +135,7 @@ describe("reducers/facets", () => {
         const expectedFacet: Store.RangeFacet = {
             type: "RangeFacet",
             key: "foo",
+            dataType: "number",
             min: 0,
             max: 10,
             filterLowerBound: 5,
@@ -128,6 +156,61 @@ describe("reducers/facets", () => {
         };
         expect(
             reducer(initialFacets, facetsAction.setFacetRange("foo", 5, 7))
+        ).toEqual(expectedFacets);
+    });
+    it("should set the range for a date range facet", () => {
+        const initialFacet: Store.RangeFacet = {
+            type: "RangeFacet",
+            dataType: "date",
+            key: "foo",
+            min: new Date(1990),
+            max: new Date(2017),
+            filterLowerBound: new Date(1990),
+            filterUpperBound: new Date(2017),
+            lowerBucketCount: 0,
+            middleBucketCount: 0,
+            upperBucketCount: 0,
+            filterClause: "",
+            facetClause: "foo,values:1970-01-01T00:00:01.990Z|1970-01-01T00:00:02.017Z"
+        };
+        const dummyFacet: Store.RangeFacet = {
+            type: "RangeFacet",
+            key: "dummy",
+            dataType: "number",
+            min: 0,
+            max: 10,
+            filterLowerBound: 0,
+            filterUpperBound: 10,
+            lowerBucketCount: 0,
+            middleBucketCount: 0,
+            upperBucketCount: 0,
+            filterClause: "",
+            facetClause: "dummy,values:0|10"
+        };
+        const expectedFacet: Store.RangeFacet = {
+            type: "RangeFacet",
+            key: "foo",
+            dataType: "date",
+            min: new Date(1990),
+            max: new Date(2017),
+            filterLowerBound: new Date(1999),
+            filterUpperBound: new Date(2015),
+            lowerBucketCount: 0,
+            middleBucketCount: 0,
+            upperBucketCount: 0,
+            filterClause: "foo ge 1970-01-01T00:00:01.999Z and foo le 1970-01-01T00:00:02.015Z",
+            facetClause: "foo,values:1970-01-01T00:00:01.990Z|1970-01-01T00:00:02.017Z"
+        };
+        const initialFacets: Store.Facets = {
+            facetMode: "simple",
+            facets: { foo: initialFacet, dummy: dummyFacet }
+        };
+        const expectedFacets: Store.Facets = {
+            facetMode: "simple",
+            facets: { foo: expectedFacet, dummy: dummyFacet }
+        };
+        expect(
+            reducer(initialFacets, facetsAction.setFacetRange("foo", new Date(1999), new Date(2015)))
         ).toEqual(expectedFacets);
     });
     it("should toggle the value of a checkbox facet value, then toggle another value, verify facet and filter clauses", () => {
@@ -259,6 +342,7 @@ describe("reducers/facets", () => {
         const rangeFacet: Store.RangeFacet = {
             type: "RangeFacet",
             key: "bar",
+            dataType: "number",
             min: 0,
             max: 10,
             filterLowerBound: 5,
@@ -294,6 +378,7 @@ describe("reducers/facets", () => {
         const expectedRangeFacet: Store.RangeFacet = {
             type: "RangeFacet",
             key: "bar",
+            dataType: "number",
             min: 0,
             max: 10,
             filterLowerBound: 0,
@@ -363,6 +448,7 @@ describe("reducers/facets", () => {
         const rangeFacet: Store.RangeFacet = {
             type: "RangeFacet",
             key: "bar",
+            dataType: "number",
             min: 0,
             max: 10,
             filterLowerBound: 5,
@@ -429,6 +515,7 @@ describe("reducers/facets", () => {
         const expectedRangeFacet: Store.RangeFacet = {
             type: "RangeFacet",
             key: "bar",
+            dataType: "number",
             min: 0,
             max: 10,
             filterLowerBound: 5,
@@ -501,6 +588,7 @@ describe("reducers/facets", () => {
         const rangeFacet: Store.RangeFacet = {
             type: "RangeFacet",
             key: "bar",
+            dataType: "number",
             min: 0,
             max: 10,
             filterLowerBound: 5,
@@ -536,6 +624,7 @@ describe("reducers/facets", () => {
         const expectedRangeFacet: Store.RangeFacet = {
             type: "RangeFacet",
             key: "bar",
+            dataType: "number",
             min: 0,
             max: 10,
             filterLowerBound: 0,
