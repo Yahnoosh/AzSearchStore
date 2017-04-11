@@ -306,7 +306,7 @@ addRangeFacet(fieldName, "number" min, max);
 // configure a date range facet for a field 
 addRangeFacet(fieldName, "date" new Date(1990), new Date());
 // configure a checkbox facet for a field
-addCheckboxFacet(fieldName, isNumeric);
+addCheckboxFacet(fieldName, dataType);
 // set the filtering limits for a range facet
 setFacetRange(fieldName, lowerBound, upperBound);
 // set selection and filter by a given value for a checkbox facet
