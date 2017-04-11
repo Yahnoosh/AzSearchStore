@@ -134,7 +134,7 @@ Basic facet usage:
 // checkbox facets are used for discrete value filtering
 // a common scenario is ratings on ecommerce sites 
 // a website might display checkboxes to filter by 1* 2* 3* 4* 5* rated products
-store.addCheckboxFacet("beds", true);
+store.addCheckboxFacet("beds", "number");
 // issue a search request that will populate facets for that field
 // note search() returns a promise 
 store.search().then(...)
@@ -273,7 +273,7 @@ Facets are stored as key value pairs in the part of the state tree corresponding
 CheckboxFacet is for discreet value filtering. Think of a typical ratings filter on an e-commerce website. The internal state is as follows:
 
 * `type`: "CheckboxFacet"
-* `isNumeric`: boolean, are the discreet values to filter on numeric or strings?
+* `dataType`: "string" | "number" | "collection", supports faceting over numeric, string or string collection fields.
 * `key`: string. The name of the field the faceting/filtering is applied to
 * `values`: { [key: string]: CheckboxFacetItem }. Key value pairs containing individual options that map to checkboxes. CheckboxFacetItem has properties `value`, `count`, and `selected`
 * `count`: number of values to retrieve. Defaults to 5, currently not configurable.
