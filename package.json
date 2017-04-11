@@ -7,7 +7,7 @@
     "url": "https://github.com/EvanBoyle/AzSearchStore.git"
   },
   "module": "dist/AzSearchStore.js",
-  "main": "dist/bundle.js",
+  "main": "dist/AzSearchStore.bundle.js",
   "files": [
     "dist"
   ],
@@ -18,8 +18,8 @@
     "test": "jest",
     "start_server": "http-server",
     "tscompile": "tsc",
-    "devPack": "webpack -d",
-    "prodPack": "webpack -p"
+    "devpack": "webpack -d",
+    "prodpack": "webpack -p"
   },
   "author": "Evan Boyle (https://github.com/EvanBoyle)",
   "license": "MIT",

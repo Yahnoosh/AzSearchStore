@@ -1,7 +1,7 @@
 module.exports = {
     entry: "./src/AzSearchStore.ts",
     output: {
-        filename: "bundle.js",
+        filename: "AzSearchStore.bundle.js",
         path: __dirname + "/dist",
         library: 'AzSearchStore',
         libraryTarget: "umd"
