@@ -83,11 +83,11 @@ describe("reducers/facets", () => {
             facetMode: "simple"
         });
     });
-    it("should add a checkbox facet", () => {
+    it("should add a numeric checkbox facet", () => {
         const expectedFacet: Store.CheckboxFacet = {
             type: "CheckboxFacet",
             key: "foo",
-            isNumeric: false,
+            dataType: "number",
             values: {},
             count: 5,
             sort: "count",
@@ -95,7 +95,27 @@ describe("reducers/facets", () => {
             facetClause: "foo,count:5,sort:count"
         };
         expect(
-            reducer(facets.initialState, facetsAction.addCheckboxFacet(expectedFacet.key, expectedFacet.isNumeric))
+            reducer(facets.initialState, facetsAction.addCheckboxFacet(expectedFacet.key, expectedFacet.dataType))
+        ).toEqual({
+            facets: {
+                "foo": expectedFacet
+            },
+            facetMode: "simple"
+        });
+    });
+    it("should add a collection checkbox facet", () => {
+        const expectedFacet: Store.CheckboxFacet = {
+            type: "CheckboxFacet",
+            key: "foo",
+            dataType: "collection",
+            values: {},
+            count: 5,
+            sort: "count",
+            filterClause: "",
+            facetClause: "foo,count:5,sort:count"
+        };
+        expect(
+            reducer(facets.initialState, facetsAction.addCheckboxFacet(expectedFacet.key, expectedFacet.dataType))
         ).toEqual({
             facets: {
                 "foo": expectedFacet
@@ -217,7 +237,7 @@ describe("reducers/facets", () => {
         const initialFacet: Store.CheckboxFacet = {
             type: "CheckboxFacet",
             key: "foo",
-            isNumeric: false,
+            dataType: "string",
             values: {
                 a: {
                     value: "a",
@@ -238,7 +258,7 @@ describe("reducers/facets", () => {
         const dummyFacet: Store.CheckboxFacet = {
             type: "CheckboxFacet",
             key: "dummy",
-            isNumeric: false,
+            dataType: "string",
             values: {
                 a: {
                     value: "a",
@@ -259,7 +279,7 @@ describe("reducers/facets", () => {
         const firstToggleFacet: Store.CheckboxFacet = {
             type: "CheckboxFacet",
             key: "foo",
-            isNumeric: false,
+            dataType: "string",
             values: {
                 a: {
                     value: "a",
@@ -280,7 +300,7 @@ describe("reducers/facets", () => {
         const secondToggleFacet: Store.CheckboxFacet = {
             type: "CheckboxFacet",
             key: "foo",
-            isNumeric: false,
+            dataType: "string",
             values: {
                 a: {
                     value: "a",
@@ -317,11 +337,88 @@ describe("reducers/facets", () => {
             reducer(firstToggleExpectedFacets, facetsAction.toggleCheckboxFacetSelection("foo", "b"))
         ).toEqual(secondToggleExpectedFacets);
     });
+    it("should toggle the value of a collection checkbox facet value, and verify facet and filter clauses", () => {
+        const initialFacet: Store.CheckboxFacet = {
+            type: "CheckboxFacet",
+            key: "foo",
+            dataType: "collection",
+            values: {
+                a: {
+                    value: "a",
+                    count: 5,
+                    selected: false
+                },
+                b: {
+                    value: "b",
+                    count: 5,
+                    selected: false
+                }
+            },
+            count: 5,
+            sort: "count",
+            filterClause: "",
+            facetClause: "foo,count:5,sort:count"
+        };
+        const dummyFacet: Store.CheckboxFacet = {
+            type: "CheckboxFacet",
+            key: "dummy",
+            dataType: "string",
+            values: {
+                a: {
+                    value: "a",
+                    count: 5,
+                    selected: false
+                },
+                b: {
+                    value: "b",
+                    count: 5,
+                    selected: false
+                }
+            },
+            count: 5,
+            sort: "count",
+            filterClause: "",
+            facetClause: "dummy,count:5,sort:count"
+        };
+        const firstToggleFacet: Store.CheckboxFacet = {
+            type: "CheckboxFacet",
+            key: "foo",
+            dataType: "collection",
+            values: {
+                a: {
+                    value: "a",
+                    count: 5,
+                    selected: true
+                },
+                b: {
+                    value: "b",
+                    count: 5,
+                    selected: false
+                }
+            },
+            count: 5,
+            sort: "count",
+            filterClause: "(foo/any(t: t eq 'a'))",
+            facetClause: "foo,count:5,sort:count"
+        };
+
+        const initialFacets: Store.Facets = {
+            facetMode: "simple",
+            facets: { foo: initialFacet, dummy: dummyFacet }
+        };
+        const firstToggleExpectedFacets: Store.Facets = {
+            facetMode: "simple",
+            facets: { foo: firstToggleFacet, dummy: dummyFacet }
+        };
+        expect(
+            reducer(initialFacets, facetsAction.toggleCheckboxFacetSelection("foo", "a"))
+        ).toEqual(firstToggleExpectedFacets);
+    });
     it("should set incoming values for facets, ignoring @odata type annotations", () => {
         const checkFacet: Store.CheckboxFacet = {
             type: "CheckboxFacet",
             key: "foo",
-            isNumeric: false,
+            dataType: "string",
             values: {
                 a: {
                     value: "a",
@@ -357,7 +454,7 @@ describe("reducers/facets", () => {
         const expectedCheckFacet: Store.CheckboxFacet = {
             type: "CheckboxFacet",
             key: "foo",
-            isNumeric: false,
+            dataType: "string",
             values: {
                 c: {
                     value: "c",
@@ -427,7 +524,7 @@ describe("reducers/facets", () => {
         const checkFacet: Store.CheckboxFacet = {
             type: "CheckboxFacet",
             key: "foo",
-            isNumeric: false,
+            dataType: "string",
             values: {
                 a: {
                     value: "a",
@@ -463,7 +560,7 @@ describe("reducers/facets", () => {
         const dummyCheckFacet: Store.CheckboxFacet = {
             type: "CheckboxFacet",
             key: "buzz",
-            isNumeric: false,
+            dataType: "string",
             values: {
                 c: {
                     value: "c",
@@ -484,7 +581,7 @@ describe("reducers/facets", () => {
         const expectedCheckFacet: Store.CheckboxFacet = {
             type: "CheckboxFacet",
             key: "foo",
-            isNumeric: false,
+            dataType: "string",
             values: {
                 a: {
                     value: "a",
@@ -567,7 +664,7 @@ describe("reducers/facets", () => {
         const checkFacet: Store.CheckboxFacet = {
             type: "CheckboxFacet",
             key: "foo",
-            isNumeric: false,
+            dataType: "string",
             values: {
                 a: {
                     value: "a",
@@ -603,7 +700,7 @@ describe("reducers/facets", () => {
         const expectedCheckFacet: Store.CheckboxFacet = {
             type: "CheckboxFacet",
             key: "foo",
-            isNumeric: false,
+            dataType: "string",
             values: {
                 a: {
                     value: "a",

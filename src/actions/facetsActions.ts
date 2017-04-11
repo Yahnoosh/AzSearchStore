@@ -34,7 +34,7 @@ export type AddRangeFacetAction = {
 export type AddCheckboxFacetAction = {
     type: "ADD_CHECKBOX_FACET"
     key: string,
-    isNumeric: boolean,
+    dataType: Store.CheckboxDataType,
     count: number,
     sort: Store.FacetSortingMode
 };
@@ -60,10 +60,10 @@ export const updateFacetsValues = (facets: { [key: string]: Store.FacetResult[] 
     facets
 });
 
-export const addCheckboxFacet = (key: string, isNumeric: boolean, count: number = 5, sort: Store.FacetSortingMode = "count"): FacetsAction => ({
+export const addCheckboxFacet = (key: string, dataType: Store.CheckboxDataType, count: number = 5, sort: Store.FacetSortingMode = "count"): FacetsAction => ({
     type: "ADD_CHECKBOX_FACET",
     key,
-    isNumeric,
+    dataType,
     count,
     sort
 });

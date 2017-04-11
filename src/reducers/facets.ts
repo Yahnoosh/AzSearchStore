@@ -214,13 +214,13 @@ function addRangeFacetAction(state: Store.Facets, action: AddRangeFacetAction): 
 }
 
 function addCheckboxFacet(state: Store.Facets, action: AddCheckboxFacetAction): Store.Facets {
-    const { isNumeric, key } = action;
+    const { dataType, key } = action;
     const sort = "count",
         count = 5;
     const checkFacet: Store.CheckboxFacet = {
         type: "CheckboxFacet",
         key,
-        isNumeric,
+        dataType,
         values: {},
         count,
         sort,
@@ -269,12 +269,23 @@ function buildCheckboxFilter(facet: Store.CheckboxFacet): string {
     });
 
     let clauses = selectedFacets.map((selectedValue) => {
-        if (facet.isNumeric) {
-            return `${facet.key} eq ${facet.values[selectedValue].value}`;
+        let clause;
+        switch (facet.dataType) {
+            case "number":
+                clause = `${facet.key} eq ${facet.values[selectedValue].value}`;
+                break;
+            case "string":
+                clause = `${facet.key} eq '${facet.values[selectedValue].value}'`;
+                break;
+            case "collection":
+                clause = `${facet.key}/any(t: t eq '${facet.values[selectedValue].value}')`;
+                break;
+            default:
+                clause = "";
+                break;
         }
-        else {
-            return `${facet.key} eq '${facet.values[selectedValue].value}'`;
-        }
+
+        return clause;
     });
 
     let filter = clauses.join(" or ");

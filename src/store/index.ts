@@ -114,9 +114,11 @@ export namespace Store {
         filterClause: string,
     };
 
+    export type CheckboxDataType = "number" | "string" | "collection";
+
     export type CheckboxFacet = {
         type: "CheckboxFacet"
-        isNumeric: boolean,
+        dataType: CheckboxDataType
         key: string,
         values: { [key: string]: CheckboxFacetItem }
         count: number,

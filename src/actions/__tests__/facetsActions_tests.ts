@@ -33,13 +33,24 @@ describe("actions/facets", () => {
             max: new Date(2017)
         });
     });
-    it("should create action to add checkbox facet", () => {
+    it("should create action to add numeric checkbox facet", () => {
         expect(
-            facetsActions.addCheckboxFacet("bar", true)
+            facetsActions.addCheckboxFacet("bar", "number")
         ).toEqual({
             type: "ADD_CHECKBOX_FACET",
             key: "bar",
-            isNumeric: true,
+            dataType: "number",
+            count: 5,
+            sort: "count"
+        });
+    });
+    it("should create action to add collection checkbox facet", () => {
+        expect(
+            facetsActions.addCheckboxFacet("bar", "collection")
+        ).toEqual({
+            type: "ADD_CHECKBOX_FACET",
+            key: "bar",
+            dataType: "collection",
             count: 5,
             sort: "count"
         });
