@@ -177,13 +177,10 @@ function setFacetMode(state: Store.Facets, action: SetFacetModeAction): Store.Fa
     return updateObject(state, { facetMode });
 }
 
-function addRangeFacetAction(state: Store.Facets, action: AddRangeFacetAction): Store.Facets {
-    let { key, min, max, dataType } = action;
-    const filterLowerBound = min,
-        filterUpperBound = max;
+function getRangeFacetClause(dataType: Store.RangeDataType, key: string, filterLowerBound: number | Date, filterUpperBound: number | Date): string {
     let lowerClause;
     let upperClause;
-    switch (action.dataType) {
+    switch (dataType) {
         case "number":
             lowerClause = filterLowerBound;
             upperClause = filterUpperBound;
@@ -195,6 +192,14 @@ function addRangeFacetAction(state: Store.Facets, action: AddRangeFacetAction): 
         default:
             break;
     }
+    return `${key},values:${lowerClause}|${upperClause}`;
+}
+
+function addRangeFacetAction(state: Store.Facets, action: AddRangeFacetAction): Store.Facets {
+    let { key, min, max, dataType } = action;
+    const filterLowerBound = min,
+        filterUpperBound = max;
+
     const rangeFacet: Store.RangeFacet = {
         type: "RangeFacet",
         dataType,
@@ -207,7 +212,7 @@ function addRangeFacetAction(state: Store.Facets, action: AddRangeFacetAction): 
         middleBucketCount: 0,
         upperBucketCount: 0,
         filterClause: "",
-        facetClause: `${key},values:${lowerClause}|${upperClause}`
+        facetClause: getRangeFacetClause(dataType, key, filterLowerBound, filterUpperBound)
     };
     const facets = updateObjectAtKey(state.facets, rangeFacet, key);
     return updateObject(state, { facets });
@@ -258,7 +263,8 @@ function setFacetRange(state: Store.Facets, action: SetFacetRangeAction): Store.
     const existingRangeFacet = existingFacet as Store.RangeFacet;
     const newRangeFacet = updateObject(existingRangeFacet, { filterLowerBound: lowerBound, filterUpperBound: upperBound });
     const filter = buildRangeFilter(newRangeFacet);
-    const newFacetWithFilter = updateObject(newRangeFacet, { filterClause: filter });
+    const facetClause = getRangeFacetClause(newRangeFacet.dataType, newRangeFacet.key, lowerBound, upperBound);
+    const newFacetWithFilter = updateObject(newRangeFacet, { filterClause: filter, facetClause });
     const facets = updateObjectAtKey(state.facets, newFacetWithFilter, key);
     return updateObject(state, { facets });
 }

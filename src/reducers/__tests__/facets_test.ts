@@ -164,7 +164,7 @@ describe("reducers/facets", () => {
             middleBucketCount: 0,
             upperBucketCount: 0,
             filterClause: "foo ge 5 and foo le 7",
-            facetClause: "foo,values:0|10"
+            facetClause: "foo,values:5|7"
         };
         const initialFacets: Store.Facets = {
             facetMode: "simple",
@@ -219,7 +219,7 @@ describe("reducers/facets", () => {
             middleBucketCount: 0,
             upperBucketCount: 0,
             filterClause: "foo ge 1970-01-01T00:00:01.999Z and foo le 1970-01-01T00:00:02.015Z",
-            facetClause: "foo,values:1970-01-01T00:00:01.990Z|1970-01-01T00:00:02.017Z"
+            facetClause: "foo,values:1970-01-01T00:00:01.999Z|1970-01-01T00:00:02.015Z"
         };
         const initialFacets: Store.Facets = {
             facetMode: "simple",
