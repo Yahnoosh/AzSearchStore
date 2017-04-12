@@ -27,9 +27,9 @@
     store.setConfig({ index: "realestate-us-sample", queryKey: "8EF3C0C4BD32C51BCCA4D74AABFA118E", service: "azs-playground" });
     store.updateSearchParameters({ count: true });
     store.setInput("*");
-    store.addCheckboxFacet("beds", true);
-    store.addRangeFacet("sqft", 0, 20000);
-    store.addCheckboxFacet("baths", true);
+    store.addCheckboxFacet("beds", "number");
+    store.addRangeFacet("sqft","number", 0, 20000);
+    store.addCheckboxFacet("baths","number");
     // create a post processor to create the desired display text since knockout lacks ritch templating
     var postProcessor = function(results) {
         return results.map(function(result){

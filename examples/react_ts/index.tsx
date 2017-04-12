@@ -19,9 +19,9 @@ store.subscribe(() => {
 store.setConfig({ index: "realestate-us-sample", queryKey: "8EF3C0C4BD32C51BCCA4D74AABFA118E", service: "azs-playground" });
 store.updateSearchParameters({ count: true });
 store.setInput("*");
-store.addCheckboxFacet("beds", true);
-store.addRangeFacet("sqft", 0, 20000);
-store.addCheckboxFacet("baths", true);
+store.addCheckboxFacet("beds", "number");
+store.addRangeFacet("sqft","number", 0, 20000);
+store.addCheckboxFacet("baths","number");
 // set suggester, project some additional fields into the returned suggestions
 store.updateSuggestionsParameters({
     suggesterName: "sg",
