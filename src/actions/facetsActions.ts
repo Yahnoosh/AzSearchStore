@@ -41,7 +41,7 @@ export type AddCheckboxFacetAction = {
 export type ToggleCheckboxFacetAction = {
     type: "TOGGLE_CHECKBOX_SELECTION",
     key: string,
-    value: string
+    value: string | number
 };
 export type SetFacetRangeAction = {
     type: "SET_FACET_RANGE",
@@ -81,7 +81,7 @@ export const setFacetMode = (facetMode: Store.FacetMode): FacetsAction => ({
     facetMode
 });
 
-export const toggleCheckboxFacetSelection = (key: string, value: string): FacetsAction => ({
+export const toggleCheckboxFacetSelection = (key: string, value: string | number): FacetsAction => ({
     type: "TOGGLE_CHECKBOX_SELECTION",
     key,
     value

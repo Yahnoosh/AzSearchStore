@@ -87,7 +87,7 @@ export class AzSearchStore {
     public addCheckboxFacet(fieldName: string, dataType: Store.CheckboxDataType) {
         this.store.dispatch(facetsActions.addCheckboxFacet(fieldName, dataType));
     }
-    public toggleCheckboxFacet(fieldName: string, value: string) {
+    public toggleCheckboxFacet(fieldName: string, value: string | number) {
         this.store.dispatch(facetsActions.toggleCheckboxFacetSelection(fieldName, value));
     }
     public setFacetRange(fieldName: string, lowerBound: number, upperBound: number) {

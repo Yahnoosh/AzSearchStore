@@ -128,7 +128,7 @@ function updateFacetsValues(state: Store.Facets, action: UpdateFacetValuesAction
                 const values: { [key: string]: Store.CheckboxFacetItem } = {};
                 // set counts for values that got updates
 
-                const currentItemKeys = currentItem.map((item) => { return item.value; });
+                const currentItemKeys = currentItem.map((item) => { return item.value.toString(); });
 
                 // make update in order to ensure stability of facets list
                 Object.keys(facet.values).forEach((valueKey) => {
@@ -241,7 +241,7 @@ function toggleFacetSelection(state: Store.Facets, action: ToggleCheckboxFacetAc
     const oldFacetItem = checkboxFacet.values[value];
     const updatedFacetItem = updateObject(oldFacetItem, { selected: !oldFacetItem.selected });
     const newValue: { [key: string]: Store.CheckboxFacetItem } = {};
-    const values = updateObjectAtKey(checkboxFacet.values, updatedFacetItem, value);
+    const values = updateObjectAtKey(checkboxFacet.values, updatedFacetItem, value.toString());
     const newFacet = updateObject(checkboxFacet, { values });
     const filterClause = buildCheckboxFilter(newFacet);
     const newFacetWithFilter = updateObject(newFacet, { filterClause });
