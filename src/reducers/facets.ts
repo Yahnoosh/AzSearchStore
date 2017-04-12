@@ -197,6 +197,15 @@ function getRangeFacetClause(dataType: Store.RangeDataType, key: string, filterL
 
 function addRangeFacetAction(state: Store.Facets, action: AddRangeFacetAction): Store.Facets {
     let { key, min, max, dataType } = action;
+
+    switch (dataType) {
+        case "number":
+        case "date":
+            break;
+        default:
+            throw new Error("dataType of RangeFacet must be 'number' | 'date'");
+    }
+
     const filterLowerBound = min,
         filterUpperBound = max;
 
@@ -222,6 +231,15 @@ function addCheckboxFacet(state: Store.Facets, action: AddCheckboxFacetAction): 
     const { dataType, key } = action;
     const sort = "count",
         count = 5;
+
+    switch (dataType) {
+        case "number":
+        case "collection":
+        case "string":
+            break;
+        default:
+            throw new Error("dataType of CheckboxFacet must be 'number' | 'collection' | 'string'");
+    }
     const checkFacet: Store.CheckboxFacet = {
         type: "CheckboxFacet",
         key,
