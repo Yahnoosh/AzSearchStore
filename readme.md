@@ -2,7 +2,7 @@
 
 A UI state management library to build js apps against [Azure Search](https://docs.microsoft.com/en-us/azure/search/). Built with redux and typescript. Provides simple APIs for searching, suggestions, and faceted navigation. Built in extensibility endpoints allow you to call your own controllers rather than the search service directly, allowing for custom authentication or server side processing of results.
 
-## [Live demo](http://azsearchstore.azurewebsites.net/channel9/index.html) [(source)](https://github.com/EvanBoyle/Channel9Demo)
+## [AzSearch.js](https://github.com/EvanBoyle/AzSearch.js) companion project that makes it easy to quickly prototype a search application.
 
 ## Quick note on data
 All samples and documentation assume the real estate sample index available through the portal. A demo account is provided for the samples. To create your own service and load the real estate sample [see this guide](https://docs.microsoft.com/en-us/azure/search/search-get-started-portal).
