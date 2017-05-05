@@ -2,6 +2,8 @@
 
 A UI state management library to build js apps against [Azure Search](https://docs.microsoft.com/en-us/azure/search/). Built with redux and typescript. Provides simple APIs for searching, suggestions, and faceted navigation. Built in extensibility endpoints allow you to call your own controllers rather than the search service directly, allowing for custom authentication or server side processing of results.
 
+[![Build Status](https://travis-ci.org/EvanBoyle/AzSearchStore.svg?branch=master)](https://travis-ci.org/EvanBoyle/AzSearchStore)
+
 ## [AzSearch.js](https://github.com/EvanBoyle/AzSearch.js) companion project that makes it easy to quickly prototype a search application.
 
 ## Quick note on data
