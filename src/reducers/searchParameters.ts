@@ -12,7 +12,11 @@ export const initialState: Store.SearchParameters = {
     top: 50,
     apiVersion: "2016-09-01",
     searchMode: "any",
-    queryType: "simple"
+    queryType: "simple",
+    highlight: null,
+    highlightPreTag: null,
+    highlightPostTag: null,
+    scoringParameter: null
 };
 
 export function searchParameters(state: Store.SearchParameters = initialState, action: SearchParametersAction): Store.SearchParameters {

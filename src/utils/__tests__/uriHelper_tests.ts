@@ -21,7 +21,11 @@ const testSearchParameters: Store.SearchParameters = {
     select: "hij",
     skip: 1000,
     top: 3,
-    queryType: "simple"
+    queryType: "simple",
+    highlight: "foo",
+    highlightPreTag: "<em>",
+    highlightPostTag: "</em>",
+    scoringParameter: "mylocation--122.2,44.8"
 };
 
 const testSuggestionsParameters: Store.SuggestionsParameters = {
@@ -60,6 +64,7 @@ const testFacets: Store.Facets = {
         foo: {
             type: "RangeFacet",
             key: "foo",
+            dataType: "number",
             min: 0,
             max: 10,
             filterLowerBound: 0,
@@ -73,7 +78,7 @@ const testFacets: Store.Facets = {
         bar: {
             type: "CheckboxFacet",
             key: "bar",
-            isNumeric: false,
+            dataType: "string",
             values: {},
             count: 5,
             sort: "count",
@@ -88,6 +93,7 @@ const filteredFacets: Store.Facets = {
     facets: {
         foo: {
             type: "RangeFacet",
+            dataType: "number",
             key: "foo",
             min: 0,
             max: 10,
@@ -102,7 +108,7 @@ const filteredFacets: Store.Facets = {
         bar: {
             type: "CheckboxFacet",
             key: "bar",
-            isNumeric: false,
+            dataType: "string",
             values: {
                 a: {
                     value: "a",
@@ -146,7 +152,11 @@ describe("utils/uriHelper", () => {
             "searchMode": "all",
             "select": "hij",
             "skip": 1000,
-            "top": 3
+            "top": 3,
+            "highlight": "foo",
+            "highlightPreTag": "<em>",
+            "highlightPostTag": "</em>",
+            "scoringParameter": "mylocation--122.2,44.8"
         });
     });
     it("should create a search uri from test config, default searchParameters and custom facets", () => {
@@ -164,7 +174,11 @@ describe("utils/uriHelper", () => {
             "searchMode": "all",
             "select": "hij",
             "skip": 1000,
-            "top": 3
+            "top": 3,
+            "highlight": "foo",
+            "highlightPreTag": "<em>",
+            "highlightPostTag": "</em>",
+            "scoringParameter": "mylocation--122.2,44.8"
         });
     });
     it("should create a search uri from test config, default searchParameters and custom facets with filters", () => {
@@ -183,7 +197,11 @@ describe("utils/uriHelper", () => {
             "searchMode": "all",
             "select": "hij",
             "skip": 1000,
-            "top": 3
+            "top": 3,
+            "highlight": "foo",
+            "highlightPreTag": "<em>",
+            "highlightPostTag": "</em>",
+            "scoringParameter": "mylocation--122.2,44.8"
         });
     });
     it("should create a suggest uri from test config, and test suggestions parameters", () => {

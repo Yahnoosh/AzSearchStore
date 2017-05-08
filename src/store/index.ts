@@ -23,7 +23,11 @@ export namespace Store {
         searchFields: string,
         minimumCoverage?: string,
         apiVersion: SearchApiVersion,
-        queryType: QueryType
+        queryType: QueryType,
+        scoringParameter: string,
+        highlight: string,
+        highlightPreTag: string,
+        highlightPostTag: string
     };
 
     export type SearchParametersUpdate = {
@@ -37,7 +41,11 @@ export namespace Store {
         searchFields?: string,
         minimumCoverage?: string,
         apiVersion?: SearchApiVersion,
-        queryType?: QueryType
+        queryType?: QueryType,
+        scoringParameter?: string,
+        highlight?: string,
+        highlightPreTag?: string,
+        highlightPostTag?: string
     };
 
     export type SuggestionsParameters = {
