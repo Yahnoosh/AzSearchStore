@@ -26,7 +26,7 @@ describe("reducers/searchParameters", () => {
             highlight: null,
             highlightPreTag: null,
             highlightPostTag: null,
-            scoringParameter: null
+            scoringParameters: null
         };
         expect(
             searchParameters.searchParameters(initialState, searchParametersActions.setSearchApiVersion("2015-02-28-Preview"))
@@ -47,7 +47,7 @@ describe("reducers/searchParameters", () => {
             highlight: "foobar",
             highlightPreTag: "<em>",
             highlightPostTag: "</em>",
-            scoringParameter: "foo-=bar"
+            scoringParameters: ["foo-bar"]
         };
         expect(
             searchParameters.searchParameters(initialState, searchParametersActions.setSearchParameters(testParameters))
@@ -75,7 +75,7 @@ describe("reducers/searchParameters", () => {
             highlight: "foo",
             highlightPreTag: null,
             highlightPostTag: null,
-            scoringParameter: null
+            scoringParameters: null
         };
         expect(
             searchParameters.searchParameters(initialState, searchParametersActions.updateSearchParameters(testParameters))
@@ -106,7 +106,7 @@ describe("reducers/searchParameters", () => {
             highlight: "foo",
             highlightPreTag: null,
             highlightPostTag: null,
-            scoringParameter: null
+            scoringParameters: null
         };
         expect(
             searchParameters.searchParameters(testParameters, searchParametersActions.decrementSkip()).skip
@@ -127,7 +127,7 @@ describe("reducers/searchParameters", () => {
             highlight: "foo",
             highlightPreTag: null,
             highlightPostTag: null,
-            scoringParameter: null
+            scoringParameters: null
         };
         expect(
             searchParameters.searchParameters(testParameters, searchParametersActions.setPage(-4)).skip

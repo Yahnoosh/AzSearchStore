@@ -25,7 +25,7 @@ const testSearchParameters: Store.SearchParameters = {
     highlight: "foo",
     highlightPreTag: "<em>",
     highlightPostTag: "</em>",
-    scoringParameter: "mylocation--122.2,44.8"
+    scoringParameters: ["mylocation--122.2,44.8"]
 };
 
 const testSuggestionsParameters: Store.SuggestionsParameters = {
@@ -156,7 +156,7 @@ describe("utils/uriHelper", () => {
             "highlight": "foo",
             "highlightPreTag": "<em>",
             "highlightPostTag": "</em>",
-            "scoringParameter": "mylocation--122.2,44.8"
+            "scoringParameters": ["mylocation--122.2,44.8"]
         });
     });
     it("should create a search uri from test config, default searchParameters and custom facets", () => {
@@ -178,7 +178,7 @@ describe("utils/uriHelper", () => {
             "highlight": "foo",
             "highlightPreTag": "<em>",
             "highlightPostTag": "</em>",
-            "scoringParameter": "mylocation--122.2,44.8"
+            "scoringParameters": ["mylocation--122.2,44.8"]
         });
     });
     it("should create a search uri from test config, default searchParameters and custom facets with filters", () => {
@@ -201,7 +201,7 @@ describe("utils/uriHelper", () => {
             "highlight": "foo",
             "highlightPreTag": "<em>",
             "highlightPostTag": "</em>",
-            "scoringParameter": "mylocation--122.2,44.8"
+            "scoringParameters": ["mylocation--122.2,44.8"]
         });
     });
     it("should create a suggest uri from test config, and test suggestions parameters", () => {
