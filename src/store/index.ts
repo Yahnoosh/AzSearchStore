@@ -24,7 +24,7 @@ export namespace Store {
         minimumCoverage?: string,
         apiVersion: SearchApiVersion,
         queryType: QueryType,
-        scoringParameter: string,
+        scoringParameters: string[],
         highlight: string,
         highlightPreTag: string,
         highlightPostTag: string
@@ -42,7 +42,7 @@ export namespace Store {
         minimumCoverage?: string,
         apiVersion?: SearchApiVersion,
         queryType?: QueryType,
-        scoringParameter?: string,
+        scoringParameters?: string[],
         highlight?: string,
         highlightPreTag?: string,
         highlightPostTag?: string

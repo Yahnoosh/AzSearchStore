@@ -16,7 +16,7 @@ export const initialState: Store.SearchParameters = {
     highlight: null,
     highlightPreTag: null,
     highlightPostTag: null,
-    scoringParameter: null
+    scoringParameters: null
 };
 
 export function searchParameters(state: Store.SearchParameters = initialState, action: SearchParametersAction): Store.SearchParameters {

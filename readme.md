@@ -200,7 +200,7 @@ searchParameters control different aspects of search such as paging, field selec
 * `minimumCoverage`: number. Advanced, the percentage of the index that must be covered by a search query
 * `apiVersion`: string. Either: "2016-09-01" or "2015-02-28-Preview"
 * `queryType`: string. Either "simple" or "full". Defaults to simple. Standard keyword search scenarios use simple.
-* `scoringParameter`: string. Indicates the values for each parameter defined in a scoring function, ex: "name-value1,value2,..."
+* `scoringParameters`: array of strings. Indicates the values for each parameter defined in a scoring function, ex: ["name-value1,value2,..."]
 * `highlight`: string. Comma separated list of fields to apply hightlights, ex: "highlight_field_1, highlight_field_2, ..."
 * `highlightPreTag`: string. Opening HTML tag that is applied to matched text ex: ```<b>```
 * `highlightPostTag`: string. Closing HTML tag that is applied to matched text ex: ```</b>```
