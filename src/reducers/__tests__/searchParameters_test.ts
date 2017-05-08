@@ -22,7 +22,11 @@ describe("reducers/searchParameters", () => {
             top: 50,
             apiVersion: "2015-02-28-Preview",
             searchMode: "any",
-            queryType: "simple"
+            queryType: "simple",
+            highlight: null,
+            highlightPreTag: null,
+            highlightPostTag: null,
+            scoringParameter: null
         };
         expect(
             searchParameters.searchParameters(initialState, searchParametersActions.setSearchApiVersion("2015-02-28-Preview"))
@@ -40,6 +44,10 @@ describe("reducers/searchParameters", () => {
             skip: 1000,
             queryType: "full",
             top: 3,
+            highlight: "foobar",
+            highlightPreTag: "<em>",
+            highlightPostTag: "</em>",
+            scoringParameter: "foo-=bar"
         };
         expect(
             searchParameters.searchParameters(initialState, searchParametersActions.setSearchParameters(testParameters))
@@ -50,7 +58,8 @@ describe("reducers/searchParameters", () => {
             skip: 1000,
             top: 3,
             searchMode: "all",
-            queryType: "full"
+            queryType: "full",
+            highlight: "foo"
         };
         const expectedParams: Store.SearchParameters = {
             count: false,
@@ -62,7 +71,11 @@ describe("reducers/searchParameters", () => {
             top: 3,
             queryType: "full",
             apiVersion: "2016-09-01",
-            searchMode: "all"
+            searchMode: "all",
+            highlight: "foo",
+            highlightPreTag: null,
+            highlightPostTag: null,
+            scoringParameter: null
         };
         expect(
             searchParameters.searchParameters(initialState, searchParametersActions.updateSearchParameters(testParameters))
@@ -90,6 +103,10 @@ describe("reducers/searchParameters", () => {
             queryType: "simple",
             skip: 1000,
             top: 3,
+            highlight: "foo",
+            highlightPreTag: null,
+            highlightPostTag: null,
+            scoringParameter: null
         };
         expect(
             searchParameters.searchParameters(testParameters, searchParametersActions.decrementSkip()).skip
@@ -107,6 +124,10 @@ describe("reducers/searchParameters", () => {
             queryType: "simple",
             skip: 1000,
             top: 10,
+            highlight: "foo",
+            highlightPreTag: null,
+            highlightPostTag: null,
+            scoringParameter: null
         };
         expect(
             searchParameters.searchParameters(testParameters, searchParametersActions.setPage(-4)).skip
