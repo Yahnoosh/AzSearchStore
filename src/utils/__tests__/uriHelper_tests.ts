@@ -54,11 +54,13 @@ const parameterInitialState: Store.Parameters = {
 };
 
 const initFacets: Store.Facets = {
+    globalFilter: "",
     facetMode: "simple",
     facets: {}
 };
 
 const testFacets: Store.Facets = {
+    globalFilter: "",
     facetMode: "simple",
     facets: {
         foo: {
@@ -89,6 +91,49 @@ const testFacets: Store.Facets = {
 };
 
 const filteredFacets: Store.Facets = {
+    globalFilter: "",
+    facetMode: "simple",
+    facets: {
+        foo: {
+            type: "RangeFacet",
+            dataType: "number",
+            key: "foo",
+            min: 0,
+            max: 10,
+            filterLowerBound: 5,
+            filterUpperBound: 7,
+            lowerBucketCount: 0,
+            middleBucketCount: 0,
+            upperBucketCount: 0,
+            filterClause: "foo ge 5 and foo le 7",
+            facetClause: "foo,values:0|10"
+        },
+        bar: {
+            type: "CheckboxFacet",
+            key: "bar",
+            dataType: "string",
+            values: {
+                a: {
+                    value: "a",
+                    count: 5,
+                    selected: true
+                },
+                b: {
+                    value: "b",
+                    count: 5,
+                    selected: false
+                }
+            },
+            count: 5,
+            sort: "count",
+            filterClause: "(bar eq 'a')",
+            facetClause: "bar,count:5,sort:count"
+        }
+    }
+};
+
+const filteredFacetsWithGlobalFilter: Store.Facets = {
+    globalFilter: "buzz lt 5",
     facetMode: "simple",
     facets: {
         foo: {
@@ -189,6 +234,49 @@ describe("utils/uriHelper", () => {
             "count": true,
             "facets": ["foo,values:0|10", "bar,count:5,sort:count"],
             "filter": "foo ge 5 and foo le 7 and (bar eq \'a\')",
+            "orderby": "foobar",
+            "queryType": "simple",
+            "scoringProfile": "abc",
+            "search": "show me the money",
+            "searchFields": "def",
+            "searchMode": "all",
+            "select": "hij",
+            "skip": 1000,
+            "top": 3,
+            "highlight": "foo",
+            "highlightPreTag": "<em>",
+            "highlightPostTag": "</em>",
+            "scoringParameters": ["mylocation--122.2,44.8"]
+        });
+    });
+    it("should create a suggest uri from test config, and test suggestions parameters", () => {
+        const uriString = uriHelper.buildSuggestionsURI(config, testParameters);
+        const searchURI = URI(uriString);
+        expect(
+            searchURI.valueOf()
+        ).toEqual("https://buzz.search.windows.net/indexes/foo/docs/suggest?api-version=2016-09-01");
+        expect(searchURI.hasQuery("api-version", "2016-09-01")).toBe(true);
+    });
+    it("should create a suggestions post body from test config, and test suggestions parameters", () => {
+        const postBody = uriHelper.buildPostBody(testParameters.suggestionsParameters, testParameters.input, uriHelper.suggestParameterValidator);
+        expect(
+            postBody
+        ).toEqual({
+            top: 5,
+            fuzzy: false,
+            suggesterName: "sg",
+            search: "show me the money"
+        });
+
+    });
+    it("should create a search uri from test config, default searchParameters and custom facets, filters, and a global filter", () => {
+        const postBody = uriHelper.buildPostBody(testParameters.searchParameters, testParameters.input, uriHelper.searchParameterValidator, filteredFacetsWithGlobalFilter);
+        expect(
+            postBody
+        ).toEqual({
+            "count": true,
+            "facets": ["foo,values:0|10", "bar,count:5,sort:count"],
+            "filter": "foo ge 5 and foo le 7 and (bar eq \'a\') and buzz lt 5",
             "orderby": "foobar",
             "queryType": "simple",
             "scoringProfile": "abc",

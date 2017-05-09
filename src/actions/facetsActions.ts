@@ -8,7 +8,8 @@ export type FacetsAction =
     SetFacetModeAction |
     SetFacetsValuesAction |
     UpdateFacetValuesAction |
-    ClearFacetsSelectionsAction;
+    ClearFacetsSelectionsAction |
+    SetGlobalFilterAction;
 export type ClearFacetsSelectionsAction = {
     type: "CLEAR_FACETS_SELECTIONS",
 };
@@ -48,6 +49,10 @@ export type SetFacetRangeAction = {
     key: string,
     lowerBound: number | Date,
     upperBound: number | Date
+};
+export type SetGlobalFilterAction = {
+    type: "SET_GLOBAL_FILTER",
+    filter: string
 };
 
 export const setFacetsValues = (facets: { [key: string]: Store.FacetResult[] }): FacetsAction => ({
@@ -95,3 +100,5 @@ export const setFacetRange = (key: string, lowerBound: number | Date, upperBound
 });
 
 export const clearFacetsSelections = (): FacetsAction => ({ type: "CLEAR_FACETS_SELECTIONS" });
+
+export const setGlobalFilter = (filter: string): FacetsAction => ({ type: "SET_GLOBAL_FILTER", filter });

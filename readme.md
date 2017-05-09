@@ -181,6 +181,7 @@ store.suggest();
     * suggestionsProcessor
 * facets
     * facetMode
+    * globalFilter
     * facets
 * parameters 
     * input
@@ -323,6 +324,9 @@ setFacetRange(fieldName, lowerBound, upperBound);
 toggleCheckboxFacet(fieldName, value);
 // reset all selected values/ranged for all facets
 clearFacetsSelections();
+// set a global filter that will be AND'd with the filters produced by your facets
+// this will set a static filter that will always filter results to english
+setGlobalFilter("language eq 'english'");
 ```
 
 ## Extensibility
