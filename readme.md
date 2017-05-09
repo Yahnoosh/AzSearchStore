@@ -41,7 +41,7 @@ npm install azsearchstore
 1. Clone the repo
 2. Install dependencies 
    ``` 
-   npm install 
+   yarn install 
    ```
 3. (optional) Install a web server to run the demos. I use http-server:
    ```
@@ -50,10 +50,14 @@ npm install azsearchstore
 4. Build the project:
 
     ```
-    npm run tscompile
+    yarn run tscompile
     ```
     ```
-    npm run devPack
+    yarn run devpack
+    ```
+5. Run tests:
+    ```
+    yarn test
     ```
 5. Install demos
     1. react
