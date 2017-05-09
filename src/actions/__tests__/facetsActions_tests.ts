@@ -97,4 +97,12 @@ describe("actions/facets", () => {
             type: "CLEAR_FACETS_SELECTIONS",
         });
     });
+    it("should create action to set a global filter", () => {
+        expect(
+            facetsActions.setGlobalFilter("foo lt 5")
+        ).toEqual({
+            type: "SET_GLOBAL_FILTER",
+            filter: "foo lt 5"
+        });
+    });
 });

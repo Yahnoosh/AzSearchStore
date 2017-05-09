@@ -1,7 +1,8 @@
 import {
     FacetsAction, SetFacetRangeAction, ToggleCheckboxFacetAction,
     AddCheckboxFacetAction, AddRangeFacetAction, SetFacetModeAction,
-    SetFacetsValuesAction, UpdateFacetValuesAction, ClearFacetsSelectionsAction
+    SetFacetsValuesAction, UpdateFacetValuesAction, ClearFacetsSelectionsAction,
+    SetGlobalFilterAction
 }
     from "../actions/facetsActions";
 import { Store } from "../store";
@@ -10,6 +11,7 @@ import { updateObject, updateObjectAtKey } from "./reducerUtils";
 
 export const initialState: Store.Facets = {
     facetMode: "simple",
+    globalFilter: "",
     facets: {}
 };
 
@@ -25,9 +27,14 @@ export function facets(state: Store.Facets = initialState, action: FacetsAction)
         case "SET_FACETS_VALUES": return setFacetsValues(state, action);
         case "UPDATE_FACETS_VALUES": return updateFacetsValues(state, action);
         case "CLEAR_FACETS_SELECTIONS": return clearFacetsSelections(state, action);
+        case "SET_GLOBAL_FILTER": return setGlobalFilter(state, action);
         default:
             return state;
     }
+}
+
+function setGlobalFilter(state: Store.Facets, action: SetGlobalFilterAction): Store.Facets {
+    return updateObject(state, { globalFilter: action.filter });
 }
 
 function clearFacetsSelections(state: Store.Facets, action: ClearFacetsSelectionsAction): Store.Facets {

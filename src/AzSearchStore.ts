@@ -96,6 +96,9 @@ export class AzSearchStore {
     public clearFacetsSelections() {
         this.store.dispatch(facetsActions.clearFacetsSelections());
     }
+    public setGlobalFilter(filter: string) {
+        this.store.dispatch(facetsActions.setGlobalFilter(filter));
+    }
 
     // extensibility
 

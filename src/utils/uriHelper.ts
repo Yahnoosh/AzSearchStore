@@ -37,6 +37,9 @@ function getFilterClauses(facets: Store.Facets): string {
     let filters = filteredFacets.map((key) => {
         return facets.facets[key].filterClause;
     });
+    if (facets.globalFilter) {
+        filters.push(facets.globalFilter);
+    }
     return filters.join(" and ");
 }
 
@@ -51,7 +54,7 @@ function getFacetClauses(facets: Store.Facets): string[] {
 
 
 export function buildSearchURI(config: Store.Config, parameters: Store.Parameters): string {
-    const {service, index} = config;
+    const { service, index } = config;
     const apiVersion = parameters.searchParameters.apiVersion;
     const uriTemplate = `https://${service}.search.windows.net/indexes/${index}/docs/search?api-version=${apiVersion}`;
     let searchURI = URI(uriTemplate);
@@ -59,7 +62,7 @@ export function buildSearchURI(config: Store.Config, parameters: Store.Parameter
 }
 
 export function buildSuggestionsURI(config: Store.Config, parameters: Store.Parameters): string {
-    const {service, index} = config;
+    const { service, index } = config;
     const apiVersion = parameters.suggestionsParameters.apiVersion;
     const uriTemplate = `https://${service}.search.windows.net/indexes/${index}/docs/suggest?api-version=${apiVersion}`;
     let searchURI = URI(uriTemplate);
