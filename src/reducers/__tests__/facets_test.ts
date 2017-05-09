@@ -660,6 +660,144 @@ describe("reducers/facets", () => {
             reducer(initialFacets, facetsAction.updateFacetsValues(facetResults))
         ).toEqual(expectedFacets);
     });
+    it("should update incoming values for facets. Should overwrite values for facets with no selection", () => {
+        const checkFacetSelected: Store.CheckboxFacet = {
+            type: "CheckboxFacet",
+            key: "foo",
+            dataType: "string",
+            values: {
+                a: {
+                    value: "a",
+                    count: 5,
+                    selected: true
+                },
+                b: {
+                    value: "b",
+                    count: 5,
+                    selected: false
+                }
+            },
+            count: 5,
+            sort: "count",
+            filterClause: "( foo eq 'a )",
+            facetClause: "foo,count:5,sort:count"
+        };
+
+        const checkFacetUnselected: Store.CheckboxFacet = {
+            type: "CheckboxFacet",
+            key: "bar",
+            dataType: "string",
+            values: {
+                a: {
+                    value: "a",
+                    count: 5,
+                    selected: false
+                },
+                b: {
+                    value: "b",
+                    count: 5,
+                    selected: false
+                }
+            },
+            count: 5,
+            sort: "count",
+            filterClause: "",
+            facetClause: "bar,count:5,sort:count"
+        };
+
+        const expectedCheckFacetSelected: Store.CheckboxFacet = {
+            type: "CheckboxFacet",
+            key: "foo",
+            dataType: "string",
+            values: {
+                a: {
+                    value: "a",
+                    count: 11,
+                    selected: true
+                },
+                b: {
+                    value: "b",
+                    count: 0,
+                    selected: false
+                },
+                c: {
+                    value: "c",
+                    count: 12,
+                    selected: false
+                },
+                d: {
+                    value: "d",
+                    count: 13,
+                    selected: false
+                }
+            },
+            count: 5,
+            sort: "count",
+            filterClause: "( foo eq 'a )",
+            facetClause: "foo,count:5,sort:count"
+        };
+
+        const expectedCheckFacetUnselected: Store.CheckboxFacet = {
+            type: "CheckboxFacet",
+            key: "bar",
+            dataType: "string",
+            values: {
+                a: {
+                    value: "a",
+                    count: 11,
+                    selected: false
+                },
+                c: {
+                    value: "c",
+                    count: 12,
+                    selected: false
+                },
+                d: {
+                    value: "d",
+                    count: 13,
+                    selected: false
+                }
+            },
+            count: 5,
+            sort: "count",
+            filterClause: "",
+            facetClause: "bar,count:5,sort:count"
+        };
+
+        const initialFacets: Store.Facets = {
+            facetMode: "simple",
+            facets: {
+                "foo": checkFacetSelected,
+                "bar": checkFacetUnselected,
+            }
+        };
+
+        const expectedFacets: Store.Facets = {
+            facetMode: "simple",
+            facets: {
+                "foo": expectedCheckFacetSelected,
+                "bar": expectedCheckFacetUnselected,
+            }
+        };
+
+        const facetResults: { [key: string]: Store.FacetResult[] } = {
+            "foo": [
+                { value: "a", count: 11 },
+                { value: "c", count: 12 },
+                { value: "d", count: 13 }
+            ],
+            "bar": [
+                { value: "a", count: 11 },
+                { value: "c", count: 12 },
+                { value: "d", count: 13 }
+            ],
+            "bar@odata.type": <any>"#Collection(Microsoft.Azure.Search.V2016_09_01.QueryResultFacet)"
+        };
+
+        expect(
+            reducer(initialFacets, facetsAction.updateFacetsValues(facetResults))
+        ).toEqual(expectedFacets);
+    });
     it("should update incoming values for numeric facet, ignoring @odata keys", () => {
         const checkFacet: Store.CheckboxFacet = {
             type: "CheckboxFacet",

@@ -114,7 +114,7 @@ function updateFacetsValues(state: Store.Facets, action: UpdateFacetValuesAction
     // filter out @odata type annotations
     const keys = Object.keys(action.facets).filter((key) => { return key.toLowerCase().indexOf(odataString) < 0; });
     keys.forEach((key) => {
-        const facet = state.facets[key];
+        let facet = state.facets[key];
         const currentItem = action.facets[key];
         switch (facet.type) {
             case "RangeFacet":
@@ -125,51 +125,56 @@ function updateFacetsValues(state: Store.Facets, action: UpdateFacetValuesAction
                 });
                 break;
             case "CheckboxFacet":
-                const values: { [key: string]: Store.CheckboxFacetItem } = {};
                 // set counts for values that got updates
-
-                const currentItemKeys = currentItem.map((item) => { return item.value.toString(); });
-
-                // make update in order to ensure stability of facets list
-                Object.keys(facet.values).forEach((valueKey) => {
-                    // do we have an update for the current key
-                    const updateIndex = currentItemKeys.indexOf(valueKey);
-                    if (updateIndex >= 0) {
-                        const item = currentItem[updateIndex];
-                        values[valueKey] = {
-                            count: item.count,
-                            value: item.value,
-                            selected: facet.values[item.value] ? facet.values[item.value].selected : false
-                        };
-                    }
-                    else {
-                        const value = facet.values[valueKey];
-                        values[valueKey] = {
-                            count: 0,
-                            selected: value.selected,
-                            value: value.value
-                        };
-                    }
-                });
-
-                // fill in new values at the end
-                currentItem.forEach((item) => {
-                    if (!values[item.value]) {
-                        values[item.value] = {
-                            count: item.count,
-                            value: item.value,
-                            selected: facet.values[item.value] ? facet.values[item.value].selected : false
-                        };
-                    }
-                });
-
-                updatedFacets[key] = updateObject(facet, { values });
+                const checkboxFacet = facet as Store.CheckboxFacet;
+                const hasSelection = facet.filterClause.length > 0;
+                const updatedFacet: Store.CheckboxFacet = hasSelection ? mergeCheckboxFacetValues(checkboxFacet, currentItem) : setCheckboxFacetValues(checkboxFacet, currentItem);
+                updatedFacets[key] = updatedFacet;
                 break;
             default: break;
         }
     });
     const facets = updateObject(state.facets, updatedFacets);
     return updateObject(state, { facets });
+}
+
+function mergeCheckboxFacetValues(facet: Store.CheckboxFacet, facetResults: Store.FacetResult[]): Store.CheckboxFacet {
+    let values: { [key: string]: Store.CheckboxFacetItem } = {};
+    const currentItemKeys = facetResults.map((item) => { return item.value.toString(); });
+
+    Object.keys(facet.values).forEach((valueKey) => {
+        // do we have an update for the current key
+        const updateIndex = currentItemKeys.indexOf(valueKey);
+        if (updateIndex >= 0) {
+            const item = facetResults[updateIndex];
+            values[valueKey] = {
+                count: item.count,
+                value: item.value,
+                selected: facet.values[item.value] ? facet.values[item.value].selected : false
+            };
+        }
+        else {
+            const value = facet.values[valueKey];
+            values[valueKey] = {
+                count: 0,
+                selected: value.selected,
+                value: value.value
+            };
+        }
+    });
+
+    // fill in new values at the end
+    facetResults.forEach((item) => {
+        if (!values[item.value]) {
+            values[item.value] = {
+                count: item.count,
+                value: item.value,
+                selected: facet.values[item.value] ? facet.values[item.value].selected : false
+            };
+        }
+    });
+
+    return updateObject(facet, { values });
 }
 
 function setFacetMode(state: Store.Facets, action: SetFacetModeAction): Store.Facets {
