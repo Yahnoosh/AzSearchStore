@@ -148,7 +148,7 @@ export namespace Store {
 
     export type Facets = {
         facetMode: FacetMode,
-        globalFilter: string,
+        globalFilters: { [key: string]: string },
         facets: { [key: string]: Facet }
     };
 

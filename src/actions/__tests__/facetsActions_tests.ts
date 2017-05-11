@@ -99,9 +99,10 @@ describe("actions/facets", () => {
     });
     it("should create action to set a global filter", () => {
         expect(
-            facetsActions.setGlobalFilter("foo lt 5")
+            facetsActions.setGlobalFilter("foo", "foo lt 5")
         ).toEqual({
             type: "SET_GLOBAL_FILTER",
+            key: "foo",
             filter: "foo lt 5"
         });
     });
