@@ -32,7 +32,7 @@ describe("reducers/facets", () => {
             reducer(facets.initialState, facetsAction.setFacetMode("advanced"))
         ).toEqual({
             facets: {},
-            globalFilter: "",
+            globalFilters: {},
             facetMode: "advanced"
         });
     });
@@ -57,7 +57,7 @@ describe("reducers/facets", () => {
             facets: {
                 "foo": expectedFacet
             },
-            globalFilter: "",
+            globalFilters: {},
             facetMode: "simple"
         });
     });
@@ -82,7 +82,7 @@ describe("reducers/facets", () => {
             facets: {
                 "foo": expectedFacet
             },
-            globalFilter: "",
+            globalFilters: {},
             facetMode: "simple"
         });
     });
@@ -103,7 +103,7 @@ describe("reducers/facets", () => {
             facets: {
                 "foo": expectedFacet
             },
-            globalFilter: "",
+            globalFilters: {},
             facetMode: "simple"
         });
     });
@@ -124,7 +124,7 @@ describe("reducers/facets", () => {
             facets: {
                 "foo": expectedFacet
             },
-            globalFilter: "",
+            globalFilters: {},
             facetMode: "simple"
         });
     });
@@ -172,12 +172,12 @@ describe("reducers/facets", () => {
             facetClause: "foo,values:5|7"
         };
         const initialFacets: Store.Facets = {
-            globalFilter: "",
+            globalFilters: {},
             facetMode: "simple",
             facets: { foo: initialFacet, dummy: dummyFacet }
         };
         const expectedFacets: Store.Facets = {
-            globalFilter: "",
+            globalFilters: {},
             facetMode: "simple",
             facets: { foo: expectedFacet, dummy: dummyFacet }
         };
@@ -229,12 +229,12 @@ describe("reducers/facets", () => {
             facetClause: "foo,values:1970-01-01T00:00:01.999Z|1970-01-01T00:00:02.015Z"
         };
         const initialFacets: Store.Facets = {
-            globalFilter: "",
+            globalFilters: {},
             facetMode: "simple",
             facets: { foo: initialFacet, dummy: dummyFacet }
         };
         const expectedFacets: Store.Facets = {
-            globalFilter: "",
+            globalFilters: {},
             facetMode: "simple",
             facets: { foo: expectedFacet, dummy: dummyFacet }
         };
@@ -328,17 +328,17 @@ describe("reducers/facets", () => {
             facetClause: "foo,count:5,sort:count"
         };
         const initialFacets: Store.Facets = {
-            globalFilter: "",
+            globalFilters: {},
             facetMode: "simple",
             facets: { foo: initialFacet, dummy: dummyFacet }
         };
         const firstToggleExpectedFacets: Store.Facets = {
-            globalFilter: "",
+            globalFilters: {},
             facetMode: "simple",
             facets: { foo: firstToggleFacet, dummy: dummyFacet }
         };
         const secondToggleExpectedFacets: Store.Facets = {
-            globalFilter: "",
+            globalFilters: {},
             facetMode: "simple",
             facets: { foo: secondToggleFacet, dummy: dummyFacet }
         };
@@ -415,12 +415,12 @@ describe("reducers/facets", () => {
         };
 
         const initialFacets: Store.Facets = {
-            globalFilter: "",
+            globalFilters: {},
             facetMode: "simple",
             facets: { foo: initialFacet, dummy: dummyFacet }
         };
         const firstToggleExpectedFacets: Store.Facets = {
-            globalFilter: "",
+            globalFilters: {},
             facetMode: "simple",
             facets: { foo: firstToggleFacet, dummy: dummyFacet }
         };
@@ -502,7 +502,7 @@ describe("reducers/facets", () => {
         };
 
         const initialFacets: Store.Facets = {
-            globalFilter: "",
+            globalFilters: {},
             facetMode: "simple",
             facets: {
                 "foo": checkFacet,
@@ -511,7 +511,7 @@ describe("reducers/facets", () => {
         };
 
         const expectedFacets: Store.Facets = {
-            globalFilter: "",
+            globalFilters: {},
             facetMode: "simple",
             facets: {
                 "foo": expectedCheckFacet,
@@ -641,7 +641,7 @@ describe("reducers/facets", () => {
         };
 
         const initialFacets: Store.Facets = {
-            globalFilter: "",
+            globalFilters: {},
             facetMode: "simple",
             facets: {
                 "foo": checkFacet,
@@ -651,7 +651,7 @@ describe("reducers/facets", () => {
         };
 
         const expectedFacets: Store.Facets = {
-            globalFilter: "",
+            globalFilters: {},
             facetMode: "simple",
             facets: {
                 "foo": expectedCheckFacet,
@@ -783,7 +783,7 @@ describe("reducers/facets", () => {
         };
 
         const initialFacets: Store.Facets = {
-            globalFilter: "",
+            globalFilters: {},
             facetMode: "simple",
             facets: {
                 "foo": checkFacetSelected,
@@ -792,7 +792,7 @@ describe("reducers/facets", () => {
         };
 
         const expectedFacets: Store.Facets = {
-            globalFilter: "",
+            globalFilters: {},
             facetMode: "simple",
             facets: {
                 "foo": expectedCheckFacetSelected,
@@ -874,7 +874,7 @@ describe("reducers/facets", () => {
         };
 
         const initialFacets: Store.Facets = {
-            globalFilter: "",
+            globalFilters: {},
             facetMode: "simple",
             facets: {
                 "foo": checkFacet
@@ -882,7 +882,7 @@ describe("reducers/facets", () => {
         };
 
         const expectedFacets: Store.Facets = {
-            globalFilter: "",
+            globalFilters: {},
             facetMode: "simple",
             facets: {
                 "foo": expectedCheckFacet,
@@ -976,7 +976,7 @@ describe("reducers/facets", () => {
         };
 
         const initialFacets: Store.Facets = {
-            globalFilter: "",
+            globalFilters: {},
             facetMode: "simple",
             facets: {
                 "foo": checkFacet,
@@ -985,7 +985,7 @@ describe("reducers/facets", () => {
         };
 
         const expectedFacets: Store.Facets = {
-            globalFilter: "",
+            globalFilters: {},
             facetMode: "simple",
             facets: {
                 "foo": expectedCheckFacet,
@@ -1035,7 +1035,7 @@ describe("reducers/facets", () => {
         };
 
         const initialFacets: Store.Facets = {
-            globalFilter: "",
+            globalFilters: {},
             facetMode: "simple",
             facets: {
                 "foo": checkFacet,
@@ -1044,7 +1044,7 @@ describe("reducers/facets", () => {
         };
 
         const expectedFacets: Store.Facets = {
-            globalFilter: "buzz lt 6",
+            globalFilters: { buzz: "buzz lt 6" },
             facetMode: "simple",
             facets: {
                 "foo": checkFacet,
@@ -1053,7 +1053,7 @@ describe("reducers/facets", () => {
         };
 
         expect(
-            reducer(initialFacets, facetsAction.setGlobalFilter("buzz lt 6"))
+            reducer(initialFacets, facetsAction.setGlobalFilter("buzz", "buzz lt 6"))
         ).toEqual(expectedFacets);
     });
 });

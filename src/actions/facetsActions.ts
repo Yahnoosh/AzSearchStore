@@ -52,6 +52,7 @@ export type SetFacetRangeAction = {
 };
 export type SetGlobalFilterAction = {
     type: "SET_GLOBAL_FILTER",
+    key: string,
     filter: string
 };
 
@@ -101,4 +102,4 @@ export const setFacetRange = (key: string, lowerBound: number | Date, upperBound
 
 export const clearFacetsSelections = (): FacetsAction => ({ type: "CLEAR_FACETS_SELECTIONS" });
 
-export const setGlobalFilter = (filter: string): FacetsAction => ({ type: "SET_GLOBAL_FILTER", filter });
+export const setGlobalFilter = (key: string, filter: string): FacetsAction => ({ type: "SET_GLOBAL_FILTER", key, filter });

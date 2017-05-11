@@ -37,9 +37,18 @@ function getFilterClauses(facets: Store.Facets): string {
     let filters = filteredFacets.map((key) => {
         return facets.facets[key].filterClause;
     });
-    if (facets.globalFilter) {
-        filters.push(facets.globalFilter);
+    const globalFilter = getGlobalFilter(facets.globalFilters);
+    if (globalFilter) {
+        filters.push(globalFilter);
     }
+    return filters.join(" and ");
+}
+
+function getGlobalFilter(globalFilters: { [key: string]: string }): string {
+    let filters = Object.keys(globalFilters).filter((key) => {
+        return globalFilters[key];
+    }).map((key) => { return globalFilters[key]; });
+
     return filters.join(" and ");
 }
 

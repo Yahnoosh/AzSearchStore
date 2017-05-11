@@ -6,25 +6,25 @@ import { Store } from "../../store";
 import * as searchParameters from "../../reducers/searchParameters";
 import * as suggestionsParameters from "../../reducers/suggestionsParameters";
 import * as input from "../../reducers/input";
-import {updateObject} from "../../reducers/reducerUtils";
+import { updateObject } from "../../reducers/reducerUtils";
 
 const parameterInitialState: Store.Parameters = {
     input: input.initialState,
     searchParameters: searchParameters.initialState,
-    suggestionsParameters: updateObject(suggestionsParameters.initialState, { suggesterName: "sg"})
+    suggestionsParameters: updateObject(suggestionsParameters.initialState, { suggesterName: "sg" })
 };
 
 const facetResults: { [key: string]: Store.FacetResult[] } = {
-            "foo": [
-                { value: "c", count: 10},
-                { value: "d", count: 17}
-            ],
-            "bar": [
-                {to: 0, count: 0},
-                {from: 0, to: 10, count: 100},
-                {from: 10, count: 0}
-            ]
-        };
+    "foo": [
+        { value: "c", count: 10 },
+        { value: "d", count: 17 }
+    ],
+    "bar": [
+        { to: 0, count: 0 },
+        { from: 0, to: 10, count: 100 },
+        { from: 10, count: 0 }
+    ]
+};
 
 const searchResponse = {
     "@odata.context": "",
@@ -49,7 +49,7 @@ const suggestionsResponse = {
 
 const config: Store.Config = { index: "foo", service: "bar", queryKey: "buzz" };
 
-const facets: Store.Facets = { facetMode: "simple", facets: {} };
+const facets: Store.Facets = { facetMode: "simple", globalFilters: {}, facets: {} };
 
 
 const middleWare = [thunk];
@@ -71,8 +71,8 @@ describe("actions/async", () => {
 
         const expectedActions = [
             { type: "INITIATE_SEARCH" },
-            { type: "RECEIVE_RESULTS", results: searchResponse.value, receivedAt: Date.now(), count: 6},
-            { type: "SET_FACETS_VALUES", facets: facetResults}
+            { type: "RECEIVE_RESULTS", results: searchResponse.value, receivedAt: Date.now(), count: 6 },
+            { type: "SET_FACETS_VALUES", facets: facetResults }
         ];
 
         const store = mockStore({ config, parameters: parameterInitialState, facets });
@@ -109,7 +109,7 @@ describe("actions/async", () => {
         const expectedActions = [
             { type: "INITIATE_SEARCH" },
             { type: "RECEIVE_RESULTS", results: searchResponse.value, receivedAt: Date.now(), count: 6 },
-            { type: "UPDATE_FACETS_VALUES", facets: facetResults}
+            { type: "UPDATE_FACETS_VALUES", facets: facetResults }
         ];
 
         const store = mockStore({ config, parameters: parameterInitialState, facets });
@@ -126,7 +126,7 @@ describe("actions/async", () => {
 
         const expectedActions = [
             { type: "INITIATE_SUGGEST" },
-            { type: "RECEIVE_SUGGESTIONS", suggestions: suggestionsResponse.value, receivedAt: Date.now()},
+            { type: "RECEIVE_SUGGESTIONS", suggestions: suggestionsResponse.value, receivedAt: Date.now() },
         ];
 
         const store = mockStore({ config, parameters: parameterInitialState, facets });

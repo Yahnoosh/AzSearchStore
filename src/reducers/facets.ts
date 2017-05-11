@@ -11,7 +11,7 @@ import { updateObject, updateObjectAtKey } from "./reducerUtils";
 
 export const initialState: Store.Facets = {
     facetMode: "simple",
-    globalFilter: "",
+    globalFilters: {},
     facets: {}
 };
 
@@ -34,7 +34,9 @@ export function facets(state: Store.Facets = initialState, action: FacetsAction)
 }
 
 function setGlobalFilter(state: Store.Facets, action: SetGlobalFilterAction): Store.Facets {
-    return updateObject(state, { globalFilter: action.filter });
+    const { filter, key } = action;
+    const globalFilters = updateObjectAtKey(state.globalFilters, filter, key);
+    return updateObject(state, { globalFilters });
 }
 
 function clearFacetsSelections(state: Store.Facets, action: ClearFacetsSelectionsAction): Store.Facets {
