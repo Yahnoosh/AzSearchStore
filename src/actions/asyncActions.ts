@@ -26,7 +26,8 @@ const searchAndDispatch: ThunkAction<Promise<void>, Store.SearchState, {
         let headers = new Headers({
             "api-key": searchState.config.queryKey,
             "Content-Type": "application/json",
-            "User-Agent": userAgent
+            "User-Agent": userAgent,
+            "x-ms-client-user-agent": userAgent
         });
         dispatch(resultsActions.initiateSearch());
         const promise = searchCallback ? searchCallback(searchState, postBody) :
@@ -76,7 +77,8 @@ export const suggest: ThunkAction<Promise<void>, Store.SearchState, {}> =
         let headers = new Headers({
             "api-key": searchState.config.queryKey,
             "Content-Type": "application/json",
-            "User-Agent": userAgent
+            "User-Agent": userAgent,
+            "x-ms-client-user-agent": userAgent
         });
         dispatch(suggestionsActions.initiateSuggest());
         const promise = suggestCallBack ? suggestCallBack(searchState, postBody) :
