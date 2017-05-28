@@ -43,11 +43,7 @@ npm install azsearchstore
    ``` 
    yarn install 
    ```
-3. (optional) Install a web server to run the demos. I use http-server:
-   ```
-   npm install -g http-server
-   ```
-4. Build the project:
+3. Build the project:
 
     ```
     yarn run tscompile
@@ -55,22 +51,22 @@ npm install azsearchstore
     ```
     yarn run devpack
     ```
-5. Run tests:
+4. Run tests:
     ```
     yarn test
     ```
 5. Install demos
     1. react
         1. cd examples/react_ts
-        2. npm install
-        3. webpack
+        2. yarn install
+        3. yarn run webpack
     2. knockout
         1. no configuration required
-5. Launch http-server
+6. Launch http-server
    ```
-   npm run start_server
+   yarn run start_server
    ```
-6. Navigate to `127.0.0.1:8080/examples/react_ts/index.html` or `127.0.0.1:8080/examples/knockout/index.html`
+7. Navigate to `127.0.0.1:8080/examples/react_ts/index.html` or `127.0.0.1:8080/examples/knockout/index.html`
 
 ## Basic Usage
 
