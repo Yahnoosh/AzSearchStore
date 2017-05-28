@@ -7,9 +7,16 @@
         "noImplicitAny": true,
         "module": "commonjs",
         "target": "es5",
-        "jsx": "react"
+        "jsx": "react",
+        "typeRoots": [
+            "./node_modules/@types"
+        ]
     },
-    "include": [
+    "files": [
         "./src/AzSearchStore.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist"
     ]
 }
