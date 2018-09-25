@@ -84,8 +84,8 @@ export class AzSearchStore {
     public addRangeFacet(fieldName: string, dataType: Store.RangeDataType, min: number | Date, max: number | Date) {
         this.store.dispatch(facetsActions.addRangeFacet(fieldName, dataType, min, max));
     }
-    public addCheckboxFacet(fieldName: string, dataType: Store.CheckboxDataType) {
-        this.store.dispatch(facetsActions.addCheckboxFacet(fieldName, dataType));
+    public addCheckboxFacet(fieldName: string, dataType: Store.CheckboxDataType, count: number = 5) {
+        this.store.dispatch(facetsActions.addCheckboxFacet(fieldName, dataType, count));
     }
     public toggleCheckboxFacet(fieldName: string, value: string | number) {
         this.store.dispatch(facetsActions.toggleCheckboxFacetSelection(fieldName, value));
