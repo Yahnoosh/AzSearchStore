@@ -1,9 +1,10 @@
 import { Store } from "../store";
+import { SearchApiVersion } from '../azure';
 
 export type SearchParametersAction =
     {
         type: "SET_SEARCH_APIVERSION",
-        apiVersion: Store.SearchApiVersion
+        apiVersion: SearchApiVersion
     } |
     {
         type: "SET_SEARCH_PARAMETERS",
@@ -24,7 +25,7 @@ export type SearchParametersAction =
         page: number
     };
 
-export const setSearchApiVersion = (apiVersion: Store.SearchApiVersion): SearchParametersAction => ({
+export const setSearchApiVersion = (apiVersion: SearchApiVersion): SearchParametersAction => ({
     type: "SET_SEARCH_APIVERSION",
     apiVersion
 });

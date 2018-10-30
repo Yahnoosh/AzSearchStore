@@ -11,6 +11,7 @@ import * as facetsActions from "./actions/facetsActions";
 import * as suggestionsActions from "./actions/suggestionsActions";
 import * as resultsActions from "./actions/resultsActions";
 import { Store } from "./store";
+import { SearchApiVersion } from './azure';
 
 export { asyncActions, configActions, searchParameterActions, suggestionsParameterActions, inputActions, facetsActions, suggestionsActions, resultsActions, Store };
 
@@ -41,7 +42,7 @@ export class AzSearchStore {
 
     // manipulating parameters for search requests
 
-    public setSearchApiVersion(apiVersion: Store.SearchApiVersion) {
+    public setSearchApiVersion(apiVersion: SearchApiVersion) {
         this.store.dispatch(searchParameterActions.setSearchApiVersion(apiVersion));
     }
     public setSearchParameters(searchParameters: Store.SearchParameters) {
@@ -63,7 +64,7 @@ export class AzSearchStore {
 
     // manipulating suggestions parameters
 
-    public setSuggestionsApiVersion(apiVersion: Store.SearchApiVersion) {
+    public setSuggestionsApiVersion(apiVersion: SearchApiVersion) {
         this.store.dispatch(suggestionsParameterActions.setSuggestionsApiVersion(apiVersion));
     }
     public setSuggestionsParameters(suggestionsParameters: Store.SuggestionsParameters) {
@@ -84,8 +85,8 @@ export class AzSearchStore {
     public addRangeFacet(fieldName: string, dataType: Store.RangeDataType, min: number | Date, max: number | Date) {
         this.store.dispatch(facetsActions.addRangeFacet(fieldName, dataType, min, max));
     }
-    public addCheckboxFacet(fieldName: string, dataType: Store.CheckboxDataType) {
-        this.store.dispatch(facetsActions.addCheckboxFacet(fieldName, dataType));
+    public addCheckboxFacet(fieldName: string, dataType: Store.CheckboxDataType, count: number = 5, sort: Store.FacetSortingMode = "count") {
+        this.store.dispatch(facetsActions.addCheckboxFacet(fieldName, dataType, count, sort));
     }
     public toggleCheckboxFacet(fieldName: string, value: string | number) {
         this.store.dispatch(facetsActions.toggleCheckboxFacetSelection(fieldName, value));

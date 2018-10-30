@@ -1,9 +1,10 @@
 import { Store } from "../store";
+import { SearchApiVersion } from '../azure';
 
 export type SuggestionsParametersAction =
     {
         type: "SET_SUGGESTIONS_APIVERSION",
-        apiVersion: Store.SearchApiVersion
+        apiVersion: SearchApiVersion
     } |
     {
         type: "SET_SUGGESTIONS_PARAMETERS",
@@ -14,7 +15,7 @@ export type SuggestionsParametersAction =
         parameters: Store.SuggestionsParametersUpdate
     };
 
-export const setSuggestionsApiVersion = (apiVersion: Store.SearchApiVersion): SuggestionsParametersAction => ({
+export const setSuggestionsApiVersion = (apiVersion: SearchApiVersion): SuggestionsParametersAction => ({
     type: "SET_SUGGESTIONS_APIVERSION",
     apiVersion
 });
